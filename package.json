@@ -1,0 +1,39 @@
+{
+  "name": "node-nfe",
+  "version": "0.0.1",
+  "description": "Geração/integração de NF-e/NFC-e para node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run build && node test.js",
+    "build": "babel src --out-dir lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lealhugui/node-nfe.git"
+  },
+  "keywords": [
+    "nfe",
+    "nfce",
+    "sefaz"
+  ],
+  "author": {"name": "Guilherme Leal", "email": "lealhugui@gmail.com"},
+  "contributors": [
+    {"name": "Leonardo Fioravanso", "email": "lhfioravanso@gmail.com"}
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lealhugui/node-nfe/issues"
+  },
+  "homepage": "https://github.com/lealhugui/node-nfe#readme",
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0",
+    "debug": "^4.1.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.22.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0"
+  }
+}
