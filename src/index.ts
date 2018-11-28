@@ -1,0 +1,1 @@
+export { NFeProcessor } from './factory'
