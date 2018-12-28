@@ -1,4 +1,0 @@
-
-NameTable = {
-    'range': 'range_',
-}
