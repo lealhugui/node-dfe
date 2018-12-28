@@ -1,0 +1,8 @@
+<cdataListType>
+    <cdatalist>
+        <script><![CDATA[ccc < ddd & eee]]></script>
+    </cdatalist>
+    <cdatalist>
+        <script>aaa &lt; bbb <![CDATA[ccc < ddd]]> eee &lt; &amp; fff&lt;<![CDATA[ggg < & hhh]]>&amp; iii &lt; jjj</script>
+    </cdatalist>
+</cdataListType>

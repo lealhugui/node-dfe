@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<people
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+
+    <comments>1. This is a <emp>foolish</emp> comment.  <bold>It</bold> is <emp>really</emp> important.</comments>
+    <comments>2. This is a <emp>silly</emp> comment.  It is <emp>very</emp> significant.</comments>
+    <comments><emp>3.</emp> This is a empty <emp></emp> comment.  <emp></emp></comments>
+
+    <!-- a simple comment -->
+
+    <person id="1" value="abcd" ratio="3.2" extraattr="aaa">
+        <name>Alberta</name>
+        <interest>gardening</interest>
+        <interest>reading</interest>
+        <category>5</category>
+        <hot  />
+        <hot.agent oneattr="bbb" twoattr="ccc">
+            <firstname>Paula</firstname>
+            <lastname>Peterson</lastname>
+            <priority>4.3</priority>
+        </hot.agent>
+    </person> 
+
+    <person id="2">
+        <name>Bernardo</name>
+        <interest>programming</interest>
+        <category>0</category>
+        <agent>
+            <firstname>Darren</firstname>
+            <lastname>Diddly</lastname>
+            <priority>4.5</priority>
+            <info name="Albert Abasinian" type="321" rating="5.33" />
+            <vehicle type="airplane">
+              <wheelcount>36</wheelcount>
+              <pilotname>Felicity Flygirl</pilotname>
+            </vehicle>
+            <vehicle xsi:type="automobile">
+              <wheelcount>4</wheelcount>
+              <drivername>Daryl Driver</drivername>
+            </vehicle>
+        </agent>
+        <range>25</range>
+    </person>
+
+    <specialperson id="2">
+        <name>Guardo</name>
+        <interest>piano</interest>
+        <category>4</category>
+        <!--
+        <musicalinstrument>piano</musicalinstrument>
+        -->
+        <agent>
+            <firstname>Harry</firstname>
+            <lastname>Hapton</lastname>
+            <priority>4.5</priority>
+            <info name="Harry Hapton" type="321" rating="5.33" />
+        </agent>
+        <range>35</range>
+    </specialperson>
+
+    <programmer id="2" language="python" area="xml">
+        <name>Charles Carlson</name>
+        <interest>programming</interest>
+        <category>2233</category>
+        <description>A very happy programmer</description>
+        <email>charles@happyprogrammers.com</email>
+        <agent>
+            <firstname>Ernest</firstname>
+            <lastname>Echo</lastname>
+            <priority>3.8</priority>
+            <info name="George Gregory" type="321" rating="5.33" />
+        </agent>
+        <elposint>14</elposint>
+        <elnegint>-12</elnegint>
+        <elnonnegint>4</elnonnegint>
+        <elnonposint>0</elnonposint>
+        <eldate>2005-04-26</eldate>
+        <eltoken>aa bb    cc	dd
+            ee</eltoken>
+        <elshort>123</elshort>
+        <ellong>13241234123412341234</ellong>
+        <elparam id="id001" name="Davy" semantic="a big    semantic"/>
+        <range>45</range>
+    </programmer>
+
+    <person id="3">
+        <name>Charlie</name>
+        <interest>people</interest>
+        <interest>cats</interest>
+        <interest>dogs</interest>
+        <category>8</category>
+        <promoter member-id="ID101">
+            <firstname>David</firstname>
+            <lastname>Donaldson</lastname>
+            <other-name>9.8</other-name>
+            <class>11.2233</class>
+            <other-value>33.4455</other-value>
+            <type>22.3344</type>
+            
+            <client-handler>
+                <fullname>Arnold Applebee</fullname>
+                <refid>10001</refid>
+            </client-handler>
+            <other-value>44.5566</other-value>
+        </promoter>
+        <promoter>
+            <firstname>Edward</firstname>
+            <lastname>Eddleberry</lastname>
+            <client-handler>
+                <fullname>Billy Bailley</fullname>
+                <refid>10002</refid>
+            </client-handler>
+        </promoter>
+        <range>26</range>
+    </person>
+
+    <person id="4" />
+
+    <python-programmer vegetable="tomato" fruit="peach" language="python" area="xml" nick-name="davy" id="232" ratio="8.7" value="abcd">
+        <favorite-editor>jed</favorite-editor>
+        <name>Darrel Dawson</name>
+        <interest>hang gliding</interest>
+        <category>3344</category>
+        <description>An object-orientated programmer</description>
+        <email>darrel@happyprogrammers.com</email>
+        <agent>
+            <firstname>Harvey</firstname>
+            <lastname>Hippolite</lastname>
+            <priority>5.2</priority>
+            <info name="Harvey Hippolite" type="543" rating="6.55" />
+        </agent>
+        <range>27</range>
+    </python-programmer>
+
+    <java-programmer vegetable="tomato" fruit="peach" language="python" area="xml" nick-name="davy" id="232" ratio="8.7" value="abcd">
+        <favorite-editor>jed</favorite-editor>
+        <name>Darrel Dawson</name>
+        <interest>hang gliding</interest>
+        <category>3344</category>
+        <description><![CDATA[An <object-orientated> programmer & stuff.]]></description>
+        <email>darrel@happyprogrammers.com</email>
+        <agent>
+            <firstname>Harvey</firstname>
+            <lastname>Hippolite</lastname>
+            <priority>5.2</priority>
+            <info name="Harvey Hippolite" type="543" rating="6.55" />
+        </agent>
+        <range>28</range>
+    </java-programmer>
+
+</people>
+

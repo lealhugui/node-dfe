@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<contact-list locator="http://www.rexx.com/~dkuhlman">
+  <description>My list of contacts</description>
+
+  <contact id="1" priority="0.05" color-code="red">
+    <first-name>arlene</first-name>  
+    <last-name>Allen</last-name>  
+    <interest>traveling</interest>
+    <category>2</category>
+  </contact>
+
+</contact-list>
+

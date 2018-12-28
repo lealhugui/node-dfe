@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+
+    <xs:include schemaLocation="oneper01.xsd"/>
+    <xs:include schemaLocation="oneper02.xsd"/>
+    <xs:include schemaLocation="http://www.davekuhlman.org/oneper03.xsd"/>
+
+    <xs:element name="root00" type="oneperType00_1" />
+
+    <xs:complexType name="oneperType00_1">
+        <xs:sequence>
+            <xs:element name="inner01" type="oneperType01_1" />
+            <xs:element name="inner02" type="oneperType01_2" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="oneperEnumType00_1">
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="float" />
+            <xs:enumeration value="int" />
+            <xs:enumeration value="Name" />
+            <xs:enumeration value="token" />
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

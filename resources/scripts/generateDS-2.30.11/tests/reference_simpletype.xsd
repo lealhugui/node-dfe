@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2015 (x64) (http://www.altova.com) by Michael de Paly (FOTON Germany Construction Machines) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified" attributeFormDefault="unqualified" vc:minVersion="1.1">
+    <xs:element name="test_ref_element" type="xs:integer"/>
+    <xs:attribute name="test_ref_attr" type="xs:integer"/>
+    <xs:attribute name="other_ref_attr" type="xs:float"/>
+    <xs:element name="dummy">
+        <xs:annotation>
+            <xs:documentation>Comment describing your root element</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="test_ref_element"/>
+                <xs:element name="test_normal_element" type="xs:integer"/>
+            </xs:sequence>
+            <xs:attribute ref="test_ref_attr"/>
+            <xs:attribute name="test_normal_attr" type="xs:integer"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

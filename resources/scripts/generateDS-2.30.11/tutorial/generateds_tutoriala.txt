@@ -1,0 +1,1004 @@
+Introduction
+============
+
+**Additional information:** 
+
+- If you plan to work through this tutorial, you may find it helpful
+  to look at the sample code that accompanies this tutorial.  You
+  can find it in the distribution under::
+
+      tutorial/
+      tutorial/Code/
+
+- You can find additional information about ``generateDS.py`` here:
+
+      http://www.davekuhlman.org/generateDS.html
+
+  That documentation is also included in the distribution.
+
+
+``generateDS.py`` generates Python data structures (for example,
+class definitions) from an XML schema document. These data
+structures represent the elements in an XML document described by
+the XML schema.  ``generateDS.py`` also generates parsers that load
+an XML document into those data structures. In addition, a separate
+file containing subclasses (stubs) is optionally generated. The user
+can add methods to the subclasses in order to process the contents
+of an XML document.
+
+The generated Python code contains:
+
+- A class definition for each element defined in the XML schema
+  document.
+
+- A main and driver function that can be used to test the
+  generated code.
+
+- A parser that will read an XML document which satisfies the XML
+  schema from which the parser was generated. The parser creates
+  and populates a tree structure of instances of the generated
+  Python classes.
+
+- Methods in each class to export the instance back out to XML
+  (method ``export``) and to export the instance to a literal
+  representing the Python data structure (method
+  ``exportLiteral``).
+
+Each generated class contains the following:
+
+- A constructor method (__init__), with member variable
+  initializers.
+
+- Methods with names ``get_xyz`` and ``set_xyz`` for each member
+  variable "xyz" or, if the member variable is defined with
+  ``maxOccurs="unbounded"``, methods with names ``get_xyz``,
+  ``set_xyz``, ``add_xyz``, and ``insert_xyz``.  (Note: If you use
+  the ``--use-old-getter-setter``, then you will get methods with
+  names like ``getXyz`` and ``setXyz``.)
+
+- A ``build`` method that can be used to populate an instance of the
+  class from a node in an ElementTree or Lxml tree.
+
+- An ``export`` method that will write the instance (and any nested
+  sub-instances) to a file object as XML text.
+
+- An ``exportLiteral`` method that will write the instance (and any
+  nested sub-instances) to a file object as Python literals (text).
+
+The generated subclass file contains one (sub-)class definition
+for each data representation class. If the subclass file is used,
+then the parser creates instances of the subclasses (instead of
+creating instances of the superclasses). This enables the user to
+extend the subclasses with "tree walk" methods, for example, that
+process the contents of the XML file. The user can also generate
+and extend multiple subclass files which use a single, common
+superclass file, thus implementing a number of different processes
+on the same XML document type.
+
+This document introduces the user to ``generateDS.py`` and walks the
+user through several examples that show how to generate Python code
+and how to use that generated code.
+
+
+Generating the code
+===================
+
+**Note:** The sample files used below are under the
+``tutorial/Code/`` directory.
+
+Use the following to get help::
+
+    $ generateDS.py --help
+
+I'll assume that ``generateDS.py`` is in a directory on your path. 
+If not, you should do whatever is necessary to make it accessible
+and executable.
+
+Here is a simple XML schema document:
+
+And, here is how you might generate classes and subclasses that
+provide data bindings (a Python API) for the definitions in that
+schema::
+
+    $ generateDS.py -o people_api.py -s people_sub.py people.xsd
+
+And, if you want to automatically over-write the generated Python
+files, use the ``-f`` command line flag to force over-write without
+asking::
+
+    $ generateDS.py -f -o people_api.py -s people_sub.py people.xsd
+
+And, to hard-wire the subclass file so that it imports the API
+module, use the ``--super`` command line file.  Example::
+
+
+    $ generateDS.py -o people_api.py people.xsd
+    $ generateDS.py -s people_appl1.py --super=people_api people.xsd
+
+Or, do both at the same time with the following::
+
+    $ generateDS.py -o people_api.py -s people_appl1.py --super=people_api people.xsd
+
+And, for your second application::
+
+    $ generateDS.py -s people_appl2.py --super=people_api people.xsd
+
+If you take a look inside these two "application" files, you will
+see and import statement like the following::
+
+    import ??? as supermod
+
+If you had not used the ``--super`` command line option when
+generating the "application" files, then you could modify that
+statement yourself.  The ``--super`` command line option does this
+for you.
+
+You can also use the `The graphical front-end`_ to configure options
+and save them in a session file, then use that session file with
+``generateDS.py`` to specify your command line options.  For
+example::
+
+    $ generateDS.py --session=test01.session
+
+You can test the generated code by running it.  Try something like
+the following::
+
+    $ python people_api.py people.xml
+
+or::
+
+    $ python people_appl1.py people.xml
+
+
+
+Why does this work?  Why can we run the generated code as a Python
+script? -- If you look at the generated code, down near the end of
+the file you'll find a ``main()`` function that calls a function
+named ``parse()``.  The ``parse`` function does the following:
+
+1. Parses your XML instance document.
+
+2. Uses your generated API to build a tree of instances of the
+   generated classes.
+
+3. Uses the ``export()`` methods in that tree of instances to print
+   out (export) XML that represents your generated tree of
+   instances.
+
+Except for some indentation (ignorable whitespace), this exported
+XML should be the same as the original XML document.  So, that
+gives you a reasonably thorough test of your generated code.
+
+And, the code in that ``parse()`` function gives you a hint of how
+you might build your own application-specific code that uses the
+generated API (those generated Python classes).
+
+
+Using the generated code to parse and export an XML document
+============================================================
+
+Now that you have generated code for your data model, you can test
+it by running it as an application.  Suppose that you have an
+XML instance document ``people1.xml`` that satisfies your schema.
+Then you can parse that instance document and export it (print it
+out) with something like the following::
+
+    $ python people_api.py people1.xml
+
+And, if you have used the ``--super`` command line option, as I
+have above, to connect your subclass file with the superclass
+(API) file, then you could use the following to do the same thing::
+
+    $ python people_appl1.py people1.xml
+
+
+
+Some command line options you might want to know
+================================================
+
+You may want to merely skim this section for now, then later refer
+back to it when some of these options are are used later in
+this tutorial.  Also, remember that you can get information about
+more command line options used by ``generateDS.py`` by typing::
+
+    $ python generateDS.py --help
+
+and by reading the document
+http://www.davekuhlman.org/generateDS.html
+
+o
+    Generate the superclass module.  This is the module that
+    contains the implementation of each class for each element
+    type.  So, you can think of this as the implementation of the
+    "data bindings" or the API for XML documents of the type
+    defined by your XML schema.
+
+s
+    Generate the subclass module.  You might or might not need
+    these.  If you intend to write some application-specific code,
+    you might want to consider starting with these skeleton classes
+    and add your application code there.
+
+super
+    This option inserts the name of the superclass module into an
+    ``import`` statement in the subclass file (generated with
+    "-s").  If you know the name of the superclass file in
+    advance, you can use this option to enable the subclass file
+    to import the superclass module automatically.  If you do not
+    use this option, you will need to edit the
+    subclass module with your text editor and modify the import
+    statement near the top.
+
+root-element="element-name"
+    Use this option to tell generateDS.py which of the elements
+    defined in your XM schema is the "root" element.  The root
+    element is the outer-most (top-level) element in XML instance
+    documents defined by this schema.  In effect, this tells your
+    generated modules which element to use as the root element when
+    parsing and exporting documents.
+
+    ``generateDS.py`` attempts to guess the root element, usually
+    the first element defined in your XML schema.  Use this option
+    when that default is not what you want.
+
+member-specs=list|dict
+    Suppose you want to write some code that can be generically
+    applied to elements of different kinds (element types implemented
+    by several *different* generated classes.  If so, it might be
+    helpful to have a list or dictionary specifying information
+    about each member data item in each class.  This option does
+    that by generating a list or a dictionary (with the member data
+    item name as key) in each generated class.  Take a look at the
+    generated code to learn about it.  In particular, look at the
+    generated list or dictionary in a class for any element type
+    and also at the definition of the class ``_MemberSpec``
+    generated near the top of the API module.
+
+version
+    Ask ``generateDS.py`` to tell you what version it is.  This is
+    helpful when you want to ask about a problem, for example at
+    the generateds-users email list
+    (https://lists.sourceforge.net/lists/listinfo/generateds-users),
+    and want to specify which version you are using.
+
+
+The graphical front-end
+=========================
+
+There is also a point-and-click way to run ``generateDS``.  It
+enables you to specify the options needed by ``generateDS.py``
+through a graphical interface, then to run ``generateDS.py`` with
+those options.  It also 
+
+You can run it, if you have installed ``generateDS``, by typing the
+following at a command line::
+
+    $ generateds_gui.py
+
+After configuring options, you can save those options in a
+"session" file, which can be loaded later.  Look under the ``File``
+menu for save and load commands and also consider using the
+"--session" command line option.
+
+Also note that ``generateDS.py`` itself supports a "--session"
+command line option that enables you to run ``generateDS.py`` with
+the options that you specified and saved with the graphical
+front-end.
+
+
+
+Adding application-specific behavior
+====================================
+
+``generateDS.py`` generates Python code which, with no modification, will
+parse and then export an XML document defined by your schema.  However, you
+are likely to want to go beyond that.  In many situations you will want to
+construct a custom application that processes your XML documents using the
+generated code.
+
+
+Implementing custom subclasses
+-------------------------------
+
+One strategy is to generate a subclass file and to add your
+application-specific code to that.  Generate the subclass file
+with the "-s" command line flag::
+
+    $ generateDS.py -s myapp.py people.xsd
+
+Now add some application-specific code to ``myapp.py``, for
+example, if you are using the included "people" sample files::
+
+    class peopleTypeSub(supermod.people):
+        def __init__(self, comments=None, person=None, programmer=None,
+            python_programmer=None, java_programmer=None):
+            supermod.people.__init__(self, comments, person, programmer, python_programmer, 
+                java_programmer)
+        def fancyexport(self, outfile):
+            outfile.write('Starting fancy export')
+            for person in self.get_person():
+                person.fancyexport(outfile)
+    supermod.people.subclass = peopleTypeSub
+    # end class peopleTypeSub
+
+    class personTypeSub(supermod.person):
+        def __init__(self, vegetable=None, fruit=None, ratio=None, id=None, value=None,
+            name=None, interest=None, category=None, agent=None, promoter=None,
+            description=None):
+            supermod.person.__init__(self, vegetable, fruit, ratio, id, value,
+                name, interest, category, agent, promoter, description)
+        def fancyexport(self, outfile):
+            outfile.write('Fancy person export -- name: %s' %
+                self.get_name(), )
+    supermod.person.subclass = personTypeSub
+    # end class personTypeSub
+
+
+
+Using the generated "API" from your application
+-----------------------------------------------
+
+In this approach you might do things like the following:
+
+- ``import`` your generated classes.
+
+- Create instances of those classes.
+
+- Link those instances, for example put "children" inside of a
+  parent, or add one or more instances to a parent that can contain
+  a list of objects (think "maxOccurs" greater than 1 in your
+  schema)
+
+Get to know the generated export API by inspecting the generated
+code in the superclass file.  That's the file generated with the
+"-o" command line flag.
+
+What to look for:
+
+- Look at the arguments to the constructor (``__init__``) to learn
+  how to initialize an instance.
+
+- Look at the "getters" and "setters" (methods name ``getxxx``
+  and ``setxxx``, to learn how to modify member variables.
+
+- Look for a method named ``addxxx`` for members that are lists. 
+  These correspond to members defined with ``maxOccurs="n"``, where
+  n > 1. 
+
+- Look at the build methods: ``build``, ``buildChildren``, and
+  ``buildAttributes``.  These will give you information about how
+  to construct each of the members of a given element/class.
+
+Now, you can import your generated API module, and use it to
+construct and manipulate objects.  Here is an example using code
+generated with the "people" schema::
+
+    import sys
+    import people_api as api
+
+    def test(names):
+        people = api.peopleType()
+        for count, name in enumerate(names):
+            id = '%d' % (count + 1, )
+            person = api.personType(name=name, id=id)
+            people.add_person(person)
+        people.export(sys.stdout, 0)
+
+    test(['albert', 'betsy', 'charlie'])
+
+Run this and you might see something like the following::
+
+    $ python tmp.py
+    <people >
+        <person  id="1">
+            <name>albert</name>
+        </person>
+        <person  id="2">
+            <name>betsy</name>
+        </person>
+        <person  id="3">
+            <name>charlie</name>
+        </person>
+    </people>
+
+
+A combined approach
+-------------------
+
+**Note:** You can find examples of the code in this section in these
+files::
+
+    tutorial/Code/upcase_names.py
+    tutorial/Code/upcase_names_appl.py
+
+Here are the relevant, modified subclasses (``upcase_names_appl.py``)::
+
+    import people_api as supermod
+
+    class peopleTypeSub(supermod.peopleType):
+        def __init__(self, comments=None, person=None, specialperson=None, programmer=None, python_programmer=None, java_programmer=None):
+            super(peopleTypeSub, self).__init__(comments, person, specialperson, programmer, python_programmer, java_programmer, )
+        def upcase_names(self):
+            for person in self.get_person():
+                person.upcase_names()
+    supermod.peopleType.subclass = peopleTypeSub
+    # end class peopleTypeSub
+
+    class personTypeSub(supermod.personType):
+        def __init__(self, vegetable=None, fruit=None, ratio=None, id=None, value=None, name=None, interest=None, category=None, agent=None, promoter=None, description=None, range_=None, extensiontype_=None):
+            super(personTypeSub, self).__init__(vegetable, fruit, ratio, id, value, name, interest, category, agent, promoter, description, range_, extensiontype_, )
+        def upcase_names(self):
+            self.set_name(self.get_name().upper())
+    supermod.personType.subclass = personTypeSub
+    # end class personTypeSub
+
+
+Notes:
+
+- These classes were generated with the "-s" command line option. 
+  They are subclasses of classes in the module ``people_api``,
+  which was generated with the "-o" command line option.
+
+- The only modification to the skeleton subclasses is the addition
+  of the two methods named ``upcase_names()``.
+
+- In the subclass ``peopleTypeSub``, the method ``upcase_names()``
+  merely walk over its immediate children.
+
+- In the subclass ``personTypeSub``, the method ``upcase_names()``
+  just converts the value of its "name" member to upper case.
+
+Here is the application itself (``upcase_names.py``)::
+
+
+    import sys
+    import upcase_names_appl as appl
+
+    def create_people(names):
+        people = appl.peopleTypeSub()
+        for count, name in enumerate(names):
+            id = '%d' % (count + 1, )
+            person = appl.personTypeSub(name=name, id=id)
+            people.add_person(person)
+        return people
+
+    def main():
+        names = ['albert', 'betsy', 'charlie']
+        people = create_people(names)
+        print 'Before:'
+        people.export(sys.stdout, 1)
+        people.upcase_names()
+        print '-' * 50
+        print 'After:'
+        people.export(sys.stdout, 1)
+
+    main()
+
+
+
+Notes:
+
+- The ``create_people()`` function creates a ``peopleTypeSub`` instance
+  with several ``personTypeSub`` instances inside it.
+
+And, when you run this mini-application, here is what you might
+see::
+
+    $ python upcase_names.py 
+    Before:
+        <people >
+            <person  id="1">
+                <name>albert</name>
+            </person>
+            <person  id="2">
+                <name>betsy</name>
+            </person>
+            <person  id="3">
+                <name>charlie</name>
+            </person>
+        </people>
+    --------------------------------------------------
+    After:
+        <people >
+            <person  id="1">
+                <name>ALBERT</name>
+            </person>
+            <person  id="2">
+                <name>BETSY</name>
+            </person>
+            <person  id="3">
+                <name>CHARLIE</name>
+            </person>
+        </people>
+
+
+
+Special situations and uses
+=============================
+
+Generic, type-independent processing
+--------------------------------------
+
+There are times when you would like to implement a function or
+method that can perform operations on a variety of members *and*
+that needs type information about each member.
+
+You can get help with this by generating your code with the
+"--member-specs" command line option.  When you use this option,
+``generateDS.py`` add a list or a dictionary containing an item for
+each member.  If you want a list, then use "--member-specs=list",
+and if you want a dictionary, with member names as keys, then use
+"--member-specs=dict".
+
+Here is an example -- In this example, we walk the
+document/instance tree and convert all string simple types to upper
+case.
+
+Here is a schema (``Code/member_specs.xsd``)::
+
+    <?xml version="1.0"?>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+      <xs:element name="contact-list" type="contactlistType" />
+        
+      <xs:complexType name="contactlistType">
+        <xs:sequence>
+          <xs:element name="description" type="xs:string" />
+            <xs:element name="contact" type="contactType" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="locator" type="xs:string" />
+      </xs:complexType>
+
+      <xs:complexType name="contactType">
+        <xs:sequence>
+          <xs:element name="first-name" type="xs:string"/>
+          <xs:element name="last-name" type="xs:string"/>
+          <xs:element name="interest" type="xs:string" maxOccurs="unbounded" />
+          <xs:element name="category" type="xs:integer"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="priority" type="xs:float" />
+        <xs:attribute name="color-code" type="xs:string" />
+      </xs:complexType>
+
+    </xs:schema>
+
+
+Step 1 -- generate the bindings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We generate code with the following command line::
+
+    $ generateDS.py -f \
+      -o member_specs_api.py \
+      -s member_specs_upper.py \
+      --super=member_specs_api \
+      --member-specs=list \
+      member_specs.xsd
+
+Notes:
+
+- We generate the member specifications as a list with the command
+  line option ``--member-specs=list``.
+
+- We generate an "application" module with the ``-s`` command line
+  option.  We'll put our application specific code in
+  ``member_specs_upper.py``.
+
+
+Step 2 -- add application-specific code
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+And, here is the subclass file (``member_specs_upper.py``, generated
+with the "-s" command line option), to which we have added a bit of
+code that converts any string-type members to upper case.  You can
+think of this module as a special "application" of the generated
+classes.
+
+::
+
+    #!/usr/bin/env python
+
+    #
+    # member_specs_upper.py
+    #
+
+    #
+    # Generated Tue Nov  9 15:54:47 2010 by generateDS.py version 2.2a.
+    #
+
+    import sys
+
+    import member_specs_api as supermod
+
+    etree_ = None
+    Verbose_import_ = False
+    (   XMLParser_import_none, XMLParser_import_lxml,
+        XMLParser_import_elementtree
+        ) = range(3)
+    XMLParser_import_library = None
+    try:
+        # lxml
+        from lxml import etree as etree_
+        XMLParser_import_library = XMLParser_import_lxml
+        if Verbose_import_:
+            print("running with lxml.etree")
+    except ImportError:
+        try:
+            # cElementTree from Python 2.5+
+            import xml.etree.cElementTree as etree_
+            XMLParser_import_library = XMLParser_import_elementtree
+            if Verbose_import_:
+                print("running with cElementTree on Python 2.5+")
+        except ImportError:
+            try:
+                # ElementTree from Python 2.5+
+                import xml.etree.ElementTree as etree_
+                XMLParser_import_library = XMLParser_import_elementtree
+                if Verbose_import_:
+                    print("running with ElementTree on Python 2.5+")
+            except ImportError:
+                try:
+                    # normal cElementTree install
+                    import cElementTree as etree_
+                    XMLParser_import_library = XMLParser_import_elementtree
+                    if Verbose_import_:
+                        print("running with cElementTree")
+                except ImportError:
+                    try:
+                        # normal ElementTree install
+                        import elementtree.ElementTree as etree_
+                        XMLParser_import_library = XMLParser_import_elementtree
+                        if Verbose_import_:
+                            print("running with ElementTree")
+                    except ImportError:
+                        raise ImportError("Failed to import ElementTree from any known place")
+
+    def parsexml_(*args, **kwargs):
+        if (XMLParser_import_library == XMLParser_import_lxml and
+            'parser' not in kwargs):
+            # Use the lxml ElementTree compatible parser so that, e.g.,
+            #   we ignore comments.
+            kwargs['parser'] = etree_.ETCompatXMLParser()
+        doc = etree_.parse(*args, **kwargs)
+        return doc
+
+    #
+    # Globals
+    #
+
+    ExternalEncoding = 'ascii'
+
+    #
+    # Utility funtions needed in each generated class.
+    #
+
+    def upper_elements(obj):
+        for item in obj.member_data_items_:
+            if item.get_data_type() == 'xs:string':
+                name = remap(item.get_name())
+                val1 = getattr(obj, name)
+                if isinstance(val1, list):
+                    for idx, val2 in enumerate(val1):
+                        val1[idx] = val2.upper()
+                else:
+                    setattr(obj, name, val1.upper())
+
+    def remap(name):
+        newname = name.replace('-', '_')
+        return newname
+
+
+    #
+    # Data representation classes
+    #
+
+    class contactlistTypeSub(supermod.contactlistType):
+        def __init__(self, locator=None, description=None, contact=None):
+            super(contactlistTypeSub, self).__init__(locator, description, contact, )
+        def upper(self):
+            upper_elements(self)
+            for child in self.get_contact():
+                child.upper()
+    supermod.contactlistType.subclass = contactlistTypeSub
+    # end class contactlistTypeSub
+
+
+    class contactTypeSub(supermod.contactType):
+        def __init__(self, priority=None, color_code=None, id=None, first_name=None, last_name=None, interest=None, category=None):
+            super(contactTypeSub, self).__init__(priority, color_code, id, first_name, last_name, interest, category, )
+        def upper(self):
+            upper_elements(self)
+    supermod.contactType.subclass = contactTypeSub
+    # end class contactTypeSub
+
+
+    def get_root_tag(node):
+        tag = supermod.Tag_pattern_.match(node.tag).groups()[-1]
+        rootClass = None
+        if hasattr(supermod, tag):
+            rootClass = getattr(supermod, tag)
+        return tag, rootClass
+
+
+    def parse(inFilename):
+        doc = parsexml_(inFilename)
+        rootNode = doc.getroot()
+        rootTag, rootClass = get_root_tag(rootNode)
+        if rootClass is None:
+            rootTag = 'contact-list'
+            rootClass = supermod.contactlistType
+        rootObj = rootClass.factory()
+        rootObj.build(rootNode)
+        # Enable Python to collect the space used by the DOM.
+        doc = None
+        sys.stdout.write('<?xml version="1.0" ?>\n')
+        rootObj.export(sys.stdout, 0, name_=rootTag,
+            namespacedef_='')
+        doc = None
+        return rootObj
+
+
+    def parseString(inString):
+        from StringIO import StringIO
+        doc = parsexml_(StringIO(inString))
+        rootNode = doc.getroot()
+        rootTag, rootClass = get_root_tag(rootNode)
+        if rootClass is None:
+            rootTag = 'contact-list'
+            rootClass = supermod.contactlistType
+        rootObj = rootClass.factory()
+        rootObj.build(rootNode)
+        # Enable Python to collect the space used by the DOM.
+        doc = None
+        sys.stdout.write('<?xml version="1.0" ?>\n')
+        rootObj.export(sys.stdout, 0, name_=rootTag,
+            namespacedef_='')
+        return rootObj
+
+
+    def parseLiteral(inFilename):
+        doc = parsexml_(inFilename)
+        rootNode = doc.getroot()
+        rootTag, rootClass = get_root_tag(rootNode)
+        if rootClass is None:
+            rootTag = 'contact-list'
+            rootClass = supermod.contactlistType
+        rootObj = rootClass.factory()
+        rootObj.build(rootNode)
+        # Enable Python to collect the space used by the DOM.
+        doc = None
+        sys.stdout.write('#from member_specs_api import *\n\n')
+        sys.stdout.write('import member_specs_api as model_\n\n')
+        sys.stdout.write('rootObj = model_.contact_list(\n')
+        rootObj.exportLiteral(sys.stdout, 0, name_="contact_list")
+        sys.stdout.write(')\n')
+        return rootObj
+
+
+    USAGE_TEXT = """
+    Usage: python ???.py <infilename>
+    """
+
+    def usage():
+        print USAGE_TEXT
+        sys.exit(1)
+
+
+    def main():
+        args = sys.argv[1:]
+        if len(args) != 1:
+            usage()
+        infilename = args[0]
+        root = parse(infilename)
+
+
+    if __name__ == '__main__':
+        #import pdb; pdb.set_trace()
+        main()
+
+
+
+Notes:
+
+- We add the functions ``upper_elements`` and ``remap`` that we use
+  in each generated class.
+
+- Notice how the function ``upper_elements`` calls the function
+  ``remap`` *only* on those members whose type is ``xs:string``.
+
+- In each generated (sub-)class, we add the methods that walk the
+  DOM tree and apply the method (``upper``) that transforms each
+  ``xs:string`` value.
+
+
+Step 3 -- write a test/driver harness
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Here is a test driver (``member_specs_test.py``) for our (mini-)
+application::
+
+    #!/usr/bin/env python
+
+    #
+    # member_specs_test.py
+    #
+
+    import sys
+    import member_specs_api as supermod
+    import member_specs_upper
+
+
+    def process(inFilename):
+        doc = supermod.parsexml_(inFilename)
+        rootNode = doc.getroot()
+        rootClass = member_specs_upper.contactlistTypeSub
+        rootObj = rootClass.factory()
+        rootObj.build(rootNode)
+        # Enable Python to collect the space used by the DOM.
+        doc = None
+        sys.stdout.write('<?xml version="1.0" ?>\n')
+        rootObj.export(sys.stdout, 0, name_="contact-list",
+            namespacedef_='')
+        rootObj.upper()
+        sys.stdout.write('-' * 60)
+        sys.stdout.write('\n')
+        rootObj.export(sys.stdout, 0, name_="contact-list",
+            namespacedef_='')
+        return rootObj
+
+
+    USAGE_MSG = """\
+    Synopsis:
+        Sample application using classes and subclasses generated by generateDS.py
+    Usage:
+        python member_specs_test.py infilename
+    """
+
+    def usage():
+        print USAGE_MSG
+        sys.exit(1)
+
+    def main():
+        args = sys.argv[1:]
+        if len(args) != 1:
+            usage()
+        infilename = args[0]
+        process(infilename)
+
+    if __name__ == '__main__':
+        main()
+
+
+
+Notes:
+
+- We copy the function ``parse()`` from our generated code to serve
+  as a model for our function ``process()``.
+
+- After parsing and displaying the XML instance document, we call
+  method ``upper()`` in the generated class ``contactlistTypeSub``
+  in order to walk the DOM tree and transform each ``xs:string`` to
+  uppercase.
+
+
+Step 4 -- run the test application
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We can use the following command line to run our application::
+
+    $ python member_specs_test.py member_specs_data.xml
+
+When we run our application, here is the output::
+
+    $ python member_specs_test.py member_specs_data.xml
+    <?xml version="1.0" ?>
+    <contact-list locator="http://www.rexx.com/~dkuhlman">
+        <description>My list of contacts</description>
+        <contact priority="0.050000" color-code="red" id="1">
+            <first-name>arlene</first-name>
+            <last-name>Allen</last-name>
+            <interest>traveling</interest>
+            <category>2</category>
+        </contact>
+    </contact-list>
+    ------------------------------------------------------------
+    <contact-list locator="HTTP://WWW.REXX.COM/~DKUHLMAN">
+        <description>MY LIST OF CONTACTS</description>
+        <contact priority="0.050000" color-code="RED" id="1">
+            <first-name>ARLENE</first-name>
+            <last-name>ALLEN</last-name>
+            <interest>TRAVELING</interest>
+            <category>2</category>
+        </contact>
+    </contact-list>
+
+
+Notes:
+
+- The output above shows both before- and after-version of
+  exporting the parsed XML instance document.
+
+
+Some hints
+============
+
+The following hints are offered for convenience.  You can discover
+them for yourself rather easily by inspecting the generated code.
+
+
+Children defined with maxOccurs greater than 1
+------------------------------------------------
+
+If a child element is defined in the XML schema with
+``maxOccurs="unbounded"`` or a value of ``maxOccurs`` greater than
+1, then access to the child is through a list.
+
+
+Children defined with simple numeric types
+--------------------------------------------
+
+If a child element is defined as a numeric type such as
+``xs:integer``, ``xs:float``, or ``xs:double`` or as a simple type
+that is (ultimately) based on a numeric type, then the value is
+stored (in the Python object) as a Python data type (``int``,
+``float``, etc).
+
+
+The type of an element's character content
+--------------------------------------------
+
+But, when the element itself is defined as ``mixed="true"`` or the
+element a restriction of and has a simple (numeric) as a base, then
+the ``valueOf_`` instance variable holds the character content and
+it is always a string, that is it is not converted.
+
+
+Constructors and their default values
+---------------------------------------
+
+All parameters to the constructors of generated classes have
+default parameters.  Therefore, you can create an "empty" instance
+of any element by calling the constructor with no parameters.
+
+For example, suppose we have the following XML schema::
+
+       <?xml version="1.0"?>
+       <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+         <xs:element name="plant-list" type="PlantList" />
+           
+         <xs:complexType name="PlantType">
+           <xs:sequence>
+             <xs:element name="description" type="xs:string" />
+               <xs:element name="catagory" type="xs:integer" />
+               <xs:element name="fertilizer" type="FertilizerType" maxOccurs="unbounded" />
+           </xs:sequence>
+           <xs:attribute name="identifier" type="xs:string" />
+         </xs:complexType>
+
+         <xs:complexType name="FertilizerType">
+           <xs:sequence>
+             <xs:element name="name" type="xs:string"/>
+             <xs:element name="description" type="xs:string"/>
+           </xs:sequence>
+           <xs:attribute name="id" type="xs:integer" />
+         </xs:complexType>
+
+       </xs:schema>
+
+And, suppose we generate a module with the following command line::
+
+       $ ./generateDS.py -o garden_api.py garden.xsd
+
+Then, for the element named ``PlantType`` in the generated module
+named ``garden_api.py``, you can create an instance as follows::
+
+       >>> import garden_api
+       >>> plant = garden_api.PlantType()
+       >>> import sys
+       >>> plant.export(sys.stdout, 0)
+       <PlantType/>
+
+
+

@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<container>
+    <sample1>
+        <integer_range_1_value>5</integer_range_1_value>
+        <pattern_value>aaa1234mnopzzz</pattern_value>
+        <pattern_value>bbbmn456opxxx</pattern_value>
+        <token_enum_value>float</token_enum_value>
+        <integer_range_incl_value>2</integer_range_incl_value>
+        <integer_range_excl_value>7</integer_range_excl_value>
+        <min_max_length_value>abc def ghi</min_max_length_value>
+        <length_value>0123456789</length_value>
+        <totaldigits_value>12.456</totaldigits_value>
+
+        <date_minincl_value>2015-07-01</date_minincl_value>
+        <date_maxincl_value>2015-07-01</date_maxincl_value>
+        <date_minexcl_value>2015-07-01</date_minexcl_value>
+        <date_maxexcl_value>2015-07-01</date_maxexcl_value>
+
+        <time_minincl_value>15:20:10</time_minincl_value>
+        <time_maxincl_value>15:20:10</time_maxincl_value>
+        <time_minexcl_value>15:20:10</time_minexcl_value>
+        <time_maxexcl_value>15:20:10</time_maxexcl_value>
+
+        <datetime_minincl_value>2015-07-01T14:20:10</datetime_minincl_value>
+        <datetime_maxincl_value>2015-05-01T14:20:10</datetime_maxincl_value>
+        <datetime_minexcl_value>2015-07-01T14:20:10</datetime_minexcl_value>
+        <datetime_maxexcl_value>2015-05-01T14:20:10</datetime_maxexcl_value>
+
+        <anonymous_float_value>2.2</anonymous_float_value>
+        <primative_integer>765</primative_integer>
+        <primative_float>54.321</primative_float>
+        <vbar_pattern_value>abcd</vbar_pattern_value>
+        <unicode_pattern_value>abçd</unicode_pattern_value>
+    </sample1>
+    <sample2_bad>
+        <integer_range_1_value>2</integer_range_1_value>
+        <pattern_value>mmaaa1234mnopzzz</pattern_value>
+        <token_enum_value>floatxx</token_enum_value>
+        <integer_range_incl_value>22</integer_range_incl_value>
+        <integer_range_excl_value>-40</integer_range_excl_value>
+        <min_max_length_value>mno pqr</min_max_length_value>
+        <length_value>012345</length_value>
+        <totaldigits_value>12.456789</totaldigits_value>
+        <anonymous_float_value>0.2</anonymous_float_value>
+        <vbar_pattern_value>efgh</vbar_pattern_value>
+        <unicode_pattern_value>efğh</unicode_pattern_value>
+    </sample2_bad>
+    <sample3_bad>
+        <integer_range_1_value>9</integer_range_1_value>
+        <pattern_value>aaa1234mnopzzzbcd</pattern_value>
+        <integer_range_incl_value>-50</integer_range_incl_value>
+        <min_max_length_value>asdf asdf asdf asdf asdf asdf</min_max_length_value>
+        <length_value>01234567890</length_value>
+        <totaldigits_value>12345678.45678901</totaldigits_value>
+
+        <date_minincl_value>2015-05-01</date_minincl_value>
+        <date_maxincl_value>2015-11-01</date_maxincl_value>
+        <date_minexcl_value>2015-05-01</date_minexcl_value>
+        <date_maxexcl_value>2015-11-01</date_maxexcl_value>
+
+        <time_minincl_value>13:30:00</time_minincl_value>
+        <time_maxincl_value>17:00:00</time_maxincl_value>
+        <time_minexcl_value>13:30:00</time_minexcl_value>
+        <time_maxexcl_value>17:00:00</time_maxexcl_value>
+
+        <datetime_minincl_value>2015-06-01T13:20:10</datetime_minincl_value>
+        <datetime_maxincl_value>2015-11-01T14:20:10</datetime_maxincl_value>
+        <datetime_minexcl_value>2015-06-01T13:20:10</datetime_minexcl_value>
+        <datetime_maxexcl_value>2015-11-01T14:20:10</datetime_maxexcl_value>
+
+        <anonymous_float_value>6.6</anonymous_float_value>
+    </sample3_bad>
+    <sample4_bad>
+        <pattern_value>aaa12zzz</pattern_value>
+    </sample4_bad>
+    <sample2>
+        <simpleTwoElementOne>
+            <simpleTwoElementTwo>abcdefghijklmno</simpleTwoElementTwo>
+        </simpleTwoElementOne>
+    </sample2>
+    <sample2>
+        <simpleTwoElementOne>
+            <simpleTwoElementTwo>pqrst</simpleTwoElementTwo>
+        </simpleTwoElementOne>
+    </sample2>
+</container>

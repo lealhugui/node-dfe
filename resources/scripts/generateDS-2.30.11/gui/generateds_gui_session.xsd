@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="session" type="sessionType" />
+
+  <xs:complexType name="sessionType">
+    <xs:sequence>
+      <xs:element name="input_schema" type="xs:string" />
+      <xs:element name="output_superclass" type="xs:string" />
+      <xs:element name="output_subclass" type="xs:string" />
+      <xs:element name="force" type="xs:boolean" />
+      <xs:element name="prefix" type="xs:string" />
+      <xs:element name="namespace_prefix" type="xs:string" />
+      <xs:element name="empty_namespace_prefix" type="xs:boolean" />
+      <xs:element name="behavior_filename" type="xs:string" />
+      <xs:element name="properties" type="xs:boolean" />
+      <xs:element name="subclass_suffix" type="xs:string" />
+      <xs:element name="root_element" type="xs:string" />
+      <xs:element name="superclass_module" type="xs:string" />
+      <xs:element name="auto_super" type="xs:boolean" />
+      <xs:element name="old_getters_setters" type="xs:boolean" />
+      <xs:element name="validator_bodies" type="xs:string" />
+      <xs:element name="user_methods" type="xs:string" />
+      <xs:element name="no_dates" type="xs:boolean" />
+      <xs:element name="no_versions" type="xs:boolean" />
+      <xs:element name="no_process_includes" type="xs:boolean" />
+      <xs:element name="silence" type="xs:boolean" />
+      <xs:element name="namespace_defs" type="xs:string" />
+      <xs:element name="external_encoding" type="xs:string" />
+      <xs:element name="get_encoded" type="xs:boolean" />
+      <xs:element name="member_specs" type="xs:string" />
+      <xs:element name="export_spec" type="xs:string" />
+      <xs:element name="one_file_per_xsd" type="xs:boolean" />
+      <xs:element name="output_directory" type="xs:string" />
+      <xs:element name="module_suffix" type="xs:string" />
+      <xs:element name="preserve_cdata_tags" type="xs:boolean" />
+      <xs:element name="cleanup_name_list" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+
+ 
+</xs:schema>
+

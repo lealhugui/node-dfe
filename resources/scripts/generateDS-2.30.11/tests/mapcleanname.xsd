@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="complex-type01">
+        <xs:sequence>
+            <xs:element name="string_value01" type="xs:string"/>
+            <xs:element name="integer_value01" type="xs:integer"
+                minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="float_value01" type="xs:float"/>
+            <xs:element name="field01" type="complex-type02"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="complex-type02">
+        <xs:sequence>
+            <xs:element name="string_value02" type="xs:string"/>
+            <xs:element name="integer_value02" type="xs:integer"
+                minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="float_value02" type="xs:float"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="complex-type03">
+        <xs:extension base="complex-type02">
+            <xs:sequence>
+                <xs:element name="string_value03" type="xs:string"/>
+                <xs:element name="integer_value03" type="xs:integer"
+                    minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="float_value03" type="xs:float"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexType>
+
+    <xs:complexType name="type">
+        <xs:sequence>
+            <xs:element name="string_value02" type="xs:string"/>
+            <xs:element name="integer_value02" type="xs:integer"
+                minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="float_value02" type="xs:float"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="complex-type04">
+        <xs:extension base="type">
+            <xs:sequence>
+                <xs:element name="string_value03" type="xs:string"/>
+                <xs:element name="integer_value03" type="xs:integer"
+                    minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="float_value03" type="xs:float"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexType>
+
+    <xs:complexType name="build">
+        <xs:sequence>
+            <xs:element name="string_value02" type="xs:string"/>
+            <xs:element name="integer_value02" type="xs:integer"
+                minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="float_value02" type="xs:float"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="complex-type05">
+        <xs:extension base="build">
+            <xs:sequence>
+                <xs:element name="string_value03" type="xs:string"/>
+                <xs:element name="integer_value03" type="xs:integer"
+                    minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="float_value03" type="xs:float"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexType>
+
+</xs:schema>

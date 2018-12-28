@@ -1,0 +1,7 @@
+#!/bin/bash -v
+generateDS.py -f \
+    -o member_specs_api.py \
+    -s member_specs_upper.py \
+    --super=member_specs_api \
+    --member-specs=list \
+    member_specs.xsd

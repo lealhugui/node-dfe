@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:pl="http://kuhlman.com/people.xsd"
+    targetNamespace="http://kuhlman.com/people.xsd"
+>
+
+  <xs:complexType name="SpecialDate">
+    <xs:simpleContent>
+      <xs:extension base="xs:date">
+        <xs:attribute name="SpecialProperty" type="xs:string">
+                         </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+
+	<xs:simpleType name="RelationType3">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The possible values of the rel attribute.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="down">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						An item in this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="add">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Add something to this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+	<xs:simpleType name="RelationType2">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The possible values of the rel attribute.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="RelationType3">
+			<xs:enumeration value="down">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						An item in this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="add">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Add something to this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+	<xs:simpleType name="RelationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The possible values of the rel attribute.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="RelationType2">
+			<xs:enumeration value="down">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						An item in this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="add">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Add something to this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+  <xs:complexType name="ExtremeDate">
+    <xs:simpleContent>
+      <xs:extension base="RelationType">
+        <xs:attribute name="ExtremeProperty" type="xs:string">
+                         </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+</xs:schema>
+

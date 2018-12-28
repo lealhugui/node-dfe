@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="contact-list" type="contactlistType" />
+    
+  <xs:complexType name="contactlistType">
+    <xs:sequence>
+      <xs:element name="description" type="xs:string" />
+        <xs:element name="contact" type="contactType" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="locator" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="contactType">
+    <xs:sequence>
+      <xs:element name="first-name" type="xs:string"/>
+      <xs:element name="last-name" type="xs:string"/>
+      <xs:element name="interest" type="xs:string" maxOccurs="unbounded" />
+      <xs:element name="category" type="xs:integer"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="priority" type="xs:float" />
+    <xs:attribute name="color-code" type="xs:string" />
+  </xs:complexType>
+
+</xs:schema>
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+
+    <xs:element name="root01" type="oneperType01_1" />
+
+    <xs:complexType name="oneperType01_1">
+        <xs:sequence>
+            <xs:element name="username" type="xs:string"/>
+            <xs:element name="inner01" type="oneperType01_2" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="oneperType01_2">
+        <xs:sequence>
+            <xs:element name="userdescription" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="oneperEnumType01_1">
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="float" />
+            <xs:enumeration value="int" />
+            <xs:enumeration value="Name" />
+            <xs:enumeration value="token" />
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
+

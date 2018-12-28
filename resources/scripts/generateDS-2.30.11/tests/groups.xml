@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="http://example.com/schema2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="groups.xsd">
+  <node1>
+    <node1node1>value 1 1</node1node1>
+    <group1>group1 1</group1>
+    <group2>group2 1</group2>
+    <node1node2>value 1 2</node1node2>
+  </node1>
+  <node2>
+    <node2node1>value 2 1</node2node1>
+    <group1>group1 2</group1>
+    <group2>group2 2</group2>
+    <node2node2>value 2 2</node2node2>
+  </node2>
+</root>

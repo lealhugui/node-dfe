@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="container" type="containerType"/>
+
+    <xs:complexType name="containerType">
+        <xs:sequence>
+            <xs:element name="sample1" type="simpleOneType" maxOccurs="unbounded"/>
+            <xs:element name="sample2_bad" type="simpleOneType" maxOccurs="unbounded"/>
+            <xs:element name="sample3_bad" type="simpleOneType" maxOccurs="unbounded"/>
+            <xs:element name="sample4_bad" type="simpleOneType" maxOccurs="unbounded"/>
+            <xs:element name="sample2" type="simpleTwoType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="simpleOneType" mixed="0">
+        <xs:sequence>
+            <xs:element name="integer_range_1_value" type="integer_range_1_st" default="5"/>
+            <xs:element name="pattern_value" type="pattern_st"/>
+            <xs:element name="token_enum_value" type="token_enum_st"/>
+            <xs:element name="integer_range_incl_value" type="integer_range_incl_st"/>
+            <xs:element name="integer_range_excl_value" type="integer_range_excl_st"/>
+            <xs:element name="min_max_length_value" type="min_max_length_st"/>
+            <xs:element name="length_value" type="length_st"/>
+            <xs:element name="totalDigits_value" type="totalDigits_st"/>
+
+            <xs:element name="date_minincl_value" type="date_minincl_st"/>
+            <xs:element name="date_maxincl_value" type="date_maxincl_st"/>
+            <xs:element name="date_minexcl_value" type="date_minexcl_st"/>
+            <xs:element name="date_maxexcl_value" type="date_maxexcl_st"/>
+            <xs:element name="time_minincl_value" type="time_minincl_st"/>
+            <xs:element name="time_maxincl_value" type="time_maxincl_st"/>
+            <xs:element name="time_minexcl_value" type="time_minexcl_st"/>
+            <xs:element name="time_maxexcl_value" type="time_maxexcl_st"/>
+            <xs:element name="datetime_minincl_value" type="datetime_minincl_st"/>
+            <xs:element name="datetime_maxincl_value" type="datetime_maxincl_st"/>
+            <xs:element name="datetime_minexcl_value" type="datetime_minexcl_st"/>
+            <xs:element name="datetime_maxexcl_value" type="datetime_maxexcl_st"/>
+            <xs:element name="vbar_pattern_value" type="vbar_pattern_st"/>
+            <xs:element name="unicode_pattern_value" type="unicode_pattern_st"/>
+
+            <!-- Test for use of anonymous simple type. -->
+            <xs:element name="anonymous_float_value">
+                <xs:simpleType>
+                    <xs:restriction base="xs:float">
+                        <xs:minInclusive value="1.1"/>
+                        <xs:maxInclusive value="4.4"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="primative_integer" type="xs:integer"/>
+            <xs:element name="primative_float" type="xs:float"/>
+        </xs:sequence>
+        <xs:attribute name="integer_range_1_value_with_default" type="integer_range_1_st" default="6"/>
+    </xs:complexType>
+    <!-- Test for use of an anonymous simple type inside an anonymous complexType. -->
+    <xs:element name="simpleTypeData" type="simpleTwoType"/>
+    <xs:complexType name="simpleTwoType">
+        <xs:sequence>
+            <xs:element name="simpleTwoElementOne">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="simpleTwoElementTwo">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:minLength value="12"/>
+                                    <xs:maxLength value="24"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="integer_range_1_st">
+        <xs:restriction base="integer_range_2_st">
+            <xs:minExclusive value="4"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="integer_range_2_st">
+        <xs:restriction base="xs:integer">
+            <xs:maxExclusive value="8"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="pattern_st">
+        <xs:restriction base="pattern_1_st">
+            <xs:pattern value="aaa.*zzz"/>
+            <xs:pattern value="bbb.*xxx"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="pattern_1_st">
+        <xs:restriction base="min_length_st">
+            <xs:pattern value=".*123.*"/>
+            <xs:pattern value=".*456.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="min_length_st">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="token_enum_st">
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="float"/>
+            <xs:enumeration value="int"/>
+            <xs:enumeration value="Name"/>
+            <xs:enumeration value="token"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="integer_range_incl_st">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="-5"/>
+            <xs:maxInclusive value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="integer_range_excl_st">
+        <xs:restriction base="xs:integer">
+            <xs:minExclusive value="-5"/>
+            <xs:maxExclusive value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="min_max_length_st">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="10"/>
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="length_st">
+        <xs:restriction base="xs:string">
+            <xs:length value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="totalDigits_st">
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="15"/>
+            <xs:fractionDigits value="5"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="date_minincl_st">
+        <xs:restriction base="xs:date">
+            <xs:minInclusive value="2015-06-01"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="date_maxincl_st">
+        <xs:restriction base="xs:date">
+            <xs:maxInclusive value="2015-10-31"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="date_minexcl_st">
+        <xs:restriction base="xs:date">
+            <xs:minExclusive value="2015-06-01"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="date_maxexcl_st">
+        <xs:restriction base="xs:date">
+            <xs:maxExclusive value="2015-10-31"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="time_minincl_st">
+        <xs:restriction base="xs:time">
+            <xs:minInclusive value="14:20:10"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="time_maxincl_st">
+        <xs:restriction base="xs:time">
+            <xs:maxInclusive value="16:20:10"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="time_minexcl_st">
+        <xs:restriction base="xs:time">
+            <xs:minExclusive value="14:20:10"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="time_maxexcl_st">
+        <xs:restriction base="xs:time">
+            <xs:maxExclusive value="16:20:10"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="datetime_minincl_st">
+        <xs:restriction base="xs:dateTime">
+            <xs:minInclusive value="2015-06-01T14:20:10"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="datetime_maxincl_st">
+        <xs:restriction base="xs:dateTime">
+            <xs:maxInclusive value="2015-10-31T16:20:10"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="datetime_minexcl_st">
+        <xs:restriction base="xs:dateTime">
+            <xs:minExclusive value="2015-06-01T14:20:10"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="datetime_maxexcl_st">
+        <xs:restriction base="xs:dateTime">
+            <xs:maxExclusive value="2015-10-31T16:20:10"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="vbar_pattern_st">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="abcd|ef\|gh" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="unicode_pattern_st">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="abçd|ef\|gh" />
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

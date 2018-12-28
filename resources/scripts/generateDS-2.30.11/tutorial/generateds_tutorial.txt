@@ -1,0 +1,48 @@
+======================================================
+generateDS -- Introduction and Tutorial
+======================================================
+
+:author: Dave Kuhlman
+:address: dkuhlman (at) davekuhlman (dot) org
+    http://www.davekuhlman.org
+
+.. Do not modify the following version comments.
+   They are used by updateversion.py.
+
+.. version
+
+:revision: 2.30.11
+
+.. version
+
+:date: |date|
+
+.. |date| date:: %B %d, %Y
+
+
+:copyright: Copyright (c) 2004 Dave Kuhlman. This documentation
+    and the software it describes is covered by The MIT License:
+    http://www.opensource.org/licenses/mit-license.
+
+:abstract: This document is an introduction and tutorial to the use
+    of ``generateDS.py`` which generates Python data structures (for
+    example, class definitions) from an XML schema document.  These
+    data structures represent the elements in an XML document
+    described by the XML schema. It also generates parsers that
+    load an XML document into those data structures. In addition,
+    a separate file containing subclasses (stubs) is optionally
+    generated. The user can add methods to the subclasses in order
+    to process the contents of an XML document.
+
+.. sectnum::
+    :depth: 4
+
+-----
+
+.. contents::
+    :depth: 4
+
+-----
+
+.. include:: generateds_tutoriala.txt
+

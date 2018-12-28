@@ -1,0 +1,22 @@
+<xsd:schema
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    >
+
+    <xsd:element name="authors" type="authorsType" />
+    <xsd:complexType name="authorsType">
+        <xsd:sequence>
+            <xsd:element ref="author"/>
+            <xsd:choice maxOccurs="unbounded" minOccurs="0">
+                <xsd:element ref="author"/>
+                <xsd:element name="cooperation" type="xsd:string"/>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="author">
+        <xsd:sequence>
+            <xsd:element name="description" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>

@@ -1,0 +1,5 @@
+{
+    "globalDependencies": {
+        "jsonix": "https://raw.githubusercontent.com/highsource/jsonix/master/typescript/src/main/typescript/Jsonix.d.ts"
+    }
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+
+    <xs:element name="data" type="dataType"/>
+
+    <xs:complexType name="dataType">
+        <xs:sequence>
+            <xs:element name="data1" type="data1Type"/>
+            <xs:element name="data2" type="TypeData2"/>
+            <xs:element name="data3" type="RealTypeData3"/>
+            <xs:element name="data4" type="AABBCCdataType"/>
+            <xs:element name="data5" type="dataTypeXYZAXYZ"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="data1Type">
+        <xs:sequence>
+            <xs:element name="content1" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TypeData2">
+        <xs:sequence>
+            <xs:element name="content1" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="RealTypeData3">
+        <xs:sequence>
+            <xs:element name="content1" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="AABBCCdataType">
+        <xs:sequence>
+            <xs:element name="content1" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="dataTypeXYZAXYZ">
+        <xs:sequence>
+            <xs:element name="content1" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

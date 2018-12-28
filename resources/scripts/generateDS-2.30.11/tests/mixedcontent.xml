@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <markup>This markup has <embedded>content</embedded> within it.</markup>
+    <markup>This markup has element
+        <nested>
+            <nested1>
+                <nestedA1>
+                    <nestedB1>B1 text A</nestedB1>
+                    <nestedB2>B2 text A</nestedB2>
+                </nestedA1>
+                <nestedA1>
+                    <nestedB1>B1 text B</nestedB1>
+                    <nestedB2>B2 text B</nestedB2>
+                </nestedA1>
+            </nested1>
+            <nested2>Some nested text</nested2>
+            <nested3>1234</nested3>
+        </nested>
+        content and character content
+        <nested>
+            <nested2>Some nested text</nested2>
+            <nested3>1234</nested3>
+        </nested>
+        within it.
+    </markup>
+</root>
+

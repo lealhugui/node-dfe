@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+
+    <xs:element name="defaults" type="DefaultTypes"/>
+
+    <xs:complexType name="DefaultTypes">
+        <xs:sequence>
+            <xs:element name="default1" type="DefaultType1"/>
+            <xs:element name="default2" type="DefaultType2"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DefaultType1">
+        <xs:sequence>
+            <xs:element name="default01" type="xs:integer" default="23"
+                minOccurs="0"/>
+            <xs:element name="normal01" type="xs:integer"
+                minOccurs="0"/>
+            <xs:element name="default02" type="xs:string" default="Peach"
+                minOccurs="0"/>
+            <xs:element name="normal02" type="xs:string"
+                minOccurs="0"/>
+            <xs:element name="default03" type="xs:float" default="23.45"
+                minOccurs="0"/>
+            <xs:element name="normal03" type="xs:float"
+                minOccurs="0"/>
+            <xs:element name="default04" type="xs:double" default="54.32"
+                minOccurs="0"/>
+            <xs:element name="normal04" type="xs:double"
+                minOccurs="0"/>
+            <xs:element name="default05a" type="xs:boolean" default="true"
+                minOccurs="0"/>
+            <xs:element name="default05b" type="xs:boolean" default="false"
+                minOccurs="0"/>
+            <xs:element name="normal05" type="xs:boolean"
+                minOccurs="0"/>
+            <xs:element name="default06" type="xs:date" default="2015-06-21"
+                minOccurs="0"/>
+            <xs:element name="normal06" type="xs:date"
+                minOccurs="0"/>
+            <xs:element name="default07" type="xs:time" default="11:10:09"
+                minOccurs="0"/>
+            <xs:element name="normal07" type="xs:date"
+                minOccurs="0"/>
+            <xs:element name="default08" type="xs:dateTime"
+                default="2015-06-21T14:13:12"
+                minOccurs="0"/>
+            <xs:element name="normal08" type="xs:dateTime"
+                minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DefaultType2">
+        <xs:sequence>
+            <xs:element name="default01" type="xs:integer" default="23"/>
+            <xs:element name="normal01" type="xs:integer"/>
+            <xs:element name="default02" type="xs:string" default="Peach"/>
+            <xs:element name="normal02" type="xs:string"/>
+            <xs:element name="default03" type="xs:float" default="23.45"/>
+            <xs:element name="normal03" type="xs:float"/>
+            <xs:element name="default04" type="xs:double" default="54.32"/>
+            <xs:element name="normal04" type="xs:double"/>
+            <xs:element name="default05a" type="xs:boolean" default="true"/>
+            <xs:element name="default05b" type="xs:boolean" default="false"/>
+            <xs:element name="normal05" type="xs:boolean"/>
+            <xs:element name="default06" type="xs:date" default="2015-06-21"/>
+            <xs:element name="normal06" type="xs:date"/>
+            <xs:element name="default07" type="xs:time" default="11:10:09"/>
+            <xs:element name="normal07" type="xs:date"/>
+            <xs:element name="default08" type="xs:dateTime"
+                default="2015-06-21T14:13:12"/>
+            <xs:element name="normal08" type="xs:dateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

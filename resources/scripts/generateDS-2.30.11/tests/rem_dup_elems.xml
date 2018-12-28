@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<authors>
+    <author>
+        <description>description one</description>
+    </author>
+    <author>
+        <description>description two</description>
+    </author>
+    <cooperation>sample cooperation one</cooperation>
+    <author>
+        <description>description three</description>
+    </author>
+    <cooperation>sample cooperation two</cooperation>
+    <author>
+        <description>description four</description>
+    </author>
+    <cooperation>sample cooperation three</cooperation>
+</authors>

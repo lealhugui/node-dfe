@@ -1,0 +1,8 @@
+[console_scripts]
+gends_extract_simple_types = gends_extract_simple_types:main
+gends_generate_django = gends_generate_django:main
+gends_run_gen_django = gends_run_gen_django:main
+generateDS = generateDS:main
+generateds_gui = generateds_gui:main
+process_includes = process_includes:main
+

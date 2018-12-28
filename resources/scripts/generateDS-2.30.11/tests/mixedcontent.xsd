@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Erwin de Kock (Philips Electronics Nederland BV) -->
+<!--
+     Tests for mixed="True"
+ -->
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+
+    <xs:element name="root" type="rootType"/>
+    <xs:complexType name="rootType">
+        <xs:sequence>
+            <xs:element name="markup" type="markupType"
+                maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="markupType" mixed="true">
+        <xs:sequence>
+            <xs:element name="embedded" type="xs:string"
+                minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="nested" type="nestedType"
+                minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="nestedType">
+        <xs:sequence>
+            <xs:element name="nested1" type="nested1Type"
+                minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="nested2" type="xs:string"
+                minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="nested3" type="xs:integer"
+                minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+        
+    <xs:complexType name="nested1Type">
+        <xs:sequence>
+            <xs:element name="nestedA1" type="nested1AType"
+                minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="nestedA2" type="nested1AType"
+                minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="nested1AType">
+        <xs:sequence>
+            <xs:element name="nestedB1" type="xs:string"
+                maxOccurs="unbounded"/>
+            <xs:element name="nestedB2" type="xs:string"
+                maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

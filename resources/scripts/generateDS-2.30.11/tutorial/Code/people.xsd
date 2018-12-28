@@ -1,0 +1,316 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="people" type="peopleType">
+        <xs:annotation><xs:documentation>
+          A list of people.
+        </xs:documentation></xs:annotation>
+    </xs:element>
+    <xs:complexType name="peopleType">
+        <xs:sequence>
+            <xs:element name="comments" type="commentsType" maxOccurs="unbounded"/>
+            <xs:element name="person" maxOccurs="unbounded" type="personType"/>
+            <xs:element name="specialperson" maxOccurs="unbounded" type="specialperson"/>
+            <xs:group ref="programmerGroup" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:group name="programmerGroup">
+        <xs:sequence>
+            <xs:element name="programmer" maxOccurs="unbounded" type="programmerType"/>
+            <xs:element name="python-programmer" maxOccurs="unbounded" type="python-programmerType"/>
+            <xs:element name="java-programmer" maxOccurs="unbounded" type="java-programmerType"/>
+        </xs:sequence>
+    </xs:group>
+
+    <xs:element name="comments" type="commentsType">
+    </xs:element>
+    <xs:complexType name="commentsType" mixed="true">
+        <xs:sequence>
+            <!-- 
+            <xs:element name="emp" type="xs:string" />
+            -->
+            <xs:element name="emp" type="xs:string" maxOccurs="unbounded"/>
+            <xs:element name="bold" type="xs:string" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="person" type="personType">
+        <xs:annotation><xs:documentation>
+          A generic person.  This is the base for a number of different
+          kinds of people.  They are each an extension of this base
+          type of person.
+        </xs:documentation></xs:annotation>
+    </xs:element>
+    <xs:complexType name="personType" mixed="0">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="interest" type="xs:string" maxOccurs="unbounded" />
+            <xs:element name="category" type="xs:integer"/>
+            <xs:element name="agent" type="agentType" maxOccurs="unbounded" />
+            <xs:element name="promoter" type="boosterType" maxOccurs="unbounded" />
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="range" type="RangeType"/>
+        </xs:sequence>
+        <xs:attribute name="value" type="xs:ID" />
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="ratio" type="xs:float" />
+        <xs:attributeGroup ref="favorites" />
+    </xs:complexType>
+
+    <xs:complexType name="specialperson">
+      <xs:complexContent>
+        <xs:extension base="personType">
+          <xs:sequence>
+            <!--
+            <xs:element name="musicalinstrument" type="xs:string" />
+            -->
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+
+    <!--
+    <xs:element name="description-a" type="xs:string" substitutionGroup="description" />
+    -->
+
+    <xs:element name="programmer" type="programmerType">
+        <xs:annotation><xs:documentation>
+          A programmer type of person.  Programmers are very special
+          but also a little shy.
+        </xs:documentation></xs:annotation>
+    </xs:element>
+    <xs:complexType name="programmerType" mixed="0">
+        <xs:complexContent>
+            <xs:extension base="personType">
+                <xs:sequence>
+                    <!--
+                    <xs:element name="description" type="xs:string"/>
+                    -->
+                    <xs:element name="email" type="xs:string"/>
+                    <xs:element name="elposint" type="xs:positiveInteger"/>
+                    <xs:element name="elnonposint" type="xs:nonPositiveInteger"/>
+                    <xs:element name="elnegint" type="xs:negativeInteger"/>
+                    <xs:element name="elnonnegint" type="xs:nonNegativeInteger"/>
+                    <xs:element name="eldate" type="xs:date"/>
+                    <xs:element name="eltoken" type="xs:token"/>
+                    <xs:element name="elshort" type="xs:short"/>
+                    <xs:element name="ellong" type="xs:long"/>
+                    <xs:element name="elparam" type="paramType"/>
+                    <xs:element name="elarraytypes" type="ArrayTypes"/>
+                    
+                </xs:sequence>
+                <xs:attribute name="language" type="xs:string" />
+                <xs:attribute name="area"/>
+                <xs:attribute name="attrposint" type="xs:positiveInteger"/>
+                <xs:attribute name="attrnonposint" type="xs:nonPositiveInteger"/>
+                <xs:attribute name="attrnegint" type="xs:negativeInteger"/>
+                <xs:attribute name="attrnonnegint" type="xs:nonNegativeInteger"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <xs:element name="param" type="paramType">
+        <xs:annotation>
+            <xs:documentation>Finding flow attribute unneccesary in practice. A unnamed parameter is unbound/skipped.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="paramType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:ID" />
+                <xs:attribute name="name" type="xs:NCName" />
+                <xs:attribute name="sid" type="xs:NCName" />
+                <xs:attribute name="flow" type="FlowType" />
+                <xs:attribute name="semantic" type="xs:token" />
+                <xs:attribute name="type" type="xs:NMTOKEN" use="required" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+
+    <xs:simpleType name="ArrayTypes">
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="float" />
+            <xs:enumeration value="int" />
+            <xs:enumeration value="Name" />
+            <xs:enumeration value="token" />
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="FlowType">
+        <xs:restriction base="xs:integer">
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="RangeType">
+        <xs:restriction base="xs:integer">
+        </xs:restriction>
+    </xs:simpleType>
+
+
+
+    <xs:element name="python-programmer" type="python-programmerType">
+        <xs:annotation><xs:documentation>
+          A Python programmer type of person.  Programmers are very special
+          and Python programmers are especially wonderful kinds
+          of people.
+        </xs:documentation></xs:annotation>
+    </xs:element>
+    <xs:complexType mixed="0" name="python-programmerType">
+        <xs:complexContent>
+            <xs:extension base="programmerType">
+                <xs:sequence>
+                    <xs:element name="favorite-editor" type="xs:string"/>
+                    <xs:element name="flowvalue" type="FlowType"/>
+                </xs:sequence>
+                <xs:attribute name="nick-name"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="java-programmer" type="java-programmerType">
+        <xs:annotation><xs:documentation>
+          A Java programmer type of person.  Programmers are very special
+          and Java programmers are nice also, but not as especially wonderful
+          as Python programmers, of course.
+        </xs:documentation></xs:annotation>
+    </xs:element>
+    <xs:complexType mixed="0" name="java-programmerType">
+        <xs:complexContent>
+            <xs:extension base="programmerType">
+                <xs:sequence>
+                    <xs:element name="favorite-editor" type="xs:string"/>
+                </xs:sequence>
+                <xs:attribute name="nick-name"/>
+                <xs:attribute name="status"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="agent" type="agentType">
+    </xs:element>
+    <xs:complexType name="agentType">
+        <xs:sequence>
+            <xs:element name="firstname" type="xs:string"/>
+            <xs:element name="lastname" type="xs:string"/>
+            <xs:element name="priority" type="xs:float"/>
+            <xs:element name="info" type="infoType"/>
+            <xs:element ref="vehicle" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="special-agent" type="special-agentType"
+        substitutionGroup="agent">
+    </xs:element>
+    <xs:complexType name="special-agentType">
+        <xs:annotation><xs:documentation>
+        This is a good kind of agent for testing the generation
+        of Python bindings for an XML schema.
+        </xs:documentation></xs:annotation>
+        <xs:complexContent>
+        <xs:extension base="agentType">
+            <xs:sequence>
+                <xs:element name="firstname" type="xs:string"/>
+                <xs:element name="lastname" type="xs:string"/>
+                <xs:element name="priority" type="xs:float"/>
+                <xs:element name="info" type="infoType"/>
+            </xs:sequence>
+        </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="weird-agent" type="weird-agentType"
+        substitutionGroup="agent">
+    </xs:element>
+    <xs:complexType name="weird-agentType">
+        <xs:annotation><xs:documentation>
+        This is a good kind of agent for testing the generation
+        of Python bindings for an XML schema.
+        </xs:documentation></xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="agentType">
+                <xs:sequence>
+                    <xs:element name="firstname" type="xs:string"/>
+                    <xs:element name="lastname" type="xs:string"/>
+                    <xs:element name="priority" type="xs:float"/>
+                    <xs:element name="info" type="infoType"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="booster" type="boosterType">
+    </xs:element>
+    <xs:complexType name="boosterType">
+        <xs:sequence>
+            <xs:element name="firstname" type="xs:string"/>
+            <xs:element name="lastname" type="xs:string"/>
+            <xs:element name="other-name" type="xs:float"/>
+            <xs:element name="class" type="xs:float"/>
+            <xs:element name="other-value" type="xs:float" maxOccurs="unbounded" />
+            <xs:element name="type" type="xs:float" maxOccurs="unbounded" />
+            <xs:element name="client-handler" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="fullname" type="xs:string"/>
+                        <xs:element name="refid" type="xs:integer"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="member-id" type="xs:string" />
+    </xs:complexType>
+
+    <!-- Test for element with attributes but no children.
+         Should use valueOf.
+    -->
+    <xs:element name="info" type="infoType">
+    </xs:element>
+    <xs:complexType name="infoType">
+        <xs:sequence>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="type" type="xs:integer" />
+        <xs:attribute name="rating" type="xs:float" />
+    </xs:complexType>
+
+
+  <xs:attributeGroup name="favorites">
+    <xs:attribute name="fruit" />
+    <xs:attribute name="vegetable" />
+  </xs:attributeGroup>
+
+
+  <xs:element name="vehicle" type="vehicleType"/>
+
+  <xs:complexType name="vehicleType" abstract="true">
+    <xs:sequence>
+      <xs:element name="wheelcount" type="xs:integer" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="automobile">
+    <xs:complexContent>
+      <xs:extension base="vehicleType">
+        <xs:sequence>
+          <xs:element name="drivername" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="airplane">
+    <xs:complexContent>
+      <xs:extension base="vehicleType" >
+        <xs:sequence>
+          <xs:element name="pilotname" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+</xs:schema>
+

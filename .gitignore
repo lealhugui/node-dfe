@@ -66,3 +66,6 @@ yarn.lock
 
 # npm deploy folder
 lib
+
+# python compiled
+**/**/*.pyc

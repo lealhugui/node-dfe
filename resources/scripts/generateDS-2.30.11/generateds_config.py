@@ -1,0 +1,4 @@
+
+NameTable = {
+    'range': 'range_',
+}

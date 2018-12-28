@@ -1,0 +1,3522 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.14: http://docutils.sourceforge.net/" />
+<title>generateDS -- Generate Data Structures from XML Schema</title>
+<meta name="author" content="Dave Kuhlman" />
+<style type="text/css">
+
+/* css */
+
+body {
+  font: 90% 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: black;
+  margin: 2em;
+  padding: 2em;
+}
+
+a[href] {
+  color: #436976;
+  background-color: transparent;
+}
+
+a.toc-backref {
+  text-decoration: none;
+}
+
+h1 a[href] {
+  text-decoration: none;
+  color: #fcb100;
+  background-color: transparent;
+}
+
+a.strong {
+  font-weight: bold;
+}
+
+img {
+  margin: 0;
+  border: 0;
+}
+
+p {
+  margin: 0.5em 0 1em 0;
+  line-height: 1.5em;
+}
+p a {
+  text-decoration: underline;
+}
+p a:visited {
+  color: purple;
+  background-color: transparent;
+}
+p a:active {
+  color: red;
+  background-color: transparent;
+}
+a:hover {
+  text-decoration: none;
+}
+p img {
+  border: 0;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #003a6b;
+  background-color: transparent;
+  font: 100% 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding-top: 0.5em;
+}
+
+h1 {
+  font-size: 160%;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #fcb100;
+}
+h2 {
+  font-size: 140%;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #aaa;
+}
+h3 {
+  font-size: 130%;
+  margin-bottom: 0.5em;
+  text-decoration: underline;
+}
+h4 {
+  font-size: 110%;
+  font-weight: bold;
+}
+h5 {
+  font-size: 100%;
+  font-weight: bold;
+}
+h6 {
+  font-size: 80%;
+  font-weight: bold;
+}
+
+ul a, ol a {
+  text-decoration: underline;
+}
+
+dt {
+  font-weight: bold;
+}
+dt a {
+  text-decoration: none;
+}
+
+dd {
+  line-height: 1.5em;
+  margin-bottom: 1em;
+}
+
+legend {
+  background: #ffffff;
+  padding: 0.5em;
+}
+
+form {
+  margin: 0;
+}
+
+
+dl.form {
+  margin: 0;
+  padding: 1em;
+}
+
+dl.form dt {
+  width: 30%;
+  float: left;
+  margin: 0;
+  padding: 0 0.5em 0.5em 0;
+  text-align: right;
+}
+
+input {
+  font: 100% 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+  color: black;
+  background-color: white;
+  vertical-align: middle;
+}
+
+abbr, acronym, .explain {
+  color: black;
+  background-color: transparent;
+}
+
+q, blockquote {
+}
+
+code, pre {
+  font-family: monospace;
+  font-size: 1.2em;
+  display: block;
+  padding: 10px;
+  border: 1px solid #838183;
+  background-color: #eee;
+  color: #000;
+  overflow: auto;
+  margin: 0.5em 1em;
+}
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+tt.docutils {
+  background-color: #dddddd;
+}
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="generateds-generate-data-structures-from-xml-schema">
+<h1 class="title">generateDS -- Generate Data Structures from XML Schema</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>Dave Kuhlman</td></tr>
+<tr><th class="docinfo-name">Contact:</th>
+<td>dkuhlman (at) davekuhlman (dot) org</td></tr>
+<tr><th class="docinfo-name">Address:</th>
+<td><pre class="address">
+<a class="first last reference external" href="http://www.davekuhlman.org">http://www.davekuhlman.org</a>
+</pre>
+</td></tr>
+</tbody>
+</table>
+<!-- Do not modify the following version comments.
+They are used by updateversion.py. -->
+<!-- version -->
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">revision:</th><td class="field-body">2.30.11</td>
+</tr>
+</tbody>
+</table>
+<!-- version -->
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">date:</th><td class="field-body">December 20, 2018</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Copyright (c) 2004 Dave Kuhlman. This documentation
+and the software it describes is covered by The MIT License:
+<a class="reference external" href="http://www.opensource.org/licenses/mit-license.php">http://www.opensource.org/licenses/mit-license.php</a>.</td>
+</tr>
+<tr class="field"><th class="field-name">abstract:</th><td class="field-body"><tt class="docutils literal">generateDS.py</tt> generates Python data structures (for
+example, class definitions) from an XML Schema document. These
+data structures represent the elements in an XML document
+described by the XML Schema. It also generates parsers that
+load an XML document into those data structures. In addition,
+a separate file containing subclasses (stubs) is optionally
+generated. The user can add methods to the subclasses in order
+to process the contents of an XML document.</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#introduction" id="id7">1&nbsp;&nbsp;&nbsp;Introduction</a></li>
+<li><a class="reference internal" href="#where-to-find-it" id="id8">2&nbsp;&nbsp;&nbsp;Where To find it</a><ul class="auto-toc">
+<li><a class="reference internal" href="#download" id="id9">2.1&nbsp;&nbsp;&nbsp;Download</a></li>
+<li><a class="reference internal" href="#support-and-more-information" id="id10">2.2&nbsp;&nbsp;&nbsp;Support and more information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#how-to-build-and-install-it" id="id11">3&nbsp;&nbsp;&nbsp;How to build and install it</a><ul class="auto-toc">
+<li><a class="reference internal" href="#requirements" id="id12">3.1&nbsp;&nbsp;&nbsp;Requirements</a></li>
+<li><a class="reference internal" href="#installation" id="id13">3.2&nbsp;&nbsp;&nbsp;Installation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#packaging-your-code" id="id14">4&nbsp;&nbsp;&nbsp;Packaging your code</a></li>
+<li><a class="reference internal" href="#the-command-line-interface-how-to-use-it" id="id15">5&nbsp;&nbsp;&nbsp;The command line interface -- How to use it</a><ul class="auto-toc">
+<li><a class="reference internal" href="#running-generateds-py" id="id16">5.1&nbsp;&nbsp;&nbsp;Running <tt class="docutils literal">generateDS.py</tt></a></li>
+<li><a class="reference internal" href="#command-line-options" id="id17">5.2&nbsp;&nbsp;&nbsp;Command line options</a></li>
+<li><a class="reference internal" href="#name-conflicts-etc" id="id18">5.3&nbsp;&nbsp;&nbsp;Name conflicts etc.</a><ul class="auto-toc">
+<li><a class="reference internal" href="#conflicts-with-python-keywords" id="id19">5.3.1&nbsp;&nbsp;&nbsp;Conflicts with Python keywords</a></li>
+<li><a class="reference internal" href="#conflicts-between-child-elements-and-attributes" id="id20">5.3.2&nbsp;&nbsp;&nbsp;Conflicts between child elements and attributes</a></li>
+<li><a class="reference internal" href="#cleaning-up-names-with-special-characters-etc" id="id21">5.3.3&nbsp;&nbsp;&nbsp;Cleaning up names with special characters etc.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-graphical-user-interface-how-to-use-it" id="id22">6&nbsp;&nbsp;&nbsp;The graphical user interface -- How to use it</a></li>
+<li><a class="reference internal" href="#common-problems" id="id23">7&nbsp;&nbsp;&nbsp;Common problems</a><ul class="auto-toc">
+<li><a class="reference internal" href="#namespace-prefix-mis-match" id="id24">7.1&nbsp;&nbsp;&nbsp;Namespace prefix mis-match</a></li>
+<li><a class="reference internal" href="#using-multiple-subclass-modules-with-the-same-superclass-module" id="id25">7.2&nbsp;&nbsp;&nbsp;Using multiple subclass modules with the same superclass module</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#supported-features-of-xml-schema" id="id26">8&nbsp;&nbsp;&nbsp;Supported features of XML Schema</a><ul class="auto-toc">
+<li><a class="reference internal" href="#attributes-no-nested-children" id="id27">8.1&nbsp;&nbsp;&nbsp;Attributes + no nested children</a></li>
+<li><a class="reference internal" href="#mixed-content" id="id28">8.2&nbsp;&nbsp;&nbsp;Mixed content</a></li>
+<li><a class="reference internal" href="#anyattribute" id="id29">8.3&nbsp;&nbsp;&nbsp;anyAttribute</a></li>
+<li><a class="reference internal" href="#element-extensions" id="id30">8.4&nbsp;&nbsp;&nbsp;Element extensions</a></li>
+<li><a class="reference internal" href="#attribute-groups" id="id31">8.5&nbsp;&nbsp;&nbsp;Attribute groups</a></li>
+<li><a class="reference internal" href="#substitution-groups" id="id32">8.6&nbsp;&nbsp;&nbsp;Substitution groups</a></li>
+<li><a class="reference internal" href="#primitive-types" id="id33">8.7&nbsp;&nbsp;&nbsp;Primitive types</a></li>
+<li><a class="reference internal" href="#simpletype" id="id34">8.8&nbsp;&nbsp;&nbsp;simpleType</a></li>
+<li><a class="reference internal" href="#list-values-optional-values-maxoccurs-etc" id="id35">8.9&nbsp;&nbsp;&nbsp;List values, optional values, maxOccurs, etc.</a></li>
+<li><a class="reference internal" href="#simpletype-and-validators" id="id36">8.10&nbsp;&nbsp;&nbsp;simpleType and validators</a><ul class="auto-toc">
+<li><a class="reference internal" href="#generating-validator-bodies-from-xml-schema" id="id37">8.10.1&nbsp;&nbsp;&nbsp;Generating validator bodies from XML schema</a></li>
+<li><a class="reference internal" href="#user-written-validator-bodies" id="id38">8.10.2&nbsp;&nbsp;&nbsp;User written validator bodies</a></li>
+<li><a class="reference internal" href="#turning-off-validation-of-simpletype-data" id="id39">8.10.3&nbsp;&nbsp;&nbsp;Turning off validation of <tt class="docutils literal">simpleType</tt> data</a></li>
+<li><a class="reference internal" href="#additional-notes-on-simpletype-validation" id="id40">8.10.4&nbsp;&nbsp;&nbsp;Additional notes on <tt class="docutils literal">simpleType</tt> validation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#include-file-processing" id="id41">8.11&nbsp;&nbsp;&nbsp;Include file processing</a></li>
+<li><a class="reference internal" href="#abstract-types" id="id42">8.12&nbsp;&nbsp;&nbsp;Abstract types</a></li>
+<li><a class="reference internal" href="#types-derived-by-extension" id="id43">8.13&nbsp;&nbsp;&nbsp;Types derived by extension</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-xml-schema-input-to-generateds" id="id44">9&nbsp;&nbsp;&nbsp;The XML schema input to generateDS</a><ul class="auto-toc">
+<li><a class="reference internal" href="#additional-constructions" id="id45">9.1&nbsp;&nbsp;&nbsp;Additional constructions</a><ul class="auto-toc">
+<li><a class="reference internal" href="#complextype-at-top-level" id="id46">9.1.1&nbsp;&nbsp;&nbsp;&lt;complexType&gt; at top-level</a></li>
+<li><a class="reference internal" href="#use-of-ref-instead-of-name-and-type-attributes" id="id47">9.1.2&nbsp;&nbsp;&nbsp;Use of &quot;ref&quot; instead of &quot;name&quot; and &quot;type&quot; attributes</a></li>
+<li><a class="reference internal" href="#extension-types" id="id48">9.1.3&nbsp;&nbsp;&nbsp;Extension types</a></li>
+<li><a class="reference internal" href="#elements-containing-mixed-content" id="id49">9.1.4&nbsp;&nbsp;&nbsp;Elements containing mixed content</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id2" id="id50">10&nbsp;&nbsp;&nbsp;XMLBehaviors</a><ul class="auto-toc">
+<li><a class="reference internal" href="#the-xmlbehaviors-input-file" id="id51">10.1&nbsp;&nbsp;&nbsp;The XMLBehaviors input file</a></li>
+<li><a class="reference internal" href="#implementing-other-sources-for-implementation-bodies" id="id52">10.2&nbsp;&nbsp;&nbsp;Implementing other sources for implementation bodies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#additional-features" id="id53">11&nbsp;&nbsp;&nbsp;Additional features</a><ul class="auto-toc">
+<li><a class="reference internal" href="#xsd-list-element-support" id="id54">11.1&nbsp;&nbsp;&nbsp;xsd:list element support</a></li>
+<li><a class="reference internal" href="#xsd-enumeration-support" id="id55">11.2&nbsp;&nbsp;&nbsp;xsd:enumeration support</a></li>
+<li><a class="reference internal" href="#xsd-union-support" id="id56">11.3&nbsp;&nbsp;&nbsp;xsd:union support</a></li>
+<li><a class="reference internal" href="#extended-xsd-choice-support" id="id57">11.4&nbsp;&nbsp;&nbsp;Extended xsd:choice support</a></li>
+<li><a class="reference internal" href="#arity-minoccurs-maxoccurs-etc" id="id58">11.5&nbsp;&nbsp;&nbsp;Arity, minOccurs, maxOccurs, etc</a></li>
+<li><a class="reference internal" href="#more-thorough-content-type-and-base-type-resolution" id="id59">11.6&nbsp;&nbsp;&nbsp;More thorough content type and base type resolution</a></li>
+<li><a class="reference internal" href="#making-top-level-simpletypes-available-from-xschemahandler" id="id60">11.7&nbsp;&nbsp;&nbsp;Making top level simpleTypes available from XschemaHandler</a></li>
+<li><a class="reference internal" href="#namespaces-inserting-namespace-definition-in-exported-documents" id="id61">11.8&nbsp;&nbsp;&nbsp;Namespaces -- inserting namespace definition in exported documents</a></li>
+<li><a class="reference internal" href="#support-for-xs-any" id="id62">11.9&nbsp;&nbsp;&nbsp;Support for xs:any</a></li>
+<li><a class="reference internal" href="#generating-lxml-element-tree" id="id63">11.10&nbsp;&nbsp;&nbsp;Generating Lxml Element tree</a><ul class="auto-toc">
+<li><a class="reference internal" href="#mapping-generateds-objects-to-lxml-elements-and-back" id="id64">11.10.1&nbsp;&nbsp;&nbsp;Mapping generateDS objects to Lxml Elements and back</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#specifying-names-for-anonymous-nested-type-definitions" id="id65">11.11&nbsp;&nbsp;&nbsp;Specifying names for anonymous nested type definitions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#how-to-use-the-generated-source-code" id="id66">12&nbsp;&nbsp;&nbsp;How to use the generated source code</a><ul class="auto-toc">
+<li><a class="reference internal" href="#the-parsing-functions" id="id67">12.1&nbsp;&nbsp;&nbsp;The parsing functions</a></li>
+<li><a class="reference internal" href="#recognizing-the-top-level-element" id="id68">12.2&nbsp;&nbsp;&nbsp;Recognizing the top level element</a></li>
+<li><a class="reference internal" href="#the-export-methods" id="id69">12.3&nbsp;&nbsp;&nbsp;The export methods</a><ul class="auto-toc">
+<li><a class="reference internal" href="#method-export" id="id70">12.3.1&nbsp;&nbsp;&nbsp;Method export</a></li>
+<li><a class="reference internal" href="#method-exportliteral" id="id71">12.3.2&nbsp;&nbsp;&nbsp;Method <tt class="docutils literal">exportLiteral</tt></a><ul class="auto-toc">
+<li><a class="reference internal" href="#what-it-does" id="id72">12.3.2.1&nbsp;&nbsp;&nbsp;What It Does</a></li>
+<li><a class="reference internal" href="#why-you-might-care" id="id73">12.3.2.2&nbsp;&nbsp;&nbsp;Why You Might Care</a></li>
+<li><a class="reference internal" href="#how-to-use-it" id="id74">12.3.2.3&nbsp;&nbsp;&nbsp;How to use it</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exporting-compact-xml-documents" id="id75">12.3.3&nbsp;&nbsp;&nbsp;Exporting compact XML documents</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-instances" id="id76">12.4&nbsp;&nbsp;&nbsp;Building instances</a></li>
+<li><a class="reference internal" href="#using-the-subclass-module" id="id77">12.5&nbsp;&nbsp;&nbsp;Using the subclass module</a></li>
+<li><a class="reference internal" href="#elements-with-attributes-but-no-nested-children" id="id78">12.6&nbsp;&nbsp;&nbsp;Elements with attributes but no nested children</a></li>
+<li><a class="reference internal" href="#id4" id="id79">12.7&nbsp;&nbsp;&nbsp;Mixed content</a></li>
+<li><a class="reference internal" href="#id6" id="id80">12.8&nbsp;&nbsp;&nbsp;anyAttribute</a></li>
+<li><a class="reference internal" href="#user-methods" id="id81">12.9&nbsp;&nbsp;&nbsp;User Methods</a></li>
+<li><a class="reference internal" href="#overridable-methods-generatedssuper-py" id="id82">12.10&nbsp;&nbsp;&nbsp;Overridable methods -- generatedssuper.py</a></li>
+<li><a class="reference internal" href="#the-element-name-to-class-name-dictionary" id="id83">12.11&nbsp;&nbsp;&nbsp;The element name to class name dictionary</a></li>
+<li><a class="reference internal" href="#adding-custom-exported-attributes-and-namespace-prefix-definitions" id="id84">12.12&nbsp;&nbsp;&nbsp;Adding custom exported attributes and namespace prefix definitions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#one-per-generating-separate-files-from-imported-included-schemas" id="id85">13&nbsp;&nbsp;&nbsp;&quot;One Per&quot; -- generating separate files from imported/included schemas</a><ul class="auto-toc">
+<li><a class="reference internal" href="#approach-1-command-line-option-one-file-per-xsd" id="id86">13.1&nbsp;&nbsp;&nbsp;Approach 1 -- Command line option --one-file-per-xsd</a></li>
+<li><a class="reference internal" href="#approach-2-extraction-and-generation-utilities" id="id87">13.2&nbsp;&nbsp;&nbsp;Approach 2 -- Extraction and generation utilities</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#how-to-modify-the-generated-code" id="id88">14&nbsp;&nbsp;&nbsp;How to modify the generated code</a><ul class="auto-toc">
+<li><a class="reference internal" href="#adding-features-to-class-definitions" id="id89">14.1&nbsp;&nbsp;&nbsp;Adding features to class definitions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples-and-demonstrations" id="id90">15&nbsp;&nbsp;&nbsp;Examples and demonstrations</a><ul class="auto-toc">
+<li><a class="reference internal" href="#django-generating-models-and-forms" id="id91">15.1&nbsp;&nbsp;&nbsp;Django -- Generating Models and Forms</a><ul class="auto-toc">
+<li><a class="reference internal" href="#how-to-generate-django-models-and-forms" id="id92">15.1.1&nbsp;&nbsp;&nbsp;How to generate Django models and forms</a></li>
+<li><a class="reference internal" href="#how-it-works" id="id93">15.1.2&nbsp;&nbsp;&nbsp;How it works</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sample-code-and-extensions" id="id94">16&nbsp;&nbsp;&nbsp;Sample code and extensions</a><ul class="auto-toc">
+<li><a class="reference internal" href="#capturing-xs-date-elements-as-dates" id="id95">16.1&nbsp;&nbsp;&nbsp;Capturing xs:date elements as dates</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#limitations-of-generateds" id="id96">17&nbsp;&nbsp;&nbsp;Limitations of generateDS</a><ul class="auto-toc">
+<li><a class="reference internal" href="#xml-schema-limitations" id="id97">17.1&nbsp;&nbsp;&nbsp;XML Schema limitations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#includes-the-xml-schema-xs-include-and-xs-import-elements" id="id98">18&nbsp;&nbsp;&nbsp;Includes -- The XML schema xs:include and xs:import elements</a></li>
+<li><a class="reference internal" href="#processing-relaxng-schemas" id="id99">19&nbsp;&nbsp;&nbsp;Processing RelaxNG schemas</a></li>
+<li><a class="reference internal" href="#acknowledgments" id="id100">20&nbsp;&nbsp;&nbsp;Acknowledgments</a></li>
+<li><a class="reference internal" href="#see-also" id="id101">21&nbsp;&nbsp;&nbsp;See also</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#id7">1&nbsp;&nbsp;&nbsp;Introduction</a></h1>
+<p><tt class="docutils literal">generateDS.py</tt> generates Python data structures (for example,
+class definitions) from an XML Schema document. These data
+structures represent the elements in an XML document described by
+the XML Schema. It also generates parsers that load an XML
+document into those data structures. In addition, a separate file
+containing subclasses (stubs) is optionally generated. The user
+can add methods to the subclasses in order to process the contents
+of an XML document.</p>
+<p>The generated Python code contains:</p>
+<ul class="simple">
+<li>A class definition for each element defined in the XML Schema
+document.</li>
+<li>A main and driver function that can be used to test the
+generated code.</li>
+<li>A parser that will read an XML document which satisfies the XML
+Schema from which the parser was generated. The parser creates
+and populates a tree structure of instances of the generated
+Python classes.</li>
+<li>Methods in each class to export the instance back out to XML
+(method <tt class="docutils literal">export</tt>) and to export the instance to a literal
+representing the Python data structure (method
+<tt class="docutils literal">exportLiteral</tt>).</li>
+</ul>
+<p>The generated classes contain the following:</p>
+<ul class="simple">
+<li>A constructor method (__init__), with member variable
+initializers.</li>
+<li>Methods with names 'getX' and 'setX' for each member variable
+'X' or, if the member variable is defined with
+maxOccurs=&quot;unbounded&quot;, methods with names 'getX', 'setX',
+'addX', and 'insertX'.</li>
+<li>A &quot;build&quot; method that can be used to populate an instance of the
+class from a node in a minidom tree.</li>
+<li>An &quot;export&quot; method that will write the instance (and any nested
+sub-instances) to a file object as XML text.</li>
+<li>An &quot;exportLiteral&quot; method that will write the instance (and any
+nested sub-instances) to a file object as Python literals (text).</li>
+</ul>
+<p>The generated subclass file contains one (sub-)class definition
+for each data representation class. If the subclass file is used,
+then the parser creates instances of the subclasses (instead of
+creating instances of the superclasses). This enables the user to
+extend the subclasses with &quot;tree walk&quot; methods, for example, that
+process the contents of the XML file. The user can also generate
+and extend multiple subclass files which use a single, common
+superclass file, thus implementing a number of different processes
+on the same XML document type.</p>
+<p><tt class="docutils literal">generateDS.py</tt> can be run under either Python 2 or Python 3.  The
+generated Python code (both superclass and subclass modules) can be
+run under either Python 2 or Python 3.</p>
+<p>This document explains (1) how to use <tt class="docutils literal">generateDS.py</tt>; (2) how
+to use the Python code and data structures that it generates; and
+(3) how to modify the generated code for special purposes.</p>
+<p>There is also support for packaging the code you generate with
+<tt class="docutils literal">generateDS.py</tt>.  See <a class="reference internal" href="#packaging-your-code">Packaging your code</a>.</p>
+</div>
+<div class="section" id="where-to-find-it">
+<h1><a class="toc-backref" href="#id8">2&nbsp;&nbsp;&nbsp;Where To find it</a></h1>
+<div class="section" id="download">
+<h2><a class="toc-backref" href="#id9">2.1&nbsp;&nbsp;&nbsp;Download</a></h2>
+<p>You can find the source distribution here:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/generateDS/">Python Package Index --
+http://pypi.python.org/pypi/generateDS/</a></li>
+<li><a class="reference external" href="http://sourceforge.net/projects/generateds/">Source Forge --
+http://sourceforge.net/projects/generateds/</a></li>
+<li><a class="reference external" href="https://bitbucket.org/dkuhlman/generateds">Bitbucket --
+https://bitbucket.org/dkuhlman/generateds</a></li>
+</ul>
+</div>
+<div class="section" id="support-and-more-information">
+<h2><a class="toc-backref" href="#id10">2.2&nbsp;&nbsp;&nbsp;Support and more information</a></h2>
+<p>There is a mailing list at SourceForge:
+<a class="reference external" href="https://lists.sourceforge.net/lists/listinfo/generateds-users">generateds-users --
+https://lists.sourceforge.net/lists/listinfo/generateds-users</a>.</p>
+<p>There is a tutorial in the distribution:
+<tt class="docutils literal">tutorial/tutorial.html</tt> and at
+<a class="reference external" href="http://www.davekuhlman.org/generateds_tutorial.html">generateDS -- Introduction and Tutorial --
+http://www.davekuhlman.org/generateds_tutorial.html</a>.</p>
+</div>
+</div>
+<div class="section" id="how-to-build-and-install-it">
+<h1><a class="toc-backref" href="#id11">3&nbsp;&nbsp;&nbsp;How to build and install it</a></h1>
+<div class="section" id="requirements">
+<h2><a class="toc-backref" href="#id12">3.1&nbsp;&nbsp;&nbsp;Requirements</a></h2>
+<p><tt class="docutils literal">Lxml</tt> is used both by <tt class="docutils literal">generateDS.py</tt> and by the code it
+generates.  <tt class="docutils literal">Lxml</tt> is available at the Python Package Index
+<a class="reference external" href="https://pypi.python.org/pypi/lxml/">https://pypi.python.org/pypi/lxml/</a> and at the <tt class="docutils literal">Lxml</tt> project home
+site <a class="reference external" href="http://lxml.de/">http://lxml.de/</a>.</p>
+<p>Older versions of Python XML support can sometimes cause problems.
+If you receive a traceback that includes &quot;_xmlplus&quot;, then you will
+need to remove that <tt class="docutils literal">_xmlplus</tt> package.</p>
+</div>
+<div class="section" id="installation">
+<h2><a class="toc-backref" href="#id13">3.2&nbsp;&nbsp;&nbsp;Installation</a></h2>
+<p>De-compress the <tt class="docutils literal">generateDS</tt> distribution file. Use something
+like the following:</p>
+<pre class="literal-block">
+tar xzvf generateDS-x.xx.tar.gz
+</pre>
+<p>Then, the regular Distutils commands should work:</p>
+<pre class="literal-block">
+$ cd generateDS-x.xx
+$ python setup.py build
+$ python setup.py install        # probably as root
+</pre>
+</div>
+</div>
+<div class="section" id="packaging-your-code">
+<h1><a class="toc-backref" href="#id14">4&nbsp;&nbsp;&nbsp;Packaging your code</a></h1>
+<p>There is some support for packaging the code you generate with
+<tt class="docutils literal">generateDS.py</tt>.  This support helps you to produce a directory
+structure with places to put sample code, sample XML instance
+documents, and utility code for use with your generated module.  It
+also assists you in using <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx</a> to
+generate documentation for your module.  The Sphinx support is
+especially useful when the schema used to generate code contains
+&quot;annotation&quot; elements that document complexType definitions.</p>
+<p>Instructions on how to use it are here:
+<a class="reference external" href="librarytemplate_howto.html">How to package a generateDS.py generated library --
+librarytemplate_howto.html</a></p>
+<p>And the package building support itself is here:
+<a class="reference external" href="http://www.davekuhlman.org/librarytemplate-1.0a.zip">LibraryTemplate --
+http://www.davekuhlman.org/librarytemplate-1.0a.zip</a>.
+It is also included in the generateDS distribution package.</p>
+</div>
+<div class="section" id="the-command-line-interface-how-to-use-it">
+<h1><a class="toc-backref" href="#id15">5&nbsp;&nbsp;&nbsp;The command line interface -- How to use it</a></h1>
+<div class="section" id="running-generateds-py">
+<h2><a class="toc-backref" href="#id16">5.1&nbsp;&nbsp;&nbsp;Running <tt class="docutils literal">generateDS.py</tt></a></h2>
+<p>Run <tt class="docutils literal">generateDS.py</tt> with a single argument, the XML Schema file
+that defines the data structures. For example, the following will
+generate Python source code for data structures described in
+people.xsd and will write it to the file people.py. In addition,
+it will write subclass stubs to the file peoplesubs.py:</p>
+<pre class="literal-block">
+python generateDS.py -o people.py -s peoplesubs.py people.xsd
+</pre>
+<p>Here is the usage message displayed by <tt class="docutils literal">generateDS.py</tt>:</p>
+<pre class="literal-block">
+Synopsis:
+    Generate Python classes from XML schema definition.
+    Input is read from in_xsd_file or, if &quot;-&quot; (dash) arg, from stdin.
+    Output is written to files named in &quot;-o&quot; and &quot;-s&quot; options.
+Usage:
+    python generateDS.py [ options ] &lt;xsd_file&gt;
+    python generateDS.py [ options ] -
+Options:
+    -h, --help               Display this help information.
+    -o &lt;outfilename&gt;         Output file name for data representation classes
+    -s &lt;subclassfilename&gt;    Output file name for subclasses
+    -p &lt;prefix&gt;              Prefix string to be pre-pended to the class names
+    -f                       Force creation of output files.  Do not ask.
+    -a &lt;namespaceabbrev&gt;     Namespace abbreviation, e.g. &quot;xsd:&quot;.
+                             Default = 'xs:'.
+    -b &lt;behaviorfilename&gt;    Input file name for behaviors added to subclasses
+    -m                       Generate properties for member variables
+    -c &lt;xmlcatalogfilename&gt;  Input file name to load an XML catalog
+    --one-file-per-xsd       Create a python module for each XSD processed.
+    --output-directory=&quot;XXX&quot; Used in conjunction with --one-file-per-xsd.
+                             The directory where the modules will be created.
+    --module-suffix=&quot;XXX&quot;    To be used in conjunction with --one-file-per-xsd.
+                             Append XXX to the end of each file created.
+    --subclass-suffix=&quot;XXX&quot;  Append XXX to the generated subclass names.
+                             Default=&quot;Sub&quot;.
+    --root-element=&quot;XX&quot;      When parsing, assume XX is root element of
+    --root-element=&quot;XX|YY&quot;   instance docs.  Default is first element defined
+                             in schema.  If YY is added, then YY is used as the
+                             top level class; if YY omitted XX is the default.
+                             class. Also see section &quot;Recognizing the top level
+                             element&quot; in the documentation.
+    --super=&quot;XXX&quot;            Super module name in generated subclass
+                             module. Default=&quot;???&quot;
+    --validator-bodies=path  Path to a directory containing files that provide
+                             bodies (implementations) of validator methods.
+    --use-old-simpletype-validators
+                             Use the old style simpleType validator functions
+                             stored in a specified directory, instead of the
+                             new style validators generated directly from the
+                             XML schema.  See option --validator-bodies.
+    --use-getter-setter      Generate getter and setter methods.  Values:
+                             &quot;old&quot; - Name getters/setters getVar()/setVar().
+                             &quot;new&quot; - Name getters/setters get_var()/set_var().
+                             &quot;none&quot; - Do not generate getter/setter methods.
+                             Default is &quot;new&quot;.
+    --use-source-file-as-module-name
+                             Used in conjunction with --one-file-per-xsd to
+                             use the source XSD file names to determine the
+                             module name of the generated classes.
+    --user-methods= &lt;module&gt;,
+    -u &lt;module&gt;              Optional module containing user methods.  See
+                             section &quot;User Methods&quot; in the documentation.
+    --no-dates               Do not include the current date in the generated
+                             files. This is useful if you want to minimize
+                             the amount of (no-operation) changes to the
+                             generated python code.
+    --no-versions            Do not include the current version in the
+                             generated files. This is useful if you want
+                             to minimize the amount of (no-operation)
+                             changes to the generated python code.
+    --no-process-includes    Do not use process_includes.py to pre-process
+                             included XML schema files.  By default,
+                             generateDS.py will insert content from files
+                             referenced by xs:include and xs:import elements
+                             into the XML schema to be processed and perform
+                             several other pre-procesing tasks.  You likely do
+                             not want to use this option; its use has been
+                             reported to result in errors in generated modules.
+                             Consider using --no-collect-includes and/or
+                             --no-redefine-groups instead.
+    --no-collect-includes    Do not (recursively) collect and insert schemas
+                             referenced by xs:include and xs:import elements.
+    --no-redefine-groups     Do not pre-process and redefine group definitions.
+    --silence                Normally, the code generated with generateDS
+                             echoes the information being parsed. To prevent
+                             the echo from occurring, use the --silence switch.
+                             Also note optional &quot;silence&quot; parameter on
+                             generated functions, e.g. parse, parseString, etc.
+    --namespacedef='xmlns:abc=&quot;http://www.abc.com&quot;'
+                             Namespace definition to be passed in as the
+                             value for the namespacedef_ parameter of
+                             the export() method by the generated
+                             parse() and parseString() functions.
+                             Default=''.
+    --no-namespace-defs      Do not pass namespace definitions as the value
+                             for the namespacedef_ parameter of the export
+                             method, even if it can be extraced from the
+                             schema.
+    --external-encoding=&lt;encoding&gt;
+                             Encode output written by the generated export
+                             methods using this encoding.  Default, if omitted,
+                             is the value returned by sys.getdefaultencoding().
+                             Example: --external-encoding='utf-8'.
+    --member-specs=list|dict
+                             Generate member (type) specifications in each
+                             class: a dictionary of instances of class
+                             MemberSpec_ containing member name, type,
+                             and array or not.  Allowed values are
+                             &quot;list&quot; or &quot;dict&quot;.  Default: do not generate.
+    --export=&lt;export-list&gt;   Specifies export functions to be generated.
+                             Value is a whitespace separated list of
+                             any of the following:
+                                 write -- write XML to file
+                                 literal -- write out python code
+                                 etree -- build element tree (can serialize
+                                     to XML)
+                             Example: &quot;write etree&quot;
+                             Default: &quot;write&quot;
+    --always-export-default  Always export elements and attributes that
+                             a default value even when the current value
+                             is equal to the default.  Default: False.
+    --disable-generatedssuper-lookup
+                             Disables the generatetion of the lookup logic for
+                             presence of an external module from which to load
+                             a custom `GeneratedsSuper` base-class definition.
+    --disable-xml            Disables generation of all XML build/export
+                             methods and command line interface
+    --preserve-cdata-tags    Preserve CDATA tags.  Default: False
+    --cleanup-name-list=&lt;replacement-map&gt;
+                             Specifies list of 2-tuples used for cleaning
+                             names.  First element is a regular expression
+                             search pattern and second is a replacement.
+                             Example: &quot;[('[-:.]', '_'), ('^__', 'Special')]&quot;
+                             Default: &quot;[('[-:.]', '_')]&quot;
+    --mixed-case-enums       If used, do not uppercase simpleType enums names.
+                             Default is to make enum names uppercase.
+    --create-mandatory-children
+                             If a child is defined with minOccurs=&quot;1&quot; and
+                             maxOccurs=&quot;1&quot; and the child is xs:complexType
+                             and the child is not defined with
+                             xs:simpleContent, then in the element's
+                             constructor generate code that automatically
+                             creates an instance of the child.  The default
+                             is False, i.e. do not automatically create child.
+    -q, --no-questions       Do not ask questions, for example,
+                             force overwrite.
+    --no-warnings            Do not print warning messages.
+    --session=mysession.session
+                             Load and use options from session file. You can
+                             create session file in generateds_gui.py.  Or,
+                             copy and edit sample.session from the
+                             distribution.
+    --fix-type-names=&quot;oldname1:newname1;oldname2:newname2;...&quot;
+                             Fix up (replace) complex type names.
+    --version                Print version and exit.
+
+Usage example:
+
+    $ python generateDS.py -f -o sample_lib.py sample_api.xsd
+
+creates (with force over-write) sample_lib.py from sample_api.xsd.
+
+    $ python generateDS.py -o sample_lib.py -s sample_app1.py \
+            --member-specs=dict sample_api.xsd
+
+creates sample_lib.py superclass and sample_app1.py subclass modules;
+also generates member specifications in each class (in a dictionary).
+</pre>
+</div>
+<div class="section" id="command-line-options">
+<h2><a class="toc-backref" href="#id17">5.2&nbsp;&nbsp;&nbsp;Command line options</a></h2>
+<p>The following command line options are recognized by <tt class="docutils literal">generateDS.py</tt>:</p>
+<dl class="docutils">
+<dt>o &lt;filename&gt;</dt>
+<dd>Write the data representation classes to file filename.</dd>
+<dt>s &lt;filename&gt;</dt>
+<dd>Write the subclass stubs to file filename.</dd>
+<dt>p &lt;prefix&gt;</dt>
+<dd>Prepend prefix to the name of each generated data structure
+(class).</dd>
+<dt>f</dt>
+<dd>Force generation of output files even if they already exist.
+Do not ask before over-writing existing files.</dd>
+<dt>a &lt;namespaceabbrev&gt;</dt>
+<dd><p class="first">Namespace abbreviation, for example &quot;xsd:&quot;. The default is
+'xs:'. If the <tt class="docutils literal">&lt;schema&gt; element</tt> in your XML Schema,
+specifies something other than &quot;xmlns:xs=&quot;, then you need to
+use this option. So, suppose you have the following at the
+beginning of your XSchema file:</p>
+<pre class="literal-block">
+&lt;xsd:schema xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+</pre>
+<p>Then you can the following command line option:</p>
+<pre class="literal-block">
+-a &quot;xsd:&quot;
+</pre>
+<p class="last">But, note that <tt class="docutils literal">generateDS.py</tt> also tries to pick-up the
+namespace prefix used in the XMLSchema file automatically. If
+the &lt;schema&gt; element has an attribute &quot;xmlns:xxx&quot; whose value
+is &quot;http://www.w3.org/2001/XMLSchema&quot;, then <tt class="docutils literal">generateDS.py</tt>
+will use &quot;xxx:&quot; as the alias for the XMLSchema namespace in
+the XMLSchema document.</p>
+</dd>
+<dt>b &lt;behaviorfilename&gt;</dt>
+<dd>Input file name for behaviors to be added to subclasses.
+Specifies is the name of an XML document containing
+descriptions of methods to be added to subclasses generated
+with the -s flag.  The -b flag requires the -s flag.  See the
+section on <a class="reference internal" href="#xmlbehaviors">XMLBehaviors</a> below.</dd>
+<dt>m</dt>
+<dd>Generate property members and new style classes.  Causes
+generated classes to inherit from class object.  Generates
+a call to the built-in property function for each pair of
+getters and setters.  This is experimental.</dd>
+<dt>c &lt;xmlcatalogfilename&gt;</dt>
+<dd>Specify the file to be used as an XML catalog.  This file will
+be used by process_includes.py if needed to resolve references
+in &lt;xs:import&gt; and &lt;xs:include&gt; elements in the XML Schema.  For
+more information on XML catalogs, see:
+http://en.wikipedia.org/wiki/XML_Catalog</dd>
+<dt>one-file-per-xsd</dt>
+<dd>Create a separate Python module for each XML Schema document
+processed (for example, using &lt;xs:include&gt; or &lt;xs:import&gt;).  For
+help with using this option, see <a class="reference internal" href="#one-per-generating-separate-files-from-imported-included-schemas">&quot;One Per&quot; -- generating
+separate files from imported/included schemas</a>.</dd>
+<dt>output-directory &lt;directory&gt;</dt>
+<dd>When used with <tt class="docutils literal"><span class="pre">one-file-per-xsd</span></tt>, create generated output
+files in path <tt class="docutils literal">&lt;directory&gt;</tt>.</dd>
+<dt>module-suffix &lt;suffix&gt;</dt>
+<dd>When used with <tt class="docutils literal"><span class="pre">one-file-per-xsd</span></tt>, append <tt class="docutils literal">&lt;suffix&gt;</tt> to the
+end of each module name.</dd>
+<dt>subclass-suffix=&lt;suffix&gt;</dt>
+<dd><p class="first">Append suffix to the name of classes generated in the subclass
+file.  The default, if omitted, is &quot;Sub&quot;.  For example, the
+following will append &quot;_Action&quot; to each generated subclass
+name:</p>
+<pre class="literal-block">
+generateDS.py --subclass-suffix=&quot;_Action&quot; -s actions.py mydef.xsd
+</pre>
+<p>And the following will append nothing, making the superclass
+and subclass names the same:</p>
+<pre class="last literal-block">
+generateDS.py --subclass-suffix=&quot;&quot; -s actions.py mydef.xsd
+</pre>
+</dd>
+<dt>root-element=&lt;element_name&gt; -OR- &lt;element_name&gt;|&lt;class_name&gt;</dt>
+<dd>Make <tt class="docutils literal">element_name</tt> the assumed root of instance documents.
+The default is the name of the element whose definition is first
+in the XML Schema document.  If <tt class="docutils literal">class_name</tt> is also present
+(after a vertical bar), then <tt class="docutils literal">class_name</tt> is assumed to be the
+name of the class to be created from the root (top level)
+element when parsing an XML instance document.  If
+<tt class="docutils literal">class_name</tt> is omitted, the default class name is the same as
+<tt class="docutils literal">element_name</tt>.  This flag effects the parsing functions (for
+example, parse(), parseString(), etc).</dd>
+<dt>super=&lt;module_name&gt;</dt>
+<dd><p class="first">Make module_name the name of the superclass module imported
+by the subclass module.  If this flag is omitted, the
+following is generated near the top of the subclass file:</p>
+<pre class="literal-block">
+import ??? as supermod
+</pre>
+<p class="last">and you will need to hand edit this so the correct superclass
+module is imported.</p>
+</dd>
+<dt>validator-bodies=&lt;path&gt;</dt>
+<dd>Obtain the bodies (implementations) for validator methods for
+members defined as <tt class="docutils literal">simpleType</tt> from files in directory
+specified by <tt class="docutils literal">&lt;path&gt;</tt>.  The name of the file in that
+directory should be the same as the <tt class="docutils literal">simpleType</tt> name with
+an optional &quot;.py&quot; extension.  If a file is not provided for a
+given type, an empty body (<tt class="docutils literal">pass</tt>) is generated.  In these
+files, lines with &quot;##&quot; in the first two columns are ignored
+and are not inserted.</dd>
+<dt>use-old-simpletype-validators</dt>
+<dd><p class="first"><tt class="docutils literal">generateDS.py</tt> is capable of generating validator bodies --
+the code that validates data content in an XML instance
+docuement and writes out warning messages if that data does not
+satisfy the facets in the <tt class="docutils literal">xs:restriction</tt> in the
+<tt class="docutils literal">xs:simpleType</tt> defintion in the XML schema.  Use this option
+if you want to use your own validation bodies/code defined in a
+specified directory .  See option <tt class="docutils literal"><span class="pre">--validator-bodies</span></tt> for
+information on that.  <em>Without</em> this option
+(<tt class="docutils literal"><span class="pre">--use-old-simpletype-validators</span></tt>), the validator code will
+be generated directly from the XML schema, which is the default.</p>
+<p class="last">This option can also be used to generate code that does <em>no</em>
+validation.  See <a class="reference internal" href="#simpletype-and-validators">simpleType and validators</a> and <a class="reference internal" href="#turning-off-validation-of-simpletype-data">Turning off
+validation of simpleType data</a> for more information.</p>
+</dd>
+<dt>use-getter-setter</dt>
+<dd><p class="first"><tt class="docutils literal">generateDS.py</tt> now generates getter and setter methods (for
+variable &quot;abc&quot;, for example) with the names get_abc() and
+set_abc(), which I believe is a more Pythonic style, instead of
+getAbc() and setAbc(), which was the old behavior.  Use this
+flag to generate getters and setters in the old style (getAbc()
+and setAbc()) or the newer style(get_abc() and set_abc()) which
+is the default or to omit generation of getter and setter
+methods.  Possible values are:</p>
+<ul class="simple">
+<li>&quot;old&quot; - Name getters/setters getVar()/setVar().</li>
+<li>&quot;new&quot; - Name getters/setters get_var()/set_var().</li>
+<li>&quot;none&quot; - Do not generate getter/setter methods.</li>
+</ul>
+<p class="last">The default is &quot;new&quot;.</p>
+</dd>
+<dt>use-source-file-as-module-name</dt>
+<dd>Used in conjunction with and only has an effect when used with
+<tt class="docutils literal"><span class="pre">--one-file-per-xsd</span></tt>.  The effect of this option is to use the
+source XML schema file names to determine the module name of the
+generated classes.  Without this option, the first root element
+is used to construct module names.  The default is False.</dd>
+<dt>u, user-methods=&lt;module&gt;</dt>
+<dd>If specified, <tt class="docutils literal">generateDS.py</tt> will add methods to generated
+classes as specified in the indicated module.  For more
+information, see section <a class="reference internal" href="#user-methods">User Methods</a>.</dd>
+<dt>no-dates</dt>
+<dd>Do not include the current date in the generated files.  This is
+useful if you want to minimize the amount of (no-operation)
+changes to the generated python code.</dd>
+<dt>no-versions</dt>
+<dd>Do not include the current version in the generated files.  This is
+useful if you want to minimize the amount of (no-operation)
+changes to the generated python code.</dd>
+<dt>no-process-includes</dt>
+<dd>Do not use <tt class="docutils literal">process_includes.py</tt> to pre-process included XML
+Schema files.  By default, generateDS.py will insert content
+from files referenced by <tt class="docutils literal">xs:include</tt> and <tt class="docutils literal">xs:import</tt>
+elements into the XML Schema to be processed.  See section
+<a class="reference internal" href="#include-file-processing">Include file processing</a>.  Note that include processing, which
+is performed in <tt class="docutils literal">process_includes.py</tt> is required for
+generating validator bodies from the XML schema, because the
+Lxml ElementTree produced in <tt class="docutils literal">process_includes.py</tt> is needed
+to generate the validator code.  So, using this option also
+turns off automatic generation of validator code.  Also note
+that process_includes(.py) performs additional tasks; it also
+(1) assigns names to each anonymous complexType, (2) processes
+(replaces) group definitions, and (3) possibly fixes complexType
+names (see command line option --fix-type-names).  You likely do
+not want to use this option; its use has been reported to result
+in errors in generated modules.  Consider using
+--no-collect-includes and/or --no-redefine-groups instead.</dd>
+<dt>no-collect-includes</dt>
+<dd>Do not (recursively) collect and insert schemas referenced by
+<tt class="docutils literal">xs:include</tt> and <tt class="docutils literal">xs:import</tt> elements.  This task is
+performed in <tt class="docutils literal">process_includes.py</tt>.</dd>
+<dt>no-redefine-groups</dt>
+<dd>Do not pre-process and redefine group definitions.  This task is
+performed in <tt class="docutils literal">process_includes.py</tt>.</dd>
+<dt>silence</dt>
+<dd>Normally, the code generated with generateDS echoes the
+information being parsed. To prevent the echo from occurring,
+use the --silence switch.  This switch causes generateDS.py,
+when it generates boiler-plate parsing functions, (parse(),
+parseString(), parseLiteral()), to generate code that does
+<em>not</em> print out output (export output to stdout).</dd>
+<dt>namespacedef=&quot;&lt;<a class="reference external" href="http://...">http://...</a>&gt;&quot;</dt>
+<dd>Namespace definition to be passed in as the value for the
+<tt class="docutils literal">namespacedef_</tt> parameter of the export() method by the generated
+parse() and parseString() functions.  If this parameter is
+specified, then the export function will insert a namespace
+prefix definition attribute in the top-most (outer-most)
+element.  (Actually, you can insert any attribute.) The default
+is an empty string.</dd>
+<dt>no-namespace-defs</dt>
+<dd>Do not pass namespace definitions as the value for the
+<tt class="docutils literal">namespacedef_</tt> parameter of the export method, even if it can
+be extraced from the schema.  The default is off.  You might
+want to consider using this in combination with the ability to
+attach namespace prefix definitions to specific element types
+during export, as described here: <a class="reference internal" href="#adding-custom-exported-attributes-and-namespace-prefix-definitions">Adding custom exported
+attributes and namespace prefix definitions</a>.</dd>
+<dt>external-encoding=&lt;encoding&gt;</dt>
+<dd>If an XML instance document contains character data or
+attribute values that are not in the ASCII character set, then
+that data will not be written out correctly or will throw an
+exception.  This flag enables the user to specify a character
+encoding into which character data will be encoded before it is
+written out by the export functions.  The generated export
+methods encode data using this encoding.  The default value, if
+this flag is omitted, is the value returned by
+sys.getdefaultencoding().  You can find a list of standard
+encodings here: <a class="reference external" href="http://docs.python.org/library/codecs.html#id3">http://docs.python.org/library/codecs.html#id3</a>.
+Example use: --external-encoding='utf-8'.</dd>
+<dt>member-specs Generate member (type) specifications in each class</dt>
+<dd>A dictionary of instances of class <tt class="docutils literal">MemberSpec_</tt> containing
+member name, type, array or not, and whether the item is
+optional (i.e. defined with minOccurs=&quot;0&quot;).  See <a class="reference internal" href="#user-methods">User Methods</a>
+section for more information about <tt class="docutils literal">MemberSpec_</tt>.  Allowed
+values are &quot;list&quot; or &quot;dict&quot;.  Default: do <em>not</em> generate member
+specifications (unless --user-methods specified).</dd>
+<dt>export</dt>
+<dd><p class="first">Specify which of the export related member methods are to be
+generated.  The value is a whitespace separated list of any of
+the following:</p>
+<ul class="simple">
+<li>write -- Generate methods <tt class="docutils literal">export</tt>, <tt class="docutils literal">exportAttributes</tt>,
+and <tt class="docutils literal">exportChildren</tt>.  These methods write XML to a file.</li>
+<li>literal -- Generate methods <tt class="docutils literal">exportLiteral</tt>,
+<tt class="docutils literal">exportLiteralAttributes</tt> and <tt class="docutils literal">exportLiteralChildren</tt>.
+These methods write out python code.</li>
+<li>etree -- Generate method <tt class="docutils literal">to_etree</tt>.  This method builds an
+lxml element tree, which can, for example, be serialized to
+XML using lxml's <tt class="docutils literal">tostring</tt> function and searched with the
+lxml xpath capability.  You can also iterate over nodes in the
+tree with the node's <tt class="docutils literal">getiterator</tt>, <tt class="docutils literal">iterchildren</tt>, etc,
+and use any of lxml's other capabilities.</li>
+</ul>
+<p class="last">For example: <tt class="docutils literal"><span class="pre">--export=&quot;write</span> etree&quot;</tt> and <tt class="docutils literal"><span class="pre">--export=&quot;write&quot;</span></tt>.  The
+default is: <tt class="docutils literal"><span class="pre">--export=&quot;write&quot;</span></tt>.</p>
+</dd>
+<dt>always-export-default</dt>
+<dd>Always export elements and attributes that a default value even
+when the current value is equal to the default.  Default: False.</dd>
+<dt>disable-generatedssuper-lookup</dt>
+<dd>Disables the generation of code implementing the lookup for
+presence of an external module from which to load a custom
+replacement for the default <tt class="docutils literal">GeneratedsSuper</tt> base-class.
+With this flag, unconditionally uses the built-in implementation
+of <tt class="docutils literal">GeneratedsSuper</tt>.  (Suggestion: In order to get a picture
+of what difference this option makes, you might consider
+generating modules both with and without it, and then comparing
+the results with <tt class="docutils literal">diff</tt>.)  The default is False.</dd>
+<dt>disable-xml</dt>
+<dd>Disables generation of code that enables XML build/export
+methods and command line interface.  Actually, the code is
+there, but is commented out.  If you enable this option, the
+generated modules will <em>not</em> contain code for the following: (1)
+run as a script without explicitly running <tt class="docutils literal">python</tt> (the
+<tt class="docutils literal"><span class="pre">#!/usr/bin/env</span> python</tt> line is omitted); (2) import
+<tt class="docutils literal">lxml.etree</tt>; (3) parse an XML file; (4) export an XML file.
+(Suggestion: In order to get a picture of what difference this
+option makes, you might consider generating modules both with
+and without it, and then comparing the results with <tt class="docutils literal">diff</tt>.)
+The default is False.</dd>
+<dt>preserve-cdata-tags</dt>
+<dd>Preserve CDATA tags.  Normally, CDATA tags (&quot;&lt;![CDATA[ ... ]]&gt;&quot;)
+are dropped while parsing an XML instance document.  If this
+option is included, the generated code will preserve those tags
+and will write them out during export.  The default is False.</dd>
+<dt>cleanup-name-list=&lt;replacement-map&gt;</dt>
+<dd><p class="first">Specifies replacement pairs to be used when cleaning up names.
+Must be a string representation of a Python list of 2-tuples.
+The values of each pair (2-tuple) must be strings.  The first
+item of each pair is a pattern and must be a valid Python
+regular expression (see
+<a class="reference external" href="https://docs.python.org/2/library/re.html#module-re">https://docs.python.org/2/library/re.html#module-re</a>) The second
+item of each pair is a string that will replace anything matched
+by the pattern.  Also see <a class="reference internal" href="#cleaning-up-names-with-special-characters-etc">Cleaning up names with special characters etc.</a></p>
+<p>The intension is to enable us to replace
+special characters in names that would cause the generation of
+invalid Python names, for example the names of generated
+classes.  However, since a string replacement is
+performed, you can replace any single character or sequence of
+characters by any other single character or sequence of
+characters.  Example:
+<tt class="docutils literal"><span class="pre">[(':',</span> <span class="pre">'colon'),</span> <span class="pre">('-',</span> <span class="pre">'dash'),</span> <span class="pre">('.',</span> <span class="pre">'dot')]</span></tt>.</p>
+<p class="last">The default when omitted is <tt class="docutils literal"><span class="pre">[('[-:.]',</span> <span class="pre">'_')]</span></tt>.</p>
+</dd>
+<dt>mixed-case-enums</dt>
+<dd>Do not uppercase the names of simpleType enums.  The default (if
+this option is omitted) is to make generated enum names
+uppercase.</dd>
+<dt>create-mandatory-children</dt>
+<dd>If a child is defined with minOccurs=&quot;1&quot; and maxOccurs=&quot;1&quot; and
+the child is xs:complexType and the child is not defined with
+xs:simpleContent, then in the element's constructor generate
+code that automatically creates an instance of the child.  The
+default is False, i.e. do not automatically create the child.
+Note that if a value for the child's parameter is passed to the
+constructor (which overrides the default value of None), then
+the constructor will not create an instance.</dd>
+<dt>q, no-questions</dt>
+<dd>Do not ask questions.  For example, if the &quot;-f&quot; command line
+option is omitted and the ouput file exists, then generateDS.py
+will not ask whether the file should be overwritten.  (In this
+case, when &quot;-q&quot; is used, the &quot;-f&quot; must be used to force the
+output file to be written.</dd>
+<dt>no-warnings</dt>
+<dd>While running generateDS.py, do not print warning messages that
+would be written to stderr.</dd>
+<dt>session=mysession.session</dt>
+<dd>Load and use options from session file. You can create a
+session file in generateds_gui.py, the graphical front-end for
+generateDS.py.  Additional options on the command line can be
+used to override options in the session file.  A session file
+is an XML document, so you can modify it with a text editor.</dd>
+<dt>fix-type-names=&quot;oldname1:newname1;oldname2:newname2;...&quot;</dt>
+<dd><p class="first">Fix up (replace) complex type names.  Using this option will
+replace the following: (1) the 'name' attribute of a
+complexType; (2) the 'type' attribute of each element that
+refers to the type; and (3) the 'base' attribute of each
+extension that refers to the type.  These fixups happen before
+information is collected from the schema for code generation.
+Therefore, using this option is effectively equivalent to
+copying your schema, then editing it with your text editor, then
+generating code from the modified schema.  If a new name is not
+specified, the default is to replace the old name with the old
+name plus an added &quot;xx&quot; suffix.  Examples:</p>
+<pre class="last literal-block">
+$ generateDS.py --fix-type-names=&quot;type1:type1Aux&quot;
+$ generateDS.py --fix-type-names=&quot;type1;type2:type2Repl&quot;
+</pre>
+</dd>
+<dt>version</dt>
+<dd>Print out the current version of <tt class="docutils literal">generateDS.py</tt> and
+immediately exit.</dd>
+</dl>
+</div>
+<div class="section" id="name-conflicts-etc">
+<h2><a class="toc-backref" href="#id18">5.3&nbsp;&nbsp;&nbsp;Name conflicts etc.</a></h2>
+<div class="section" id="conflicts-with-python-keywords">
+<h3><a class="toc-backref" href="#id19">5.3.1&nbsp;&nbsp;&nbsp;Conflicts with Python keywords</a></h3>
+<p>In some cases the element and attribute names in an XML document
+will conflict with Python keywords.  There are two solutions to fixing
+and avoiding name conflicts:</p>
+<ul>
+<li><p class="first">In an attempt to avoid these clashes, <tt class="docutils literal">generateDS.py</tt> contains a
+table that maps names that might clash to acceptable names. This
+table is a Python dictionary named <tt class="docutils literal">NameTable</tt>. The user can
+modify existing entries in this table within <tt class="docutils literal">generateDS.py</tt>
+itself and add additional name-replacement pairs to this table, for
+example, if new conflicts occur.</p>
+</li>
+<li><p class="first">Or, you can fix additional conflicts by following these steps:</p>
+<ol class="arabic">
+<li><p class="first">Create a module named <tt class="docutils literal">generateds_config.py</tt>.</p>
+</li>
+<li><p class="first">Define a dictionary in that module named <tt class="docutils literal">NameTable</tt>.</p>
+</li>
+<li><p class="first">Place additional name mappings in that dictionary.  Here is a
+sample:</p>
+<pre class="literal-block">
+NameTable = {
+    'range': 'rangeType',
+    }
+</pre>
+</li>
+</ol>
+<ol class="arabic simple" start="3">
+<li>And, place that module where <tt class="docutils literal">generateDS.py</tt> can import it, or
+place the directory containing that module on your
+<tt class="docutils literal">PYTHONPATH</tt> environment variable.</li>
+</ol>
+<p><tt class="docutils literal">generateDS.py</tt> will attempt to import that module
+(<tt class="docutils literal">generateds_config.py</tt>) and will add the name mappings in it to
+the default set of mappings in <tt class="docutils literal">NameTable</tt> in <tt class="docutils literal">generateDS.py</tt>
+itself.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="conflicts-between-child-elements-and-attributes">
+<h3><a class="toc-backref" href="#id20">5.3.2&nbsp;&nbsp;&nbsp;Conflicts between child elements and attributes</a></h3>
+<p>In some cases the name of a child element and the name of an
+attribute will be the same.  (I believe, but am not sure, that
+this is allowed by XML Schema.) Since generateDS.py treats both
+child elements and attributes as members of the generated class,
+this is a name conflict.  Therefore, where such conflicts exist,
+generateDS.py modifies the name of the attribute by adding &quot;_attr&quot;
+to its name.</p>
+</div>
+<div class="section" id="cleaning-up-names-with-special-characters-etc">
+<h3><a class="toc-backref" href="#id21">5.3.3&nbsp;&nbsp;&nbsp;Cleaning up names with special characters etc.</a></h3>
+<p><tt class="docutils literal">generateDS.py</tt> attempts to clean up names that contain special
+characters.  For example, a complexType whose name contains a dash
+would generate a Python class with an invalid name.  But, you can
+use this facility to make other changes to names as well.</p>
+<p>The command line option <tt class="docutils literal"><span class="pre">--cleanup-name-list</span></tt> specifies
+replacement pairs to be used when cleaning up (and modifying) names.
+The value of this option must be a string representation of a Python
+list of 2-tuples.  The values of each pair (2-tuple) must be
+strings.  The first item of each pair is a pattern and must be a
+valid Python regular expression (see
+<a class="reference external" href="https://docs.python.org/2/library/re.html#module-re">https://docs.python.org/2/library/re.html#module-re</a>) The second item
+of each pair is a string that will replace anything matched by the
+pattern.  The intension is to enable us to replace special
+characters in names that would cause the generation of invalid
+Python names, for example the names of generated classes.  However,
+since a string replacement is performed, you can replace any single
+character or sequence of characters by any other single character or
+sequence of characters.</p>
+<p>For example, the following option, in addition to performing the
+default replacements of &quot;-&quot;, &quot;:&quot;, and &quot;.&quot; by an underscore, would
+also replace the string &quot;Type&quot; when it occurs at the end of a name,
+by &quot;Class&quot;:</p>
+<pre class="literal-block">
+--cleanup-name-list=&quot;[('[-:.]', '_'), ('Type$', 'Class')]&quot;
+</pre>
+<p>This would cause the name &quot;big-data-Type&quot; to become &quot;big_data_Class&quot;.</p>
+<p>The default when this option is omitted is <tt class="docutils literal"><span class="pre">[('[-:.]',</span> <span class="pre">'_')]</span></tt>.</p>
+<p>The order of replacements performed is the same as the order of the
+tuples in the list.  So, replacements performed by pattern
+replacement pairs (2-tuples) later in the list (to the right) will
+be performed after those earlier (to the left), and may overwrite
+earlier replacements.</p>
+<p>See the notes on the command line option <tt class="docutils literal"><span class="pre">--cleanup-name-list</span></tt> for
+more on this.  Or, run <tt class="docutils literal">$ generateDS.py <span class="pre">--help</span></tt>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="the-graphical-user-interface-how-to-use-it">
+<h1><a class="toc-backref" href="#id22">6&nbsp;&nbsp;&nbsp;The graphical user interface -- How to use it</a></h1>
+<p><strong>Note:</strong> The graphical user interface is no longer supported.</p>
+<p>Here are a few notes on how to use the GUI front-end.</p>
+<ul>
+<li><p class="first"><tt class="docutils literal">generateds_gui.py</tt> is installed when you do the standard
+installation:</p>
+<pre class="literal-block">
+$ python setup.py install
+</pre>
+</li>
+<li><p class="first">Run it by typing the following at the command line:</p>
+<pre class="literal-block">
+$ generateds_gui.py
+</pre>
+</li>
+<li><p class="first">For help with command line options, run:</p>
+<pre class="literal-block">
+$ generateds_gui.py --help
+</pre>
+</li>
+<li><p class="first">For a description of the values and flags that you can set, see
+section <a class="reference internal" href="#running-generateds-py">Running generateDS.py</a>.  There are also tool tips on
+the various widgets in the graphical user interface.</p>
+</li>
+<li><p class="first">Generate the python bindings modules by using the
+<tt class="docutils literal">Tools/Generate</tt> menu item or the <tt class="docutils literal">Generate</tt> button at the
+bottom of the window.</p>
+</li>
+<li><p class="first">Capture the command line generated by using the
+<tt class="docutils literal">Tools/Capture command line</tt> menu item.  You might consider copying and
+pasting that command line into a shell script or batch file for
+repeated reuse.</p>
+</li>
+<li><p class="first">You can also save and later reload your values and
+flags in a session file.  See the <tt class="docutils literal">Save session</tt>,
+<tt class="docutils literal">Save session as</tt>, and <tt class="docutils literal">Load session</tt> items under the <tt class="docutils literal">File</tt> menu.
+By default, a session file has the extension &quot;.session&quot;.</p>
+</li>
+<li><p class="first">You can load a session on start-up with the &quot;-s&quot; or &quot;--session&quot;
+comand line options.  For example:</p>
+<pre class="literal-block">
+$ generateds_gui.py --session=mybindingsjob.session
+</pre>
+<p>Or, use the &quot;session&quot; option in a configuration file.</p>
+</li>
+<li><p class="first">If the command to be run when generating bindings is not
+standard, you can specify that command with the &quot;--exec-path&quot;
+command line option or with the &quot;exec-path&quot; option configuration
+file.  The default is &quot;generateDS.py&quot;.</p>
+</li>
+<li><p class="first">Command line options can also be specified in a configuration
+file.  <tt class="docutils literal">generateds_gui.py</tt> checks for that configuration file in
+the following locations in this order:</p>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">~/.generateds_gui.ini</span></tt></li>
+<li><tt class="docutils literal">./generateds_gui.ini</tt></li>
+</ol>
+<p>Here is a sample configuration file:</p>
+<pre class="literal-block">
+[general]
+exec-path: /usr/bin/python ~/bin/generateDS.py
+impl-path: generateds_gui.glade
+session: a1.session
+</pre>
+<p>Options on the command line override options in configuration
+files.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="common-problems">
+<h1><a class="toc-backref" href="#id23">7&nbsp;&nbsp;&nbsp;Common problems</a></h1>
+<div class="section" id="namespace-prefix-mis-match">
+<h2><a class="toc-backref" href="#id24">7.1&nbsp;&nbsp;&nbsp;Namespace prefix mis-match</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> is not very intelligent about detecting what
+prefix is used in the schema file for the XML Schema namespace.
+When this problem occurs, you may see the following when running
+<tt class="docutils literal">generateDS.py</tt>:</p>
+<pre class="literal-block">
+AttributeError: 'NoneType' object has no attribute 'annotate'
+</pre>
+<p><tt class="docutils literal">generateDS.py</tt> assumes that the XML Schema namespace prefix in
+your schema is &quot;xs:&quot;.</p>
+<p>So, if the XML Schema namespace prefix in your schema is not &quot;xs:&quot;,
+you will need to use the &quot;-a&quot; command line option when you run
+<tt class="docutils literal">generateDS.py</tt>.  Here is an example:</p>
+<pre class="literal-block">
+generateDS.py -a &quot;xsd:&quot; --super=mylib -o mylib.py -s myapp.py someschema.xsd
+</pre>
+</div>
+<div class="section" id="using-multiple-subclass-modules-with-the-same-superclass-module">
+<h2><a class="toc-backref" href="#id25">7.2&nbsp;&nbsp;&nbsp;Using multiple subclass modules with the same superclass module</a></h2>
+<p>Suppose that from a single XML schema, you have generated a
+superclass module and a subclass module (using the &quot;-o&quot; and &quot;-s&quot;
+command line options).  Now you make a copy of the subclass module.
+Next you add special and different code to each of the subclass
+modules.  You can run these two subclass modules separately and
+(after a bit of debugging) each works fine.  And, you can import
+each subclass module in separate applications, and things are still
+good.  However, if you import both subclass modules into a single
+application, you find that one of them is &quot;ignored&quot; by the
+superclass module when it parses XML instance documents and builds
+classes.  Effectively, each subclass module, when it is imported,
+sets a class variable (<tt class="docutils literal">subclass</tt>) in each superclass to the
+subclass to be used by the superclass, and the last subclass
+imported module wins.</p>
+<p>There are two alternative solutions to this problem:</p>
+<ol class="arabic">
+<li><p class="first">Use the script/function provided by the distribution in file
+<tt class="docutils literal">fix_subclass_refs.py</tt>.  The doc string in that module explains
+how to use it and gives an example of its use.</p>
+</li>
+<li><p class="first">Each generated superclass module (starting with <tt class="docutils literal">generateDS.py</tt>
+version 2-19a) contains a global variable
+<tt class="docutils literal">CurrentSubclassModule_</tt>.  The value of this variable, if it is
+not None, overrides the value of the class variable <tt class="docutils literal">subclass</tt>
+in each generated superclass.  You can change the value of this
+variable before parsing an XML document and building instances of
+the generated classes to determine which subclass module is to be
+used during the &quot;build&quot; phase.</p>
+<p>Here is an example of the use of this feature:</p>
+<pre class="literal-block">
+#!/usr/bin/env python
+
+import lib01suba
+import lib01subb
+
+def test():
+    lib01suba.supermod.CurrentSubclassModule_ = lib01suba
+    roota = lib01suba.parse('test01.xml', silence=True)
+    lib01subb.supermod.CurrentSubclassModule_ = lib01subb
+    rootb = lib01subb.parse('test01.xml', silence=True)
+    roota.show()
+    print '-' * 50
+    rootb.show()
+
+test()
+</pre>
+</li>
+</ol>
+<p>The second alternative (above) is likely to be a more convenient
+solution in most cases.  But, there are possibly use cases where the
+use of <tt class="docutils literal">fix_subclass_refs.py</tt> or a modified version of it will be
+helpful.</p>
+</div>
+</div>
+<div class="section" id="supported-features-of-xml-schema">
+<h1><a class="toc-backref" href="#id26">8&nbsp;&nbsp;&nbsp;Supported features of XML Schema</a></h1>
+<p>The following constructs, among others, in XML Schema are
+supported:</p>
+<ul class="simple">
+<li>Attributes of types xs:string, xs:integer, xs:float, and
+xs:boolean.</li>
+<li>Repeated sub-elements specified with maxOccurs=&quot;unbounded&quot;.</li>
+<li>Sub-elements of simple types xs:string, xs:integer, and xs:float.</li>
+<li>Sub-elements of complex types defined separately in the XML
+Schema document.</li>
+</ul>
+<p>See file people.xsd for examples of the definition of data types
+and structures. Also see the section on <a class="reference internal" href="#the-xml-schema-input-to-generateds">The XML Schema Input
+to generateDS</a>.</p>
+<div class="section" id="attributes-no-nested-children">
+<h2><a class="toc-backref" href="#id27">8.1&nbsp;&nbsp;&nbsp;Attributes + no nested children</a></h2>
+<p>Element definitions that contain attributes but <em>no</em> nested child
+elements provide access to their data content through getter and
+setter methods <tt class="docutils literal">getValueOf_</tt> and <tt class="docutils literal">setValueOf_</tt> and member
+variable <tt class="docutils literal">valueOf_</tt>.</p>
+</div>
+<div class="section" id="mixed-content">
+<h2><a class="toc-backref" href="#id28">8.2&nbsp;&nbsp;&nbsp;Mixed content</a></h2>
+<p>Elements that are defined to contain both text and nested child
+elements have &quot;mixed content&quot;.  <tt class="docutils literal">generateDS.py</tt> provides access
+to mixed content, but the generated data structures (classes) are
+fundamentally different from that generated for other elements.
+See section <a class="reference internal" href="#id3">Mixed content</a> for more details.</p>
+<p>Note that elements defined with attributes but with <em>no</em> nested
+sub-elements do not need to be declared as &quot;mixed&quot;.  For these
+elements, character data is captured in a member variable
+<tt class="docutils literal">valueOf_</tt>, and can be accessed with member methods
+<tt class="docutils literal">getValueOf_</tt> and <tt class="docutils literal">setValueOf_</tt>.</p>
+</div>
+<div class="section" id="anyattribute">
+<h2><a class="toc-backref" href="#id29">8.3&nbsp;&nbsp;&nbsp;anyAttribute</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> supports <tt class="docutils literal">anyAttribute</tt>.  For example, if an
+element is defined as follows:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;Tool&quot;&gt;
+   &lt;xs:complexType&gt;
+      &lt;xs:attribute name=&quot;PartNumber&quot; type=&quot;xs:string&quot; /&gt;
+      &lt;xs:anyAttribute processContents=&quot;skip&quot; /&gt;
+   &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;
+</pre>
+<p>Then <tt class="docutils literal">generateDS.py</tt> will generate a class with a member
+variable <tt class="docutils literal">anyAttributes_</tt> containing a dictionary.  Any
+attributes found in the instance XML document that are not
+explicitly defined for this element will be stored in this
+dictionary.  <tt class="docutils literal">generateDS.py</tt> also generates getters and setters
+as well as code for parsing and export. <tt class="docutils literal">generateDS.py</tt> ignores
+<tt class="docutils literal">processContents</tt>. See section <a class="reference internal" href="#id5">anyAttribute</a> for more details.</p>
+</div>
+<div class="section" id="element-extensions">
+<h2><a class="toc-backref" href="#id30">8.4&nbsp;&nbsp;&nbsp;Element extensions</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> now generates subclasses for extensions, that is
+when an element definition contains something like this:</p>
+<pre class="literal-block">
+&lt;xs:extension base=&quot;sometag&quot;&gt;
+</pre>
+<p><strong>Limitation</strong> -- There is an important limitation, however:
+member names duplicated (overridden ?) in an extension generate
+erroneous code.  Sigh. I guess I needed something more to do.</p>
+<p>Several of the generated methods have been refactored so that
+subclasses can reuse the code in their superclasses.  Take a look
+at the generated code to learn how to use it.</p>
+<p>The Python compiler/interpreter requires that it has seen a
+superclass before it sees the subclass that uses it.  Because of
+this, <tt class="docutils literal">generateDS.py</tt> delays generating a subclass until after
+its superclass has been generated.  Therefore, the order in which
+classes are generated may be different from what you expect.</p>
+</div>
+<div class="section" id="attribute-groups">
+<h2><a class="toc-backref" href="#id31">8.5&nbsp;&nbsp;&nbsp;Attribute groups</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> now handles definition and use of attribute
+groups.  For example: the use of something like the following:</p>
+<pre class="literal-block">
+&lt;xs:attributeGroup name=&quot;favorites&quot;&gt;
+    &lt;xs:attribute name=&quot;fruit&quot; /&gt;
+    &lt;xs:attribute name=&quot;vegetable&quot; /&gt;
+&lt;/xs:attributeGroup&gt;
+</pre>
+<p>And, a reference or use like the following:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;person&quot;&gt;
+    &lt;xs:complexType mixed=&quot;0&quot;&gt;
+        &lt;xs:attributeGroup ref=&quot;favorites&quot; /&gt;
+        o
+        o
+        o
+</pre>
+<p>Results in generation of class <tt class="docutils literal">person</tt> that contains members
+<tt class="docutils literal">fruit</tt> and <tt class="docutils literal">vegetable</tt>.</p>
+<p>Multiple levels of attributeGroups are supported, that is, attribute
+groups themselves can contain references to other attribute groups.</p>
+</div>
+<div class="section" id="substitution-groups">
+<h2><a class="toc-backref" href="#id32">8.6&nbsp;&nbsp;&nbsp;Substitution groups</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> now handles a limited range of substitution
+groups, but, there is an important <strong>limitation</strong>, in particular
+<tt class="docutils literal">generateDS.py</tt> handles substitution groups that involve complex
+types, but does not handle those that involve (substitute for)
+simple types (for example, xs:string, xs:integer, etc).  This is
+because the code generated for members defined as simple types
+does not provide the needed information to handle substitution
+groups.</p>
+</div>
+<div class="section" id="primitive-types">
+<h2><a class="toc-backref" href="#id33">8.7&nbsp;&nbsp;&nbsp;Primitive types</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> supports some, but not all, simple types defined
+in &quot;XML Schema Part 0: Primer Second Edition&quot; (
+<a class="reference external" href="http://www.w3.org/TR/xmlschema-0/">http://www.w3.org/TR/xmlschema-0/</a>.  See section &quot;Simple Types&quot; and
+appendix B).  Validation is performed for some simple types.  When
+performed, validation is done while the XML document is being read
+and instances are created.</p>
+<p>Here is a list of supported simple types:</p>
+<ul class="simple">
+<li><tt class="docutils literal">xs:string</tt> -- No validation.</li>
+<li><tt class="docutils literal">xs:token</tt> -- No validation.  White space between tokens is
+coerced to a single blank between tokens.</li>
+<li><tt class="docutils literal">xs:integer</tt>, <tt class="docutils literal">xs:short</tt>, <tt class="docutils literal">xs:long</tt>. <tt class="docutils literal">xs:int</tt> -- All
+treated the same.  Checked for valid integer.</li>
+<li><tt class="docutils literal">xs:float</tt>, <tt class="docutils literal">xs:double</tt>, <tt class="docutils literal">xs:decimal</tt> -- All treated the
+same.  Checked for valid float.</li>
+<li><tt class="docutils literal">xs:positiveInteger</tt> -- Checked for valid range (&gt; 0).</li>
+<li><tt class="docutils literal">xs:nonPositiveInteger</tt> -- Checked for valid range (&lt;= 0).</li>
+<li><tt class="docutils literal">xs:negativeInteger</tt> -- Checked for valid range (&lt; 0).</li>
+<li><tt class="docutils literal">xs:nonNegativeInteger</tt> -- Checked for valid range (&gt;= 0).</li>
+<li><tt class="docutils literal">xs:date</tt>, <tt class="docutils literal">xs:dateTime</tt> -- All treated the same.  No
+validation.</li>
+<li><tt class="docutils literal">xs:boolean</tt> -- Checked for one of <tt class="docutils literal">0</tt>, <tt class="docutils literal">false</tt>, <tt class="docutils literal">1</tt>,
+<tt class="docutils literal">true</tt>.</li>
+</ul>
+</div>
+<div class="section" id="simpletype">
+<h2><a class="toc-backref" href="#id34">8.8&nbsp;&nbsp;&nbsp;simpleType</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> generates minimal support for members defined as
+<tt class="docutils literal">simpleType</tt>.  However, the code generated by <tt class="docutils literal">generateDS.py</tt>
+does <strong>not</strong> enforce restrictions.  For notes on how to enforce
+restrictions, see section <a class="reference internal" href="#simpletype-and-validators">simpleType and validators</a>.</p>
+<p>A <tt class="docutils literal">simpleType</tt> can be a restriction on a primitive type or on a
+defined element type.  So, for example, the following will
+generate valid code:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;percent&quot;&gt;
+    &lt;xs:simpleType&gt;
+        &lt;xs:restriction base=&quot;xs:integer&quot;&gt;
+            &lt;xs:minInclusive value=&quot;1&quot;/&gt;
+            &lt;xs:maxInclusive value=&quot;100&quot;/&gt;
+        &lt;/xs:restriction&gt;
+    &lt;/xs:simpleType&gt;
+&lt;/xs:element&gt;
+</pre>
+<p>And, the following will also generate valid code:</p>
+<pre class="literal-block">
+&lt;xs:simpleType name=&quot;emptyString&quot;&gt;
+    &lt;xs:restriction base=&quot;xs:string&quot;&gt;
+        &lt;xs:whiteSpace value=&quot;collapse&quot;/&gt;
+    &lt;/xs:restriction&gt;
+&lt;/xs:simpleType&gt;
+
+&lt;xs:element name=&quot;merge&quot;&gt;
+    &lt;xs:complexType&gt;
+        &lt;xs:simpleContent&gt;
+            &lt;xs:extension base=&quot;emptyString&quot;&gt;
+                &lt;xs:attribute name=&quot;fromTag&quot; type=&quot;xs:string&quot;/&gt;
+                &lt;xs:attribute name=&quot;toTag&quot; type=&quot;xs:string&quot;/&gt;
+            &lt;/xs:extension&gt;
+        &lt;/xs:simpleContent&gt;
+    &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;
+</pre>
+</div>
+<div class="section" id="list-values-optional-values-maxoccurs-etc">
+<h2><a class="toc-backref" href="#id35">8.9&nbsp;&nbsp;&nbsp;List values, optional values, maxOccurs, etc.</a></h2>
+<p>For elements defined with <tt class="docutils literal"><span class="pre">maxOccurs=&quot;unbounded&quot;</span></tt>,
+<tt class="docutils literal">generateDS.py</tt> generates code that processes a list of elements.</p>
+<p>For elements defined with <tt class="docutils literal"><span class="pre">minOccurs=&quot;0&quot;</span></tt> and <tt class="docutils literal"><span class="pre">maxOccurs=&quot;1&quot;</span></tt>,
+<tt class="docutils literal">generateDS.py</tt> generates code that exports an element only if
+that element has a (non-None) value.</p>
+</div>
+<div class="section" id="simpletype-and-validators">
+<h2><a class="toc-backref" href="#id36">8.10&nbsp;&nbsp;&nbsp;simpleType and validators</a></h2>
+<div class="section" id="generating-validator-bodies-from-xml-schema">
+<h3><a class="toc-backref" href="#id37">8.10.1&nbsp;&nbsp;&nbsp;Generating validator bodies from XML schema</a></h3>
+<p>If you do <em>not</em> use the <tt class="docutils literal"><span class="pre">--use-old-simpletype-validators</span></tt> command line
+option, then <tt class="docutils literal">generateDS.py</tt> will generate validation code
+directly from the restrictions specified inside the <tt class="docutils literal">simpleType</tt>
+definitions in your XML schema.</p>
+<p>Here is a bit of explanation of what that generated code will do.</p>
+<ul class="simple">
+<li>The generated validation code checks the global variable
+<tt class="docutils literal">Validate_simpletypes_</tt>.  Set that variable to <tt class="docutils literal">False</tt> to turn
+off validation.</li>
+<li>In the case of some XML schema built-in simple types, the
+generated validation code calls <tt class="docutils literal">gds_validate_xxx</tt>, where &quot;xxx&quot;
+is a base, simple type.  In some cases, you will be able to add
+additional code to that method to perform custom checking.  See
+section <a class="reference internal" href="#overridable-methods-generatedssuper-py">Overridable methods -- generatedssuper.py</a> for
+information on how to use and override that class.</li>
+<li>When validation finds data that fails to validate, it generates a
+warning (using the <tt class="docutils literal">warnings</tt> module from the Python standard
+library), not an exception, so that processing continues.</li>
+<li>The validation code is generated in a separate method named
+<tt class="docutils literal">validate_xxx</tt>, where &quot;xxx&quot; is the name of the data element.
+This method is called in the <tt class="docutils literal">build</tt> method as the input data is
+parsed and instances of the generated classes are created to hold
+it.  Your own code can also call this method whenever you'd like
+to perform on the data in that element/field.</li>
+<li>There are rules for how checking should be performed when (1)
+there are multiple restrictions in a single <tt class="docutils literal">simpleType</tt> and
+when there are restrictions in a <tt class="docutils literal">simpleType</tt> and it base simple
+types.  <tt class="docutils literal">generateds.py</tt> attempts to follow those rules in
+generating validation code.  For information about that, see:
+<a class="reference external" href="http://www.w3.org/TR/xmlschema-2/#rf-facets">http://www.w3.org/TR/xmlschema-2/#rf-facets</a>.  Pattern facets are
+especially tricky, because pattern restrictions at the same level
+are OR-ed together, while pattern restrictions at different levels
+are AND-ed together.  See:
+<a class="reference external" href="http://www.w3.org/TR/xmlschema-2/#rf-pattern">http://www.w3.org/TR/xmlschema-2/#rf-pattern</a>.</li>
+<li>The validation method also performs type conversion for some
+simple types, for example, string to int for integers, string to
+float for floats, etc.</li>
+</ul>
+</div>
+<div class="section" id="user-written-validator-bodies">
+<h3><a class="toc-backref" href="#id38">8.10.2&nbsp;&nbsp;&nbsp;User written validator bodies</a></h3>
+<p>This is the older, more manual method.  In order to generate code
+that uses this method, use command line option
+<tt class="docutils literal"><span class="pre">--use-old-simpletype-validators</span></tt>.</p>
+<p>Here are a few notes that should help you <em>write your own</em> validator
+methods to enforce restrictions.</p>
+<ul>
+<li><p class="first">Default behavior -- The generated code, by default, treats the
+value of a member whose type is a <tt class="docutils literal">simpleType</tt> as if it were
+declared as type <tt class="docutils literal">xs:string</tt>.</p>
+</li>
+<li><p class="first">Validator method stubs -- For a member variable name declared as a
+<tt class="docutils literal">simpleType</tt> named <tt class="docutils literal">X</tt>, a validator method <tt class="docutils literal">validate_X</tt> is
+generated.  Example -- from:</p>
+<pre class="literal-block">
+&lt;xs:simpleType name=&quot;tAnyName&quot;&gt;
+    &lt;xs:restriction base=&quot;xs:string&quot;/&gt;
+&lt;/xs:simpleType&gt;
+</pre>
+<p>The class generated by <tt class="docutils literal">generateDS.py</tt> will contain the
+following method definition:</p>
+<pre class="literal-block">
+def validate_tAnyName(self, value):
+    # Validate type tAnyName, a restriction on xs:string.
+    pass
+</pre>
+</li>
+<li><p class="first">Calls to validator methods -- For a member variable declared as a
+<tt class="docutils literal">simpleType</tt> <tt class="docutils literal">X</tt>, a call to <tt class="docutils literal">validate X</tt> is added to the
+build method.  Example -- from:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;person&quot;&gt;
+    &lt;xs:complexType mixed=&quot;0&quot;&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element name=&quot;test2&quot; type=&quot;tAnyName&quot;/&gt;
+        &lt;/xs:sequence&gt;
+    &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;
+</pre>
+<p><tt class="docutils literal">generateDS.py</tt> produces the following call:</p>
+<pre class="literal-block">
+self.validate_tAnyName(self.test2)    # validate type tAnyName
+</pre>
+</li>
+<li><p class="first">Code bodies for validator methods can be added either (1)
+manually or (2) automatically from an external source.  See
+command line option &quot;--validator-bodies&quot; and see below.</p>
+</li>
+</ul>
+<p>You can add code to the validator method stub to enforce the
+restriction for the base type and further restrictions imposed on
+that base type.  This can be done in the following ways:</p>
+<ol class="arabic simple">
+<li>Add code manually after generation.  I recommend that you use
+the &quot;-s&quot; command line option and override the validator method
+in the resulting subclass file.</li>
+<li>Or, supply code bodies (implementations) in an external
+source and ask <tt class="docutils literal">generateDS.py</tt> to insert those code bodies
+into generated validator methods.  Here are notes on how to do
+this:<ul>
+<li>Use the &quot;--validator-bodies=path&quot; command line option to specify
+a directory.</li>
+<li>In that directory, provide one file for each <tt class="docutils literal">simpleType</tt>.
+The name of the file should be the same as the name of
+the <tt class="docutils literal">simpleType</tt> with an optional extension &quot;.py&quot;.
+<tt class="docutils literal">generateDS.py</tt> looks for a file named <tt class="docutils literal">type_name.py</tt>,
+first, and if not found, looks for a file named
+<tt class="docutils literal">type_name</tt>.</li>
+<li>If the &quot;--validator-bodies&quot; is not on the command line
+or neither <tt class="docutils literal">type_name.py</tt> nor <tt class="docutils literal">type_name</tt> is found, an
+empty body (a <tt class="docutils literal">pass</tt> statement) is generated.</li>
+<li>Lines from the file are inserted as is, except that lines
+containing &quot;##&quot; in the first two columns are omitted.  Note
+that you will need to provide the correct indentation for a
+method in a class, specifically 8 spaces.</li>
+</ul>
+</li>
+</ol>
+<p>The support for <tt class="docutils literal">simpleType</tt> in <tt class="docutils literal">generateDS.py</tt> has the
+following limitations (among others, I'm sure):</p>
+<ul>
+<li><p class="first">It only works for <tt class="docutils literal">simpleType</tt> defined with and referenced
+through a name.  It does not work for &quot;in-line&quot; definitions.
+So, for example, the following works:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;person&quot;&gt;
+    &lt;xs:complexType&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element name=&quot;test3&quot; type=&quot;tAnyName&quot;/&gt;
+        &lt;/xs:sequence&gt;
+    &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;
+
+&lt;xs:simpleType name=&quot;tAnyName&quot;&gt;
+    &lt;xs:restriction base=&quot;xs:string&quot;/&gt;
+&lt;/xs:simpleType&gt;
+</pre>
+<p>But, the following does not work:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;person&quot;&gt;
+    &lt;xs:complexType&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element name=&quot;test3&quot;&gt;
+                &lt;xs:simpleType name=&quot;tAnyName&quot;&gt;
+                    &lt;xs:restriction base=&quot;xs:string&quot;/&gt;
+                &lt;/xs:simpleType&gt;
+            &lt;/xs:element&gt;
+        &lt;/xs:sequence&gt;
+    &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;
+</pre>
+</li>
+<li><p class="first">Attributes defined as a simple type are not supported.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="turning-off-validation-of-simpletype-data">
+<h3><a class="toc-backref" href="#id39">8.10.3&nbsp;&nbsp;&nbsp;Turning off validation of <tt class="docutils literal">simpleType</tt> data</a></h3>
+<p>If you do not want validation performed on <tt class="docutils literal">simpleType</tt> data, you
+have these options:</p>
+<ol class="arabic simple">
+<li>When generating your code, use the
+<tt class="docutils literal"><span class="pre">--use-old-simpletype-validators</span></tt> command line option but do
+<em>not</em> use the <tt class="docutils literal"><span class="pre">--validator-bodies</span></tt> command line option.  This
+will result in validator methods that have empty bodies (only a
+<tt class="docutils literal">pass</tt> statement).</li>
+<li>Or, when you run your generated code, set the variable
+<tt class="docutils literal">Validate_simpletypes_</tt> to <tt class="docutils literal">False</tt>.  This global variable is
+near the top of your generated module.  It can be set to <tt class="docutils literal">True</tt>
+or <tt class="docutils literal">False</tt> before and during processing to turn validation on
+and off.</li>
+</ol>
+</div>
+<div class="section" id="additional-notes-on-simpletype-validation">
+<h3><a class="toc-backref" href="#id40">8.10.4&nbsp;&nbsp;&nbsp;Additional notes on <tt class="docutils literal">simpleType</tt> validation</a></h3>
+<p>Don't forget that <tt class="docutils literal">xmllint</tt> can also be used to perform
+validation against the XML scheme.  This validation includes
+checking against <tt class="docutils literal">simpleType</tt> restrictions.  See
+<a class="reference external" href="http://xmlsoft.org/">http://xmlsoft.org/</a> for more information on <tt class="docutils literal">xmllint</tt>.</p>
+</div>
+</div>
+<div class="section" id="include-file-processing">
+<h2><a class="toc-backref" href="#id41">8.11&nbsp;&nbsp;&nbsp;Include file processing</a></h2>
+<p>By default, generateDS.py will insert content from files referenced by
+<tt class="docutils literal">include</tt> elements into the XML Schema to be processed.  This
+behavior can be turned off by using the &quot;--no-process-includes&quot;
+command line option.</p>
+<p><tt class="docutils literal">include</tt> elements are processed and the referenced content is
+inserted in the XML Schema by importing and using
+<tt class="docutils literal">process_includes.py</tt>, which is included in the <tt class="docutils literal">generateDS.py</tt>
+distribution.</p>
+<p>The include file processing is capable of retrieve included files
+via FTP and HTTP internet protocols as well as from the local file
+system.</p>
+</div>
+<div class="section" id="abstract-types">
+<h2><a class="toc-backref" href="#id42">8.12&nbsp;&nbsp;&nbsp;Abstract types</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> has support for abstract types.  For more on
+this, see:
+<a class="reference external" href="http://www.w3.org/TR/xmlschema-0/#abstract">XML Schema Part 0: Primer Second Edition: Abstract Elements and Types --
+http://www.w3.org/TR/xmlschema-0/#abstract</a>.</p>
+</div>
+<div class="section" id="types-derived-by-extension">
+<h2><a class="toc-backref" href="#id43">8.13&nbsp;&nbsp;&nbsp;Types derived by extension</a></h2>
+<p>This section describes some of the support for types derived by
+extension and also how to use the data bindings generated for those
+types in Python.</p>
+<p>For example, suppose you have an XML schema that looks like this
+(<tt class="docutils literal">example.xsd</tt>):</p>
+<pre class="literal-block">
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;xs:schema xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; version=&quot;1.0&quot;&gt;
+
+&lt;xs:element name=&quot;animalCollection&quot;&gt;
+  &lt;xs:complexType&gt;
+    &lt;xs:sequence&gt;
+      &lt;xs:element name=&quot;animal&quot; type=&quot;animal&quot; maxOccurs=&quot;unbounded&quot;/&gt;
+    &lt;/xs:sequence&gt;
+  &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;
+
+&lt;xs:complexType name=&quot;animal&quot; abstract=&quot;true&quot;&gt;&lt;/xs:complexType&gt;
+
+&lt;xs:complexType name=&quot;dog&quot;&gt;
+  &lt;xs:complexContent&gt;
+    &lt;xs:extension base=&quot;animal&quot;&gt;
+      &lt;xs:sequence&gt;
+        &lt;xs:element name=&quot;name&quot; type=&quot;xs:string&quot;/&gt;
+      &lt;/xs:sequence&gt;
+    &lt;/xs:extension&gt;
+  &lt;/xs:complexContent&gt;
+&lt;/xs:complexType&gt;
+&lt;/xs:schema&gt;
+</pre>
+<p>An XML instance document for this document type might be the
+following:</p>
+<pre class="literal-block">
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;animalCollection xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+    &lt;animal xsi:type=&quot;dog&quot;&gt;
+        &lt;name&gt;fido&lt;/name&gt;
+    &lt;/animal&gt;
+&lt;/animalCollection&gt;
+</pre>
+<p>Question: How would you, in Python, using bindings generated by
+<tt class="docutils literal">generateDS.py</tt>, create an instance of type <tt class="docutils literal">dog</tt> that is
+derived from type <tt class="docutils literal">animal</tt> and when exported to XML, appears as an
+animal with attribute <tt class="docutils literal"><span class="pre">xsi:type=&quot;dog&quot;</span></tt>?</p>
+<p>First, we need to generate our bindings:</p>
+<pre class="literal-block">
+$ generateDS.py -o example01.py example.xsd
+</pre>
+<p>And, now, here is Python some code that creates those instances and
+exports them:</p>
+<pre class="literal-block">
+# sample01.py
+
+import sys
+import example01
+
+def test():
+    animal_collection = example01.animalCollection()
+    animal = example01.dog(name='milicent')
+    #
+    # must set original_tagname_ and extensiontype_ for
+    # type derived by extension.  See:
+    # https://www.w3.org/TR/2004/REC-xmlschema-0-20041028/#DerivExt
+    animal.original_tagname_ = 'animal'
+    animal.extensiontype_ = 'dog'
+    animal_collection.add_animal(animal)
+    animal_collection.export(sys.stdout, 0)
+    return animal_collection, animal
+
+test()
+</pre>
+<p>Notes:</p>
+<ul class="simple">
+<li>The above code creates an instance of class <tt class="docutils literal">animalCollection</tt>
+and an instance of class <tt class="docutils literal">dog</tt>.</li>
+<li>Because we want the <tt class="docutils literal">dog</tt> to be represented in XML as a
+&quot;&lt;animal&gt;&quot; with an &quot;xsi:type&quot; attribute, we must set the
+<tt class="docutils literal">original_tagname_</tt> and <tt class="docutils literal">extensiontype_</tt> attributes in the
+instance of class <tt class="docutils literal">dog</tt>.</li>
+<li>Then we add our <tt class="docutils literal">dog</tt> to the <tt class="docutils literal">animalCollection</tt>, and finally,
+we export it.</li>
+<li>We can get some clues about this by reading the code generated for
+classes <tt class="docutils literal">animalCollection</tt>, <tt class="docutils literal">animal</tt>, and <tt class="docutils literal">dog</tt>.</li>
+</ul>
+<p>When we run it, we'll see:</p>
+<pre class="literal-block">
+$ python sample01.py
+&lt;animalCollection&gt;
+    &lt;animal xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;dog&quot;&gt;
+        &lt;name&gt;milicent&lt;/name&gt;
+    &lt;/animal&gt;
+&lt;/animalCollection&gt;
+</pre>
+<p>For more information on types derived by extension, see &quot;XML Schema
+Part 0: Primer Second Edition&quot;, specifically:</p>
+<ul class="simple">
+<li>&quot;Deriving Types by Extension&quot; --
+<a class="reference external" href="https://www.w3.org/TR/2004/REC-xmlschema-0-20041028/#DerivExt">https://www.w3.org/TR/2004/REC-xmlschema-0-20041028/#DerivExt</a></li>
+<li>&quot;Using Derived Types in Instance Documents&quot; --
+<a class="reference external" href="https://www.w3.org/TR/2004/REC-xmlschema-0-20041028/#UseDerivInInstDocs">https://www.w3.org/TR/2004/REC-xmlschema-0-20041028/#UseDerivInInstDocs</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="the-xml-schema-input-to-generateds">
+<h1><a class="toc-backref" href="#id44">9&nbsp;&nbsp;&nbsp;The XML schema input to generateDS</a></h1>
+<p><strong>Note:</strong> Quite a bit of work has been done on <tt class="docutils literal">generateDS.py</tt>
+since this section was written.  So, it accepts and processes
+more of features in XML Schema than earlier.  The best advice is to
+give it a try on your schema.  If it works, great.  If it does not,
+post a message to the list:
+<a class="reference external" href="https://lists.sourceforge.net/lists/listinfo/generateds-users">generateds-users --
+https://lists.sourceforge.net/lists/listinfo/generateds-users</a>.</p>
+<p><tt class="docutils literal">generateDS.py</tt> actually accepts a subset of XML Schema.
+The sample XML Schema file should give you a picture of how to
+describe an XML file and the Python classes that you will
+generate. And here are some notes that should help:</p>
+<ul>
+<li><p class="first">Specify the tag in the XML file and the name of the generated
+Python class in the name attribute on the xs:element. For
+example, to generate a Python class named &quot;person&quot;, which will
+be populated from an XML element/tag &quot;person&quot;, use the following
+XML Schema snippet:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;person&quot; ...
+</pre>
+</li>
+<li><p class="first">To specify a data member for a generated Python class that will
+be propogated from an attribute in an element in an XML file,
+use the XML Schema xs:attribute. For attributes, generateDS
+recognizes the following types: &quot;xs:string&quot;, &quot;xs:integer&quot;, and
+&quot;xs:float&quot;. For example, the following adds member data items
+&quot;hobby&quot; and &quot;category&quot; with types &quot;xs:string&quot; and &quot;xs:integer&quot;:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;person&quot;&gt;
+    &lt;complexType&gt;
+        &lt;xs:attribute name=&quot;hobby&quot; type=&quot;xs:string&quot; /&gt;
+        &lt;xs:attribute name=&quot;category&quot; type=&quot;xs:integer&quot; /&gt;
+    &lt;/complexType&gt;
+&lt;/xs:element&gt;
+</pre>
+</li>
+<li><p class="first">To specify a data member for a generated Python class whose
+value is a string, integer, or float and which will be populated
+from a nested (simple) element, specify a nested XML Schema
+element whose type is &quot;xs:string&quot;, &quot;xs:integer&quot;, or &quot;xs:float&quot;.
+Here is an example which defines a Python class &quot;person&quot; with a
+data member &quot;description&quot; which is a string and which is
+populated from a (simple) nested element:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;person&quot;&gt;
+    &lt;complexType&gt;
+        &lt;sequence&gt;
+            &lt;xs:element name=&quot;description&quot; type=&quot;xs:string&quot; /&gt;
+        &lt;sequence&gt;
+    &lt;/complexType&gt;
+&lt;/xs:element&gt;
+</pre>
+</li>
+<li><p class="first">To specify a data member of a generated Python class that will
+be populated from a nested XML element, refer to the nested
+object in the &quot;type&quot; attribute and then define another
+element/type whose name is that type. For example, the following
+specifies that the person class will have a data member named
+&quot;transportation&quot; that will be populated from a nested XML
+element &quot;bicycle&quot; and whose value will be an instance of the
+generated class &quot;bicycle&quot;:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;person&quot;&gt;
+    &lt;complexType&gt;
+        &lt;sequence&gt;
+            &lt;xs:element name=&quot;transportation&quot; type=&quot;bicycle&quot; /&gt;
+        &lt;sequence&gt;
+    &lt;/complexType&gt;
+&lt;/xs:element&gt;
+
+&lt;xs:element name=&quot;bicycle&quot;&gt;
+    o
+    o
+    o
+&lt;/xs:element&gt;
+</pre>
+</li>
+<li><p class="first">To specify a data member of a generated Python class that will
+contain a list of instances of a generated classes and populated
+from nested XML elements, add the &quot;maxOccurs&quot; attribute with
+value &quot;unbounded&quot;. Here is an example:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;person&quot;&gt;
+    &lt;complexType&gt;
+        &lt;sequence&gt;
+            &lt;xs:element name=&quot;transportation&quot; type=&quot;bicycle&quot; maxOccurs=&quot;unbounded&quot; /&gt;
+            &lt;xs:element name=&quot;description&quot; type=&quot;xs:string&quot; maxOccurs=&quot;unbounded&quot; /&gt;
+        &lt;sequence&gt;
+    &lt;/complexType&gt;
+&lt;/xs:element&gt;
+
+&lt;xs:element name=&quot;bicycle&quot;&gt;
+    o
+    o
+    o
+&lt;/xs:element&gt;
+</pre>
+</li>
+</ul>
+<p>Here are a few additional rules that will help you to write XML
+Schema files for <tt class="docutils literal">generateDS.py</tt>:</p>
+<ul class="simple">
+<li>The first (top most) class definition (i.e. the first
+&quot;xs:element&quot; in the .xsd file) is assumed to be the root element
+in XML input files. Possibly XML Schema has another way to
+specify the root, but I was not about to find it in the spec.
+To specify root element, see command line option &quot;--root-element&quot;
+in section <a class="reference internal" href="#running-generateds-py">Running generateDS.py</a>.</li>
+<li>The &quot;name&quot; attribute of the &quot;xs:element&quot; must match the tag in
+the XML file from which instances of this object will be
+populated. You can change the names of the generated class by
+using the &quot;-p&lt;prefix&gt;&quot; option, which preprends a prefix to each
+class name.</li>
+<li>The &quot;type&quot; attribute of the &quot;xs:element&quot; should match the &quot;name&quot;
+attribute of a (separately defined) type (i.e. an xs:element) in
+order to define a member data item that takes an instance or
+list of instances of a Python class.</li>
+</ul>
+<div class="section" id="additional-constructions">
+<h2><a class="toc-backref" href="#id45">9.1&nbsp;&nbsp;&nbsp;Additional constructions</a></h2>
+<p>Here are a few additional constructions that <tt class="docutils literal">generateDS.py</tt>
+understands.</p>
+<div class="section" id="complextype-at-top-level">
+<h3><a class="toc-backref" href="#id46">9.1.1&nbsp;&nbsp;&nbsp;&lt;complexType&gt; at top-level</a></h3>
+<p>You can use the &lt;complexType&gt; element at top level (instead of
+&lt;element&gt;) to define an element. So, for example, instead of:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;server-type&quot;&gt;
+    &lt;xs:complexType&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element name=&quot;server-name&quot; type=&quot;xs:string&quot;/&gt;
+            &lt;xs:element name=&quot;server-description&quot; type=&quot;xs:string&quot;/&gt;
+        &lt;/xs:sequence&gt;
+    &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;
+</pre>
+<p>you can use the following, which is equivalent:</p>
+<pre class="literal-block">
+&lt;xs:complexType name=&quot;server-type&quot;&gt;
+    &lt;xs:sequence&gt;
+        &lt;xs:element name=&quot;server-name&quot; type=&quot;xs:string&quot;/&gt;
+        &lt;xs:element name=&quot;server-description&quot; type=&quot;xs:string&quot;/&gt;
+    &lt;/xs:sequence&gt;
+&lt;/xs:complexType&gt;
+</pre>
+</div>
+<div class="section" id="use-of-ref-instead-of-name-and-type-attributes">
+<h3><a class="toc-backref" href="#id47">9.1.2&nbsp;&nbsp;&nbsp;Use of &quot;ref&quot; instead of &quot;name&quot; and &quot;type&quot; attributes</a></h3>
+<p>You can use the &quot;ref&quot; attribute to refer to another element
+definition, instead of using the &quot;name&quot; and &quot;type&quot; attributes. So,
+for example, you can use the following:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;server-info&quot;&gt;
+    &lt;xs:complexType&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element name=&quot;server-comment&quot; type=&quot;xs:string&quot;/&gt;
+            &lt;xs:element ref=&quot;server-type&quot; /&gt;
+        &lt;/xs:sequence&gt;
+    &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;
+   in place of this:
+&lt;xs:element name=&quot;server-info&quot;&gt;
+    &lt;xs:complexType&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element name=&quot;server-comment&quot; type=&quot;xs:string&quot;/&gt;
+            &lt;xs:element name=&quot;server-type&quot; type=&quot;server-type&quot;/&gt;
+        &lt;/xs:sequence&gt;
+    &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;
+</pre>
+</div>
+<div class="section" id="extension-types">
+<h3><a class="toc-backref" href="#id48">9.1.3&nbsp;&nbsp;&nbsp;Extension types</a></h3>
+<p><tt class="docutils literal">generateDS.py</tt> generates a subclass for each element that that
+is defined as the extension of a base element.  So, for the
+following:</p>
+<pre class="literal-block">
+&lt;xs:complexType name=&quot;BType&quot;&gt;
+    &lt;xs:complexContent&gt;
+        &lt;xs:extension base=&quot;AType&quot;&gt;
+            &lt;xs:sequence&gt;
+                o
+                o
+                o
+</pre>
+<p><tt class="docutils literal">generateDS.py</tt> will generate something like the following:</p>
+<pre class="literal-block">
+class BType(AType):
+    o
+    o
+    o
+</pre>
+</div>
+<div class="section" id="elements-containing-mixed-content">
+<h3><a class="toc-backref" href="#id49">9.1.4&nbsp;&nbsp;&nbsp;Elements containing mixed content</a></h3>
+<p><tt class="docutils literal">generateDS.py</tt> generates special code to handle elements
+defined as containing mixed content, that is elements defined with
+attribute <tt class="docutils literal"><span class="pre">mixed=&quot;true&quot;</span></tt>.  See section <a class="reference internal" href="#id3">Mixed content</a> for more
+details.</p>
+</div>
+</div>
+</div>
+<div class="section" id="id2">
+<span id="xmlbehaviors"></span><h1><a class="toc-backref" href="#id50">10&nbsp;&nbsp;&nbsp;XMLBehaviors</a></h1>
+<p>With the use of the &quot;-b&quot; command line option, <tt class="docutils literal">generateDS.py</tt> will
+also accept as input an XML document instance that describes
+behaviors to be added to subclasses when the subclass file is
+generated with the &quot;-s&quot; command line option.</p>
+<p>An example is provided in the Demos/Xmlbehavior sub-directory of
+the distribution.</p>
+<p>The XMLBehaviors capability in <tt class="docutils literal">generateDS.py</tt> was inspired and,
+for the most part, designed by gian paolo ciceri
+(<a class="reference external" href="mailto:gp.ciceri&#64;suddenthinks.com">gp.ciceri&#64;suddenthinks.com</a>).  This work is part of our work on
+our application development project for Quixote.</p>
+<div class="section" id="the-xmlbehaviors-input-file">
+<h2><a class="toc-backref" href="#id51">10.1&nbsp;&nbsp;&nbsp;The XMLBehaviors input file</a></h2>
+<p>This section describes the XMLBehavior XML document that is used
+as input to <tt class="docutils literal">generateDS.py</tt>.  The XMLBehavior XML document is an
+XML instance document (given as an argument to the &quot;-b&quot; command
+line flag) that describes behaviors (methods) to be added to class
+definitions in the subclass file (generated with the &quot;-s&quot; command
+line flag).</p>
+<p>See file <tt class="docutils literal">xmlbehavior_po.xml</tt> in the <tt class="docutils literal">Demos/Xmlbehavior</tt>
+directory in the distribution for an example that you can use as a
+model.</p>
+<p>The elements in the XMLBehavior document type are the following:</p>
+<ul class="simple">
+<li>&lt;xb:xml-behavior&gt; -- The base element in the document.<ul>
+<li>&lt;xb:base-impl-url&gt; -- The root (left-most portion) of URL
+containing implementation bodies.  Implementation URLs are
+appended to this base URL.</li>
+<li>&lt;xb:behaviors&gt; -- A list of behaviors.<ul>
+<li>&lt;xb:behavior&gt; -- Describes a single XMLBehavior.<ul>
+<li>&lt;xb:class&gt; -- The name of the class to which this behavior
+is to be added.</li>
+<li>&lt;xb:name&gt; -- The name of the behavior/method.  Must
+conform to Python name syntax.</li>
+<li>&lt;xb:args&gt; -- A list of arguments to the behavior/method.<ul>
+<li>&lt;xb:arg&gt; -- A positional argument to the method.<ul>
+<li>&lt;xb:name&gt; -- The name of the argument.</li>
+<li>&lt;xb:data-type&gt; -- The data-type of the argument.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>&lt;xb:return-type&gt; -- The data-type of the value returned by
+the behavior/method.</li>
+<li>&lt;xb:impl-url&gt; -- The URL of the implementation body.  This
+value will be concatenated to the right-hand side of the
+base-impl-url.</li>
+<li>&lt;xb:ancillaries&gt; -- A list of ancillary behaviors/methods.
+Each ancillary has a role, which defines how it is to be
+used.<ul>
+<li>&lt;xb:ancillary&gt; -- A specification of an ancillary
+behavior/method.<ul>
+<li>&lt;xb:name&gt; -- The name of the behavior/method.  Must
+conform to Python name syntax.</li>
+<li>&lt;xb:role&gt; -- The method's role.  The following values
+are supported:<ul>
+<li>&quot;DBC-precondition&quot; -- A Design By Contract-style
+pre-condition check.  This method will be called
+<em>before</em> the core behavior/method itself.</li>
+<li>&quot;DBC-postcondition&quot; -- A Design By Contract-style
+post-condition check.  This method will be called
+<em>after</em> the core behavior/method itself.</li>
+</ul>
+</li>
+<li>&lt;xb:args&gt; -- A list of arguments to the ancillary
+behavior/method.  The element has the same content as
+the &lt;xb:args&gt; element for the core behavior/method.</li>
+<li>&lt;xb:return-type&gt; -- The data-type of the value returned by
+the behavior/method.</li>
+<li>&lt;xb:impl-url&gt; -- The URL of the implementation body.
+This value will be concatenated to the right-hand side
+of the base-impl-url.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="implementing-other-sources-for-implementation-bodies">
+<h2><a class="toc-backref" href="#id52">10.2&nbsp;&nbsp;&nbsp;Implementing other sources for implementation bodies</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> contains a function <tt class="docutils literal">get_impl_body()</tt> that
+implements the ability to retrieve implementation bodies.  The
+current implementation retrieves implementation bodies from an
+Internet Web URL.  Other sources for implementation bodies can be
+implemented by modifying <tt class="docutils literal">get_impl_body()</tt>.</p>
+<p>As an example, the version that follows first tries to retrieve an
+implementation body from a Web address and, if that fails,
+attempts to obtain the implementation body from a file in the
+local file system using the &lt;xb:base-impl-url&gt; as a path to a
+directory containing files, each of which contains one
+implementation body and &lt;xb:impl-url&gt; as the file name.  This
+implementation of <tt class="docutils literal">get_impl_body</tt> was provided by Colin
+Dembovsky of Systemsfusion Inc.  Thanks, Colin.  (I've included it
+in the <tt class="docutils literal">generateDS.py</tt> script, but commented out, for those who
+want to use and possibly extend it.):</p>
+<pre class="literal-block">
+def get_impl_body(classBehavior, baseImplUrl, implUrl):
+    impl = '        pass\n'
+    if implUrl:
+        trylocal = 0
+        if baseImplUrl:
+            implUrl = '%s%s' % (baseImplUrl, implUrl)
+        try:
+            implFile = urllib2.urlopen(implUrl)
+            impl = implFile.read()
+            implFile.close()
+        except:
+            trylocal = 1
+        if trylocal:
+            try:
+                implFile = file(implUrl)
+                impl = implFile.read()
+                implFile.close()
+            except:
+                print '*** Implementation at %s not found.' % implUrl
+    return impl
+</pre>
+</div>
+</div>
+<div class="section" id="additional-features">
+<h1><a class="toc-backref" href="#id53">11&nbsp;&nbsp;&nbsp;Additional features</a></h1>
+<p>Here are additional features, contributed by users such as Chris
+Allan.  Many thanks.</p>
+<div class="section" id="xsd-list-element-support">
+<h2><a class="toc-backref" href="#id54">11.1&nbsp;&nbsp;&nbsp;xsd:list element support</a></h2>
+<p>xsd:list elements can be used with a child xsd:simpleType which
+confuses the XschemaHandler stack unrolling.  xsd:list element
+support should allow the following XML Schema definition to be
+supported in <tt class="docutils literal">generateDS.py</tt>:</p>
+<pre class="literal-block">
+&lt;xsd:attribute name=&quot;Foo&quot;&gt;
+    &lt;xsd:simpleType&gt;
+        &lt;xsd:list&gt;
+            &lt;xsd:simpleType&gt;
+                ...
+            &lt;/xsd:simpleType&gt;
+        &lt;/xsd:list&gt;
+    &lt;/xsd:simpleType&gt;
+&lt;/xsd:attribute&gt;
+</pre>
+</div>
+<div class="section" id="xsd-enumeration-support">
+<h2><a class="toc-backref" href="#id55">11.2&nbsp;&nbsp;&nbsp;xsd:enumeration support</a></h2>
+<p>The enumerated values for the parent element are resolved and made
+available through the instance attribute <tt class="docutils literal">values</tt>.</p>
+</div>
+<div class="section" id="xsd-union-support">
+<h2><a class="toc-backref" href="#id56">11.3&nbsp;&nbsp;&nbsp;xsd:union support</a></h2>
+<p>In order to properly resolve and query types which are unions in
+an XML Schema, an element's membership in an xsd:union is
+available through the instance attribute <tt class="docutils literal">unionOf</tt>.</p>
+</div>
+<div class="section" id="extended-xsd-choice-support">
+<h2><a class="toc-backref" href="#id57">11.4&nbsp;&nbsp;&nbsp;Extended xsd:choice support</a></h2>
+<p>When a parent xsd:choice is exists, an element's &quot;maxOccurs&quot; and
+&quot;minOccurs&quot; values can be inherited from the xsd:choice rather
+than the element itself. xsd:choice elements have been added to
+the child element via the <tt class="docutils literal">choice</tt> instance attribute and are
+now used in the &quot;maxOccurs&quot; and &quot;minOccurs&quot; attribute resolution.
+This should allow the following XML Schema definition to be
+supported in <tt class="docutils literal">generateDS.py</tt>:</p>
+<pre class="literal-block">
+&lt;xsd:element name=&quot;Foo&quot;&gt;
+    &lt;xsd:complexType&gt;
+        &lt;xsd:choice maxOccurs=&quot;unbounded&quot;&gt;
+            &lt;xsd:element ref=&quot;Bar&quot;/&gt;
+            &lt;xsd:element ref=&quot;Baz&quot;/&gt;
+        &lt;/xsd:choice&gt;
+    &lt;/xsd:complexType&gt;
+&lt;/xsd:element&gt;
+</pre>
+</div>
+<div class="section" id="arity-minoccurs-maxoccurs-etc">
+<h2><a class="toc-backref" href="#id58">11.5&nbsp;&nbsp;&nbsp;Arity, minOccurs, maxOccurs, etc</a></h2>
+<p>Some applications require information about the &quot;minOccurs&quot; and
+&quot;maxOccurs&quot; attributes in the XML Schema.  Some of that information
+can be obtained by using the --member-specs= (list|dict) command line
+option, then looking at the <tt class="docutils literal">member_data_items_</tt> class variable
+that it generates in each data representation class.  In particular,
+look at the <tt class="docutils literal">get_container</tt> method (from class <tt class="docutils literal">MemberSpec_</tt>).</p>
+</div>
+<div class="section" id="more-thorough-content-type-and-base-type-resolution">
+<h2><a class="toc-backref" href="#id59">11.6&nbsp;&nbsp;&nbsp;More thorough content type and base type resolution</a></h2>
+<p>The previous content type and base type resolution is insufficient
+for some needs.  Basically it was unable to handle more complex
+and shared element and simpleType definitions.  This support has
+been extended to more correctly resolve the base type and properly
+indicate the content type of the element.  This should provide the
+ability to handle more complex XML Schema definitions in
+<tt class="docutils literal">generateDS.py</tt>.  Documentation on the algorithm for how this is
+achieved is available as comments in the source code of
+<tt class="docutils literal">generateDS.py</tt> -- see comments in method <tt class="docutils literal">resolve_type</tt> in
+class <tt class="docutils literal">XschemaElement</tt>.</p>
+</div>
+<div class="section" id="making-top-level-simpletypes-available-from-xschemahandler">
+<h2><a class="toc-backref" href="#id60">11.7&nbsp;&nbsp;&nbsp;Making top level simpleTypes available from XschemaHandler</a></h2>
+<p>Some developers working to extend the analysis and code generation
+in <tt class="docutils literal">generateDS.py</tt> may be helped by additional information
+collected during the parsing of the XML Schema file.</p>
+<p>Some applications need all the top level simpleTypes to be
+available for further queries after the SAX parser has completed
+its work and after all types have been resolved.  These types are
+available as an instance attribute <tt class="docutils literal">topLevelSimpleTypes</tt> inside
+<tt class="docutils literal">XschemaHandler</tt>.</p>
+</div>
+<div class="section" id="namespaces-inserting-namespace-definition-in-exported-documents">
+<h2><a class="toc-backref" href="#id61">11.8&nbsp;&nbsp;&nbsp;Namespaces -- inserting namespace definition in exported documents</a></h2>
+<p>In some cases, the document produced by a call to an export method
+will contain elements that have namespace prefixes.  For example,
+the following snippet contains namespace prefix &quot;abc&quot;:</p>
+<pre class="literal-block">
+&lt;abc:people &gt;
+    &lt;abc:person&gt;
+    o
+    o
+    o
+    &lt;/abc:person&gt;
+&lt;/abc:people&gt;
+</pre>
+<p>A way is needed to insert a namespace prefix definition into the
+generated document.  Here is how <tt class="docutils literal">generateDS.py</tt> fills that need.</p>
+<p>Each generated export method takes an optional argument
+<tt class="docutils literal">namespacedef_</tt>.  If provided, the value of that parameter is
+inserted in the exported element.  So, for example, the following
+call:</p>
+<pre class="literal-block">
+people.export(sys.stdout, 0,
+    namespacedef_='xmlns:abc=&quot;http://www.abc.com/namespace&quot;')
+</pre>
+<p>might produce:</p>
+<pre class="literal-block">
+&lt;abc:people xmlns:abc=&quot;http://www.abc.com/namespace&quot;&gt;
+    &lt;abc:person&gt;
+    o
+    o
+    o
+    &lt;/abc:person&gt;
+&lt;/abc:people&gt;
+</pre>
+<p>If this is an issue for you, then you may also want to consider
+using the &quot;--namespacedef&quot; command line option when you run
+<tt class="docutils literal">generateDS.py</tt>.  The value of this option will be passed in to
+the export function in the generated parse functions.  So, for
+example, running <tt class="docutils literal">generateDS.py</tt> as follows:</p>
+<pre class="literal-block">
+generateDS.py --namespacedef='xmlns:abc=&quot;http://www.abc.com/namespace.xsd&quot;'
+    -o mylib.py -s myapp.py myschema.xsd
+</pre>
+<p>will generate parse methods that automatically add the
+<tt class="docutils literal">namespacedef_</tt> argument to the call to export.</p>
+</div>
+<div class="section" id="support-for-xs-any">
+<h2><a class="toc-backref" href="#id62">11.9&nbsp;&nbsp;&nbsp;Support for xs:any</a></h2>
+<p>There is minimal support for the <tt class="docutils literal">xs:any</tt> wild card declaration.
+Effectively, an element defined by an <tt class="docutils literal">xs:complexType</tt> containing
+<tt class="docutils literal">xs:any</tt> can contain any element type as a child element.  Because
+<tt class="docutils literal">generateDS.py</tt> does not know how to generate code to handle
+specific element types during the parsing and building of an XML
+instance document, it generates a call to a method <tt class="docutils literal">gds_build_any</tt>
+in the <tt class="docutils literal">GeneratedsSuper</tt> class.  This method has a default
+implementation in the generated code.  If your XML schema uses
+<tt class="docutils literal">xs:any</tt>, you may need to add some code to that default
+implementation of <tt class="docutils literal">gds_build_any</tt>.  See section <a class="reference internal" href="#overridable-methods-generatedssuper-py">Overridable
+methods -- generatedssuper.py</a> for guidance on how to provide an
+implementation of that method.</p>
+<p>For more help with this, look at the code generated from an XML
+schema that uses <tt class="docutils literal">xs:any</tt>.  In particular, look at the code
+generated in the Python class corresponding to the
+<tt class="docutils literal">xs:complexType</tt> containing <tt class="docutils literal">xs:any</tt> and look at the default
+implementation of method <tt class="docutils literal">gds_build_any</tt> in class
+<tt class="docutils literal">GeneratedsSuper</tt>.  Reading the code in the <tt class="docutils literal">buildChildren</tt> and
+<tt class="docutils literal">exportChildren</tt> methods of a class containing a child declared
+with <tt class="docutils literal">xs:any</tt> should help you understand what is going on.</p>
+<p>When you starting developing your implementation of
+<tt class="docutils literal">gds_build_any</tt>, look at the code generated in several
+<tt class="docutils literal">buildChildren</tt> methods.  It's likely that you will be able to
+copy, paste, and edit code from there.</p>
+</div>
+<div class="section" id="generating-lxml-element-tree">
+<h2><a class="toc-backref" href="#id63">11.10&nbsp;&nbsp;&nbsp;Generating Lxml Element tree</a></h2>
+<p>Once you have build the tree of objects that are instances of the
+classes generated by <tt class="docutils literal">generateDS.py</tt>, you can use this to produce
+a tree of instances of the Lxml Element instances.  See
+<a class="reference external" href="http://lxml.de/">http://lxml.de/</a> for more about Lxml.  And, see the function
+<tt class="docutils literal">parseEtree</tt> in the generated code for an example of how to
+produce the Lxml Element tree:</p>
+<pre class="literal-block">
+def parseEtree(inFileName):
+    doc = parsexml_(inFileName)
+    rootNode = doc.getroot()
+    rootTag, rootClass = get_root_tag(rootNode)
+    if rootClass is None:
+        rootTag = 'test'
+        rootClass = Test
+    rootObj = rootClass.factory()
+    rootObj.build(rootNode)
+    # Enable Python to collect the space used by the DOM.
+    doc = None
+    mapping = {}
+    rootElement = rootObj.to_etree(None, name_=rootTag, mapping_=mapping)
+    reverse_mapping = rootObj.gds_reverse_node_mapping(mapping)
+    content = etree_.tostring(
+        rootElement, pretty_print=True,
+        xml_declaration=True, encoding=&quot;utf-8&quot;)
+    sys.stdout.write(content)
+    sys.stdout.write('\n')
+    return rootObj, rootElement, mapping, reverse_mapping
+</pre>
+<div class="section" id="mapping-generateds-objects-to-lxml-elements-and-back">
+<h3><a class="toc-backref" href="#id64">11.10.1&nbsp;&nbsp;&nbsp;Mapping generateDS objects to Lxml Elements and back</a></h3>
+<p>Now suppose that you have produced the tree of instances of the
+generated classes, and suppose that you have used that to produce a
+tree of instances of the Element class from Lxml.  It may be useful
+to have a dictionary that maps instances in one tree to the
+corresponding instances in the other.  You can create that
+dictionary by passing an empty dictionary as the value of the
+optional parameter <tt class="docutils literal">mapping_</tt> in the call to the <tt class="docutils literal">to_tree</tt>
+method.  And, you can produce the reverse mapping by calling the
+convenience method <tt class="docutils literal">gds_reverse_node_mapping</tt> from superclass
+<tt class="docutils literal">GeneratedsSuper</tt>.  Again, see the code above for an example.</p>
+</div>
+</div>
+<div class="section" id="specifying-names-for-anonymous-nested-type-definitions">
+<h2><a class="toc-backref" href="#id65">11.11&nbsp;&nbsp;&nbsp;Specifying names for anonymous nested type definitions</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> automatically assigns names for types (and the
+classes generated from them), when that type definition (for
+example, <tt class="docutils literal">xs:complexType</tt>) does not have a name and it is nested
+inside another type definition.  However, these assigned names, in
+part because of the need to make them unique, can be difficult to
+predict.</p>
+<p>Therefore, <tt class="docutils literal">generateDS.py</tt> provides a way to specify the names of
+the Python classes generated from these anonymous, nested types.  To
+do so, follow these steps:</p>
+<ol class="arabic">
+<li><p class="first">Create a module named <tt class="docutils literal">gds_inner_name_map</tt>
+(<tt class="docutils literal">gds_inner_name_map.py</tt>).</p>
+</li>
+<li><p class="first">Place that module where Python can import it when you run
+<tt class="docutils literal">generateDS.py</tt>.  You can do this either by adding an
+additional directory to the environment variable <tt class="docutils literal">PYTHONPATH</tt>
+or by placing <tt class="docutils literal">gds_inner_name_map.py</tt> in a directory that is
+already on Python's search path for modules.  You can check this
+by running the following Python code snippet:</p>
+<pre class="literal-block">
+import sys
+print sys.path
+</pre>
+<p>Also see: <a class="reference external" href="https://docs.python.org/2/library/sys.html#sys.path">https://docs.python.org/2/library/sys.html#sys.path</a></p>
+</li>
+<li><p class="first">In module <tt class="docutils literal">gds_inner_name_map</tt>, define a global variable
+<tt class="docutils literal">Inner_name_map</tt>.  The value of this variable should be a
+dictionary that maps 2-tuples containing (a) the name of the
+grandparent type and (b) the name of the parent type onto the new
+name.</p>
+</li>
+</ol>
+<p>If <tt class="docutils literal">generateDS.py</tt> cannot import <tt class="docutils literal">Inner_name_map</tt> from
+<tt class="docutils literal">gds_inner_name_map</tt>, then it will, by default, generate unique
+names.  In particular, it automatically generates names for
+anonymous, nested types when the following Python statement fails:</p>
+<pre class="literal-block">
+from gds_inner_name_map import Inner_name_map
+</pre>
+<p>Here is an example of module <tt class="docutils literal">gds_inner_name_map.py</tt>:</p>
+<pre class="literal-block">
+Inner_name_map = {
+    (&quot;classAType&quot;, &quot;inner&quot;): &quot;inner_001&quot;,
+    (&quot;classBType&quot;, &quot;inner&quot;): &quot;inner_002&quot;,
+}
+</pre>
+<p>Usage hints:</p>
+<ul class="simple">
+<li>When <tt class="docutils literal">generateDS.py</tt> succeeds in importing <tt class="docutils literal">Inner_name_map</tt>
+from <tt class="docutils literal">gds_inner_name_map</tt>, but <em>cannot</em> find one of the required
+mappings in that dictionary, it will throw an exception and print
+out the missing mapping.  You can copy this line; paste it into
+your <tt class="docutils literal">gds_inner_name_map.py</tt>; and edit it so as to specify the
+class name of your choice.</li>
+<li>Make sure that the names you specify are unique within your XML
+schema.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="how-to-use-the-generated-source-code">
+<h1><a class="toc-backref" href="#id66">12&nbsp;&nbsp;&nbsp;How to use the generated source code</a></h1>
+<div class="section" id="the-parsing-functions">
+<h2><a class="toc-backref" href="#id67">12.1&nbsp;&nbsp;&nbsp;The parsing functions</a></h2>
+<p>The simplest use is to call one of the parsing functions in the
+generated source file. You may be able to use one of these
+functions without change, or can modify one to fit your needs.
+<tt class="docutils literal">generateDS.py</tt> generates the following parsing functions:</p>
+<ul class="simple">
+<li>parse -- Parse an XML document from a file.</li>
+<li>parseString -- Parse an XML document from a string.</li>
+</ul>
+<p>These parsing functions are generated in both the superclass and
+the subclass files. Note the call to the export method. You may
+need to comment out or un-comment this call to export according to
+your needs.</p>
+<p>For example, if the generated source is in people.py, then, from
+the command line, run something like the following:</p>
+<pre class="literal-block">
+python people.py people.xml
+</pre>
+<p>Or, from within other Python code, use something like the
+following:</p>
+<pre class="literal-block">
+import people
+rootObject = people.parse('people.xml')
+</pre>
+</div>
+<div class="section" id="recognizing-the-top-level-element">
+<h2><a class="toc-backref" href="#id68">12.2&nbsp;&nbsp;&nbsp;Recognizing the top level element</a></h2>
+<p>It might be that the generated module, when parsing an XML instance
+document, does not, by default, recognize the top level (root)
+element in an instance document.  This might happen because
+<tt class="docutils literal">generateDS.py</tt> does not detect the correct top level element
+from the XML schema or because you need to use the generated module
+to parse instance documents that have <em>different</em> top level
+elements.  If this is the case, you might pick and use one of the
+following strategies:</p>
+<ol class="arabic">
+<li><p class="first">In your schema, move the definition of the element type that
+defines the top level element in your instance documents to the
+top of the schema.  By default, generateDS.py uses the first
+definition in the schema as the when constructing the generated
+<tt class="docutils literal">parse</tt> function.</p>
+</li>
+<li><p class="first">Use the &quot;--root-element&quot; command line option to specify top level
+element.  But, be aware that this only works if the tag name and
+type name of the top level element are the same.</p>
+</li>
+<li><p class="first">Modify the <tt class="docutils literal">parse</tt> function in your generated module, replacing
+the class whose factory is called and the tag name passed in to
+the export method.  For example, change:</p>
+<pre class="literal-block">
+def parse(inFileName):
+    doc = minidom.parse(inFileName)
+    rootNode = doc.documentElement
+    rootObj = type1.factory()
+    rootObj.build(rootNode)
+    # Enable Python to collect the space used by the DOM.
+    doc = None
+    sys.stdout.write('&lt;?xml version=&quot;1.0&quot; ?&gt;\n')
+    rootObj.export(sys.stdout, 0, name_=&quot;type1&quot;,
+        namespacedef_='')
+    return rootObj
+</pre>
+<p>to:</p>
+<pre class="literal-block">
+def parse(inFileName):
+    doc = minidom.parse(inFileName)
+    rootNode = doc.documentElement
+    rootObj = type2.factory()
+    rootObj.build(rootNode)
+    # Enable Python to collect the space used by the DOM.
+    doc = None
+    sys.stdout.write('&lt;?xml version=&quot;1.0&quot; ?&gt;\n')
+    rootObj.export(sys.stdout, 0, name_=&quot;type2&quot;,
+        namespacedef_='')
+    return rootObj
+</pre>
+<p>Notice that we've changed the two occurrences of &quot;type1&quot; to
+&quot;type2&quot;.</p>
+</li>
+<li><p class="first">Using the generated <tt class="docutils literal">parse</tt> function as a model, create a
+separate module that imports your generated module.  In the
+<tt class="docutils literal">parse</tt> function in your module, make a change similar to that
+suggested above.  And, of course, add any additional code needed
+by your application.</p>
+</li>
+<li><p class="first">Write a separate module containing your own parse function that
+inspects the top level element of an input XML instance document
+and automatically determines which generated class should be used
+to parse it.  Here is an example:</p>
+<pre class="literal-block">
+#!/usr/bin/env python
+
+import sys
+from optparse import OptionParser
+from xml.dom import minidom
+import mygeneratedmodule as gendsmod
+
+def get_root_tag(node):
+    tag = node.tagName
+    tags = tag.split(':')
+    if len(tags) &gt; 1:
+        tag = tags[-1]
+    rootClass = None
+    if hasattr(gendsmod, tag):
+        rootClass = getattr(gendsmod, tag)
+    return tag, rootClass
+
+def parse(inFilename, options):
+    doc = minidom.parse(inFilename)
+    rootNode = doc.documentElement
+    rootTag, rootClass = get_root_tag(rootNode)
+    rootObj = rootClass.factory()
+    rootObj.build(rootNode)
+    # Enable Python to collect the space used by the DOM.
+    doc = None
+    sys.stdout.write('&lt;?xml version=&quot;1.0&quot; ?&gt;\n')
+    rootObj.export(sys.stdout, 0, name_=rootTag,
+        namespacedef_='')
+    doc = None
+    return rootObj
+
+USAGE_TEXT = &quot;&quot;&quot;
+    python %prog [options] &lt;somefile.xml&gt;&quot;&quot;&quot;
+
+def usage(parser):
+    parser.print_help()
+    sys.exit(1)
+
+def main():
+    parser = OptionParser(USAGE_TEXT)
+    (options, args) = parser.parse_args()
+    if len(args) == 1:
+        infilename = args[0]
+        parse(infilename, options)
+    else:
+        usage(parser)
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</pre>
+<p>Notice the call to <tt class="docutils literal">get_root_tag</tt>, which attempts to recognize
+the top level tag in the input XML document so that the <tt class="docutils literal">parse</tt>
+function can parse and export it.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="the-export-methods">
+<h2><a class="toc-backref" href="#id69">12.3&nbsp;&nbsp;&nbsp;The export methods</a></h2>
+<p>The generated classes contain methods <tt class="docutils literal">export</tt> and
+<tt class="docutils literal">exportLiteral</tt> which can be called to export classes to several
+text formats, in particular to an XML instance document and a
+Python module containing Python literals.  See the generated parse
+functions for examples showing how to call the export methods.</p>
+<div class="section" id="method-export">
+<h3><a class="toc-backref" href="#id70">12.3.1&nbsp;&nbsp;&nbsp;Method export</a></h3>
+<p>The export method in generated classes writes out an XML document
+that represents the instance that contains it and its child
+elements.  So, for example, if your instance tree was created by
+one of the parsing functions described above, then calling
+<tt class="docutils literal">export</tt> on the root element should reproduce the input XML
+document, differing only with respect to ignorable white space.</p>
+</div>
+<div class="section" id="method-exportliteral">
+<h3><a class="toc-backref" href="#id71">12.3.2&nbsp;&nbsp;&nbsp;Method <tt class="docutils literal">exportLiteral</tt></a></h3>
+<p><tt class="docutils literal">generateDS.py</tt> generates Python classes that represent the
+elements in an XML document, given an Xschema definition of the
+XML document type. The <tt class="docutils literal">exportLiteral</tt> method will export a
+Python literal representation of the Python instances of the
+classes that represent an XML document.</p>
+<div class="section" id="what-it-does">
+<h4><a class="toc-backref" href="#id72">12.3.2.1&nbsp;&nbsp;&nbsp;What It Does</a></h4>
+<p>When <tt class="docutils literal">generateDS.py</tt> generates the Python source code for your
+classes, this new feature also generates an <tt class="docutils literal">exportLiteral</tt>
+method in each class. If you call this method on the root
+(top-most) object, it will write out a literal representation of
+your class instances as Python code.</p>
+<p><tt class="docutils literal">generateDS.py</tt> also generates a function at top level
+(parseLiteral) that parses an XML document and calls the
+&quot;exportLiteral&quot; method on the root object to write the data
+structure (instances of your generated classes) as a Python module
+that you can import to (re-)create instances of the classes that
+represent your XML document.</p>
+</div>
+<div class="section" id="why-you-might-care">
+<h4><a class="toc-backref" href="#id73">12.3.2.2&nbsp;&nbsp;&nbsp;Why You Might Care</a></h4>
+<p><tt class="docutils literal">generateDS.py</tt> was designed and built with the assumption that
+we are <em>not</em> interested in marking up text content at all.  What
+we really want is a way to represent structured and nested date in
+text.  It takes the statement, &quot;I want to represent nested data
+structures in text.&quot;, entirely seriously.  Given that assumption,
+there may be times when you want a more &quot;Pythonic&quot; textual
+representation of the Python data structures for which
+<tt class="docutils literal">generateDS.py</tt> has generated code.  <tt class="docutils literal">exportLiteral</tt> enables
+you to produce that representation.</p>
+<p>This feature means that the classes that you generate from an XML
+schema support the interchangeability of XML and Python literals.
+This means that, given classes generated by <tt class="docutils literal">generateDS.py</tt> for
+your XML document type, you can perform the following
+transformations:</p>
+<ul class="simple">
+<li>Translate an XML document into a Python module containing a
+literal definition of the contents of the XML document.</li>
+<li>Translate the literal definition of a Python data structure into
+an XML instance document.</li>
+</ul>
+<p>This capability enables you to:</p>
+<ul class="simple">
+<li>Work with an XML (text) document, then exchange it for a Python
+text representation of the content of that document.</li>
+<li>Work with a Python literal text representation of your XML
+document, then exchange that for an XML document that represents
+the same content.</li>
+<li>&quot;Freeze&quot; your XML document as a Python module that you can
+import. The module can be edited with your text editor, so
+perhaps it would be better to say that it is frozen, but not too
+hard. The classes that you generate with <tt class="docutils literal">generateDS.py</tt> can
+be used to:<ol class="arabic">
+<li>Read in an XML document.</li>
+<li>(Optionally) modify the Python instances that represent that
+XML document.</li>
+<li>Write the instances out as a Python module that you can later
+import.</li>
+</ol>
+</li>
+</ul>
+</div>
+<div class="section" id="how-to-use-it">
+<h4><a class="toc-backref" href="#id74">12.3.2.3&nbsp;&nbsp;&nbsp;How to use it</a></h4>
+<p>See the generated function <tt class="docutils literal">parseLiteral</tt> for an example of how
+to use <tt class="docutils literal">exportLiteral</tt>.</p>
+</div>
+</div>
+<div class="section" id="exporting-compact-xml-documents">
+<h3><a class="toc-backref" href="#id75">12.3.3&nbsp;&nbsp;&nbsp;Exporting compact XML documents</a></h3>
+<p>You can also export &quot;compact&quot; XML documents.  A compact document is
+one that is exported <em>without</em> the ignorable whitespace that is used
+to produce pretty printed documents.  In contrast, a pretty printed
+document will have leading white space on most lines to show
+indentation.</p>
+<p>To produce compact documents, pass the optional argument
+<tt class="docutils literal">pretty_print=False</tt> to the export function.  Check the &quot;parse&quot;
+functions generated near the bottom of modules generated by
+<tt class="docutils literal">generateDS.py</tt>, where <tt class="docutils literal">pretty_print=True</tt> is passed in by
+default.</p>
+</div>
+</div>
+<div class="section" id="building-instances">
+<h2><a class="toc-backref" href="#id76">12.4&nbsp;&nbsp;&nbsp;Building instances</a></h2>
+<p>If you have an instance of a minidom node that represents an
+element in an XML document, you can also use the 'build' member
+function to populate an instance of the corresponding class. Here
+is an example:</p>
+<pre class="literal-block">
+from xml.dom import minidom
+from xml.dom import Node
+
+doc = minidom.parse(inFileName)
+rootNode = doc.childNodes[0]
+people = []
+for child in rootNode.childNodes:
+    if child.nodeType == Node.ELEMENT_NODE and child.nodeName == 'person':
+        obj = person()
+        obj.build(child)
+        people.append(obj)
+</pre>
+</div>
+<div class="section" id="using-the-subclass-module">
+<h2><a class="toc-backref" href="#id77">12.5&nbsp;&nbsp;&nbsp;Using the subclass module</a></h2>
+<p>If you choose to use the generated subclass module, and I
+encourage you to do so, you may need to edit and modify that
+file. Here are some of the things that you must do (look for
+&quot;???&quot;):</p>
+<ul class="simple">
+<li>Edit the import statement at the top of the file. It should
+import the generated superclass file.  Note that you can also
+use the &quot;--super&quot; command line option to insert this
+automatically.</li>
+<li>Edit the USAGE_TEXT string so that it gives a help message
+appropriate for your use.</li>
+<li>Edit the main function toward the bottom of the file. It should
+call a method, that you have possibly added, to the root
+subclass.</li>
+</ul>
+<p>You can also (and most likely will want to) add methods to the
+generated classes. See the section <a class="reference internal" href="#how-to-modify-the-generated-code">How to Modify the Generated
+Code</a> for more on this.</p>
+<p>The classes generated from each element definition provide getter
+and setter methods to access its attributes and child elements.</p>
+<p>Elements that are referenced but not defined (i.e. that are
+simple, for example strings, integers, floats, and booleans) are
+accessed through getter and setter methods in the class in which
+they are referenced.</p>
+</div>
+<div class="section" id="elements-with-attributes-but-no-nested-children">
+<h2><a class="toc-backref" href="#id78">12.6&nbsp;&nbsp;&nbsp;Elements with attributes but no nested children</a></h2>
+<p>Element definitions that contain attributes but <em>no</em> nested child
+elements provide access to their data content through getter and
+setter methods <tt class="docutils literal">getValueOf_</tt> and <tt class="docutils literal">setValueOf_</tt> and member
+variable <tt class="docutils literal">valueOf_</tt>.</p>
+</div>
+<div class="section" id="id4">
+<span id="id3"></span><h2><a class="toc-backref" href="#id79">12.7&nbsp;&nbsp;&nbsp;Mixed content</a></h2>
+<p>The goal of <tt class="docutils literal">generateDS.py</tt> is to support data structures
+represented in XML as opposed to text mark-up.  However, it does
+provides some support for mixed content.  But, for mixed content,
+the data structures and code generated by <tt class="docutils literal">generateDS.py</tt> are
+fundamentally different from those for elements that do not
+contain mixed content.</p>
+<p>There are limitations, of course.  A known limitation is related
+to extension elements.  Specifically, if an element contains mixed
+content, and this element extends a base class, then the base
+class and any classes it extends must be defined to contain mixed
+content.  This is due to the fact that <tt class="docutils literal">generateDS.py</tt> generates
+a data structure (class) for elements containing mixed content
+that is fundamentally different from that generated for other
+elements.</p>
+<p>Here is an example of mixed content:</p>
+<pre class="literal-block">
+&lt;note&gt;This is a &lt;bold&gt;nice&lt;/bold&gt; comment.&lt;/note&gt;
+</pre>
+<p>When an element is defined with something like the following:</p>
+<pre class="literal-block">
+&lt;xs:complexType mixed=&quot;true&quot;&gt;
+    &lt;xs:sequence&gt;
+        o
+        o
+        o
+</pre>
+<p>then, instead of generating a class whose named members refer to
+nested elements, a class containing a list of instances of class
+<tt class="docutils literal">MixedContainer</tt> is generated.  In order to process the content
+of a mixed content element, the code you write will need to walk
+this list of instances of <tt class="docutils literal">MixedContainer</tt> and check the type of
+each item in that list.  Basically, the structure becomes more
+DOM-like in the sense that it has a list of children, rather than
+named fields.</p>
+<p>Instances of <tt class="docutils literal">MixedContainer</tt> have the following methods:</p>
+<ul class="simple">
+<li><tt class="docutils literal">getCategory</tt> -- Returns one of the following, depending on
+the content:<ul>
+<li>CategoryText -- Text content.</li>
+<li>CategorySimple -- Simple elements, that is, elements defined
+as xs:string, xs:integer, etc.  For these, the member variable
+<tt class="docutils literal">content_type</tt>, accessible through method <tt class="docutils literal">getContenttype</tt>
+will contain one of TypeString, TypeInteger, TypeFloat,
+TypeDecimal, TypeDouble, or TypeBoolean.</li>
+<li>CategoryComplex -- Complex elements represented by a generated
+class.  For these, the member variable <tt class="docutils literal">name</tt>, accessible
+through method <tt class="docutils literal">getName</tt> will return the element/tag name
+and the member variable <tt class="docutils literal">value</tt>, accessible through method
+<tt class="docutils literal">getValue</tt> will return the instance.</li>
+</ul>
+</li>
+<li><tt class="docutils literal">getContenttype</tt> -- Returns one of TypeString, TypeInteger,
+TypeFloat, TypeDecimal, TypeDouble, or TypeBoolean.  Valid only
+when category is CategorySimple.</li>
+<li><tt class="docutils literal">getName</tt> -- For CategoryComplex, returns the name of the
+element.</li>
+<li><tt class="docutils literal">getValue</tt> -- Returns the value of this chunk of content. Its
+type depends on the value returned by <tt class="docutils literal">getCategory</tt> and
+<tt class="docutils literal">getContenttype</tt>.</li>
+</ul>
+<p>Note that elements defined with attributes but with <em>no</em> nested
+sub-elements do not need to be declared as &quot;mixed&quot;.  For these
+elements, character data is captured in a member variable
+<tt class="docutils literal">valueOf_</tt>, and can be accessed with member methods
+<tt class="docutils literal">getValueOf_</tt> and <tt class="docutils literal">setValueOf_</tt>.</p>
+</div>
+<div class="section" id="id6">
+<span id="id5"></span><h2><a class="toc-backref" href="#id80">12.8&nbsp;&nbsp;&nbsp;anyAttribute</a></h2>
+<p>For elements that specify <tt class="docutils literal">anyAttributes</tt>, <tt class="docutils literal">generateDS.py</tt>
+produces a class containing the following:</p>
+<ul class="simple">
+<li>A member variable <tt class="docutils literal">anyAttributes_</tt> containing a Python
+dictionary.  After parsing an XML instance document, this
+dictionary will contain name-value pairs for any attributes in
+the instance document not explicitly defined for that element.</li>
+<li>The following getters and setters: <tt class="docutils literal">getAnyAttributes_</tt> and
+<tt class="docutils literal">setAnyAttributes_</tt>.</li>
+<li>Code to export the attribute names and values stored in the
+dictionary.</li>
+<li>Code to parse attributes in addition to those explicitly defined
+for the element and store them in the dictionary.</li>
+</ul>
+<p><strong>Note:</strong> Attributes that are explicitly defined for an element
+are <em>not</em> stored in the dictionary <tt class="docutils literal">anyAttributes_</tt>.</p>
+<p><tt class="docutils literal">generateDS.py</tt> ignores the <tt class="docutils literal">processContents</tt> attribute on the
+<tt class="docutils literal">anyAttribute</tt> element in the XML Schema</p>
+</div>
+<div class="section" id="user-methods">
+<h2><a class="toc-backref" href="#id81">12.9&nbsp;&nbsp;&nbsp;User Methods</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> provides a mechanism that enables you to attach
+user defined methods to specific generated classes.  In order to
+do so, create a Python module containing specifications of those
+methods and indicate that module on the command line with the
+&quot;--user-methods&quot; option.  Example:</p>
+<pre class="literal-block">
+python generateDS.py -f --super=people_sup -o people_sup.py -s people_sub.py --user-methods=gends_user_methods people.xsd
+</pre>
+<p>The module named with this flag must be located where
+<tt class="docutils literal">generateDS.py</tt> can import it.  You might need to add the
+directory containing your user methods module to the
+<tt class="docutils literal">PYTHONPATH</tt> environment variable.</p>
+<p>The module specified with the &quot;--user-methods&quot; flag should define
+a variable <tt class="docutils literal">METHOD_SPECS</tt> which contains a list of instances of
+a class that implements methods <tt class="docutils literal">match_name</tt> and
+<tt class="docutils literal">get_interpolated_source</tt>.</p>
+<p>See file <a class="reference external" href="https://bitbucket.org/dkuhlman/generateds/src">gends_user_methods.py</a> for an example of this
+specification file and the definition of class <tt class="docutils literal">MethodSpec</tt>.
+Read the comments in that file for more guidance.</p>
+<p>The <tt class="docutils literal">member_data_items_</tt> class variable -- User methods,
+especially those attached to more than one class, are likely to
+need a list of the members in the current class.  Each generated
+class has a class variable containing a list of specifications of
+the members in the class.  Each item in this list is an instance
+of class <tt class="docutils literal">MemberSpec_</tt>, which is defined near the top of your
+generated (super-class) file.  Use the following to access the
+information in each member specification:</p>
+<ul>
+<li><p class="first"><tt class="docutils literal">m.get_name()</tt> -- Returns the name of the member variable (a string).</p>
+</li>
+<li><p class="first"><tt class="docutils literal">m.get_data_type()</tt> -- Returns the data type of the member
+variable (a string).  If the data type is a list, returns the
+terminal type, which is that last string in the list.  (Also see
+<tt class="docutils literal">get_data_type_chain()</tt>.)</p>
+</li>
+<li><p class="first"><tt class="docutils literal">m.get_data_type_chain()</tt> -- Returns the data type of the
+member variable (a string or list).  When the data type is a
+simpleType that has another simpleType as it's base or is a
+complexType that extends a simpleType, then the data type is a
+list of strings, for example:</p>
+<pre class="literal-block">
+['RelationType', 'xs:string']
+</pre>
+<p>The last string in the list is the terminal type, usually a
+built-in simple type.  Note that <tt class="docutils literal">m.get_data_type()</tt> returns
+the terminal (last) type.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">m.get_container()</tt> -- (an integer) Indicates whether the
+member variable is a single item or a list/container (i.e.
+generated from maxOccurs &gt; 0): 0 indicates a single item; 1
+indicates a list.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">m.get_optional()</tt> -- (an integer) Returns 0 (zero) if the item
+is optional (defined with minOccurs=&quot;0&quot;), else returns 1.</p>
+</li>
+</ul>
+<p>There are a number of things of interest in this sample file
+(<a class="reference external" href="https://bitbucket.org/dkuhlman/generateds/src">gends_user_methods.py</a>):</p>
+<ul>
+<li><p class="first">Although, the <tt class="docutils literal">MethodSpec</tt> class must be included in your user
+methods specification module, you can modify this class. For
+example, for special situations, it might be useful to modify
+either of the methods <tt class="docutils literal">MethodSpec.match_name</tt> or
+<tt class="docutils literal">MethodSpec.get_interpolated_source</tt>.  These methods are
+called by <tt class="docutils literal">generateDS.py</tt>.  See comments on the definitions of
+these methods in <a class="reference external" href="https://bitbucket.org/dkuhlman/generateds/src">gends_user_methods.py</a>.</p>
+</li>
+<li><p class="first">A method <tt class="docutils literal">set_up</tt> is attached to the root class.  (This user
+method specification module is intended to be used with
+<tt class="docutils literal">people.xsd/people.xml</tt> in the <tt class="docutils literal">Demos/People</tt> directory.)
+It performs initialization, before the <tt class="docutils literal">walk</tt> method is
+called.  In particular, <tt class="docutils literal">set_up</tt> initializes a counter and
+imports the <tt class="docutils literal">types</tt> module (which saves us from having to
+modify the generated code).</p>
+</li>
+<li><p class="first">The <tt class="docutils literal">walk_and_update</tt> and <tt class="docutils literal">walk_and_show</tt> methods provide an
+example showing how to walk the entire document object tree.</p>
+</li>
+<li><p class="first">The method <tt class="docutils literal">walk_and_update</tt> uses the <tt class="docutils literal">member_data_items_</tt>
+class variable to obtain a list of members of the class.  It's a
+list of instances of class <tt class="docutils literal">MemberSpec_</tt>, which support the
+<tt class="docutils literal">m.get_name()</tt>, <tt class="docutils literal">m.get_data_type()</tt>, and <tt class="docutils literal">m.get_container()</tt>
+methods described above.</p>
+</li>
+<li><p class="first">In method <tt class="docutils literal">walk_and_show</tt>, note the use of <tt class="docutils literal">getattr</tt> to
+retrieve the value of a member variable and the use of
+<tt class="docutils literal">setattr</tt> to set the value of a member variable.</p>
+</li>
+<li><p class="first">The expression &quot;%(class_name)s&quot; is used to insert the class name
+into the generated source code.</p>
+</li>
+<li><p class="first">Notice how the <tt class="docutils literal">types</tt> module is used to determine whether a
+member variable contains a simple type or an instance of a
+class.  Example:</p>
+<pre class="literal-block">
+obj1 = getattr(self, member[0])
+if type(obj1) == types.InstanceType:
+    ...
+</pre>
+</li>
+<li><p class="first">In string formatting operations, you will need to use double
+percent signs in order to &quot;pass through&quot; a single percent sign,
+for example:</p>
+<pre class="literal-block">
+print '%%d. class: %(class_name)s  depth: %%d' %% (counter, depth, )
+</pre>
+<p>where the single percent signs are interpolated
+(&quot;%(class_name)s&quot; is replace by the class name), and double
+percent signs are replace by single percent signs (&quot;%%d&quot; becomes
+&quot;%d&quot;).</p>
+</li>
+</ul>
+<p>Suggestion -- How to begin:</p>
+<ol class="arabic simple">
+<li>Make a copy of <a class="reference external" href="https://bitbucket.org/dkuhlman/generateds/src">gends_user_methods.py</a>.</li>
+<li>Modify the method specifications in that file.  Replace the
+source code and the class_name pattern in each specification.</li>
+<li>Run <tt class="docutils literal">generateDS.py</tt> with the &quot;--user-methods&quot; (or &quot;-u&quot;) flag.</li>
+<li>Inspect the user methods in the generated classes.</li>
+<li>Test your generated code.</li>
+<li>Repeat as necessary.</li>
+</ol>
+</div>
+<div class="section" id="overridable-methods-generatedssuper-py">
+<h2><a class="toc-backref" href="#id82">12.10&nbsp;&nbsp;&nbsp;Overridable methods -- generatedssuper.py</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> generates calls to several methods that each have
+a default implementation in a superclass.  The default superclass
+with default implementations is included in the generated code.
+The user can replace this default superclass by implementing a
+module named <tt class="docutils literal">generatedssuper.py</tt> containing a class named
+<tt class="docutils literal">GeneratedsSuper</tt>.</p>
+<p>What to look for in the generated code:</p>
+<ul class="simple">
+<li>In the generated superclass file (generated with command line
+option &quot;-o&quot;), look for the import of module
+<tt class="docutils literal">generatedssuper.py</tt> and the definition of the (default)
+class <tt class="docutils literal">GeneratedsSuper</tt>.</li>
+<li>Also look for calls to methods <tt class="docutils literal">format_integer()</tt>,
+<tt class="docutils literal">format_float()</tt>, <tt class="docutils literal">format_double()</tt>, etc.</li>
+</ul>
+<p>To view the default implementation of class GeneratedsSuper, look in
+a generated superclass module (one generated by the &quot;-o&quot; command
+line option with generateDS.py). The default definition of class
+GeneratedsSuper is near the top of a generated module.</p>
+<p>If you wish to modify the behavior of any of these methods, see
+below for instructions on how to do so.</p>
+<p><strong>Caution:</strong> Overriding any of the <tt class="docutils literal"><span class="pre">*_format_*()</span></tt> methods
+enables you to export invalid XML.  So, use at your own risk, test
+before using, etc.</p>
+<p>How to modify the behavior of the default methods:</p>
+<ul class="simple">
+<li>Implement methods that override the default methods.</li>
+<li>Look at the definition of the default methods in class
+<tt class="docutils literal">GeneratedsSuper</tt> in order to learn the signature of the
+methods in that class.</li>
+<li>Look at the definition of the default methods to determine what
+they do and what type of value they return, then do something
+similar in your overriding method.</li>
+<li>Search for and look at the call to the method you are interested
+in modifying (for example <tt class="docutils literal">gds_format_string</tt>) to learn where
+and when it is used and for what.</li>
+</ul>
+<p>Where to put (implement) methods that override the default methods
+-- You can place the implementations of methods that override the
+default methods in the following places:</p>
+<ul>
+<li><p class="first">In a class named <tt class="docutils literal">GeneratedsSuper</tt> in a separate module named
+<tt class="docutils literal">generatedssuper</tt>.  Since this class would replace the
+default implementations, you should provide implementations of
+all the default methods listed above in that class.  To create
+your own version, copy and paste the default implementation of
+class <tt class="docutils literal">GeneratedsSuper</tt> from your generated module into a file
+named <tt class="docutils literal">generatedssuper.py</tt>, then modify that.</p>
+</li>
+<li><p class="first">In individual generated (super) classes (the ones generated with
+the &quot;-o&quot; command line option) using the <a class="reference internal" href="#user-methods">User Methods</a> feature.</p>
+</li>
+<li><p class="first">In individual classes in a subclass module generated with the &quot;-s&quot;
+command line option.</p>
+<p>If you want to use the same method in more than one generated
+subclass, then you might consider putting that method in a
+&quot;mix-in&quot; class and inherited that method in the generated
+subclass.  With this approach, you must put the mix-in class
+containing your methods before the regular superclass, so that
+Python will find your custom methods before the default ones.
+That is, you must use:</p>
+<pre class="literal-block">
+class clientSub(MySpecialMethods, supermod.client):
+</pre>
+<p>not:</p>
+<pre class="literal-block">
+class clientSub(supermod.client, MySpecialMethods):
+</pre>
+</li>
+</ul>
+<p>If you choose to implement module <tt class="docutils literal">generatedssuper</tt>, here are
+a few instructions and suggestions:</p>
+<ul>
+<li><p class="first">Implement a module <tt class="docutils literal">generatedssuper.py</tt> containing definition of
+a class <tt class="docutils literal">GeneratedsSuper</tt>.  You can copy and paste the default
+implementation from a superclass module generated with the -o
+command line option for <tt class="docutils literal">generateDS.py</tt>.</p>
+</li>
+<li><p class="first">Put this module in a location where it can be imported when your
+generated code is run.  Note the <tt class="docutils literal">try:except:</tt> block in your
+generated superclass module that attempts to import it and that
+uses the default implementation of <tt class="docutils literal">GeneratedsSuper</tt> when it
+cannot.</p>
+</li>
+<li><p class="first">An easy way to begin is to copy the default definition of the
+class <tt class="docutils literal">GeneratedsSuper</tt> from a superclass module generated with
+the &quot;-o&quot; command line option into a module named
+<tt class="docutils literal">generatedssuper.py</tt>. Then modify your (copied) implementation.</p>
+</li>
+<li><p class="first">To implement a method that does a task specific to particular
+class or a particular member of a class, do something like the
+following:</p>
+<pre class="literal-block">
+def gds_format_string(self, input_data, input_name=''):
+    if self.__class__.__name__ == 'person':
+        return '[[%s]]' % input_data
+    else:
+        return input_data
+</pre>
+<p>or:</p>
+<pre class="literal-block">
+def gds_format_string(self, input_data, input_name=''):
+    if self.__class__.__name__ == 'booster' and input_name == 'lastname':
+        return '[[%s]]' % input_data
+    else:
+        return input_data
+</pre>
+<p>Alternatively, to attach a method to a specific class, use the
+<a class="reference internal" href="#user-methods">User Methods</a> or a generated subclass module (command line
+option &quot;-s&quot;), as described above.</p>
+</li>
+<li><p class="first">You can also add additional, new methods that you call (for
+example, in subclasses that you generate with the -s command line
+option for <tt class="docutils literal">generateDS.py</tt>.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="the-element-name-to-class-name-dictionary">
+<h2><a class="toc-backref" href="#id83">12.11&nbsp;&nbsp;&nbsp;The element name to class name dictionary</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> automatically generates a dictionary that maps
+element/complexType names to the names of the class generated for
+that complexType definition.  This dictionary is named
+<tt class="docutils literal">GDSClassesMapping</tt>.  You will find it in the module generated
+with the &quot;-o&quot; option.</p>
+</div>
+<div class="section" id="adding-custom-exported-attributes-and-namespace-prefix-definitions">
+<h2><a class="toc-backref" href="#id84">12.12&nbsp;&nbsp;&nbsp;Adding custom exported attributes and namespace prefix definitions</a></h2>
+<p>You can add additional attributes to exported XML content by (1)
+providing a module named <tt class="docutils literal">generatedsnamespaces.py</tt>; (2) placing
+that module somewhere so that it can be imported when you &quot;run&quot; your
+generated module; and (3) including in <tt class="docutils literal">generatedsnamespaces.py</tt> a
+global variable named <tt class="docutils literal">GenerateDSNamespaceDefs</tt> whose value is a
+Python dictionary.  The keys in this dictionary should be element
+type names in the generated module.  And the values should be text
+strings that are attributes to be added to exported elements of that
+type.</p>
+<p>Here is an example:</p>
+<pre class="literal-block">
+# file: generatedsnamespaces.py
+
+GenerateDSNamespaceDefs = {
+    &quot;A1ElementType&quot;: 'xmlns:abc=&quot;http://www.abc.com/namespace_a1&quot;',
+    &quot;A2ElementType&quot;: 'xmlns:abc=&quot;http://www.abc.com/namespace_a2&quot;',
+}
+</pre>
+<p>Notes:</p>
+<ul class="simple">
+<li>While the original intension of this facility was to enable the
+user to add XML namespace prefix definitions to the XML content in
+exported files, you can use it to add other attribute definitions
+as well.</li>
+<li>If you find that <tt class="docutils literal">generateDS.py</tt> is adding a specific namespace
+prefix definition to many exported XML elements and you want to
+suppress this behavior, take a look at the <tt class="docutils literal"><span class="pre">--no-namespace-defs</span></tt>
+command line option.  In particular, this command line option may
+be useful when used together with the capability described in this
+section (<tt class="docutils literal">generatedsnamespaces.py</tt>).</li>
+</ul>
+</div>
+</div>
+<div class="section" id="one-per-generating-separate-files-from-imported-included-schemas">
+<h1><a class="toc-backref" href="#id85">13&nbsp;&nbsp;&nbsp;&quot;One Per&quot; -- generating separate files from imported/included schemas</a></h1>
+<p>The <tt class="docutils literal">generateDS.py</tt> project provides support for two approaches to
+this task:</p>
+<ul class="simple">
+<li>The first (<a class="reference internal" href="#approach-1-command-line-option-one-file-per-xsd">Approach 1 -- Command line option
+--one-file-per-xsd</a>, below) is likely to be easier to use, but if
+it does not work for you as is, it is very difficult to customize.</li>
+<li>The second method (<a class="reference internal" href="#approach-2-extraction-and-generation-utilities">Approach 2 -- Extraction and generation
+utilities</a>, below) may require a little more work and
+understanding, but offers more options and customization, and,
+since the scripts that implement it are short and rather simple,
+may be easier to customize or even re-write for your specific
+needs.</li>
+</ul>
+<div class="section" id="approach-1-command-line-option-one-file-per-xsd">
+<h2><a class="toc-backref" href="#id86">13.1&nbsp;&nbsp;&nbsp;Approach 1 -- Command line option --one-file-per-xsd</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">--one-file-per-xsd</span></tt> command line option enables you to
+generate a separate Python module for each XML schema that is
+imported or included (using <tt class="docutils literal">&lt;xs:import&gt;</tt> or <tt class="docutils literal">&lt;xs:include&gt;</tt>) by
+a &quot;master&quot; schema.  Then, in your Python application, these modules
+can then be imported separately.  Alternatively, these modules can
+be placed in a Python package (a directory containing a file named
+&quot;__init__.py&quot;).  See
+<a class="reference external" href="http://docs.python.org/2/tutorial/modules.html#packages">http://docs.python.org/2/tutorial/modules.html#packages</a> for more on
+Python packages.</p>
+<p>Here is a sample use:</p>
+<pre class="literal-block">
+$ ../generateDS.py --one-file-per-xsd --output-directory=&quot;OnePer&quot; --module-suffix=&quot;One&quot; one_per.xsd
+</pre>
+<p>The above command does the following:</p>
+<ul class="simple">
+<li>It generates one Python module for each XML schema that is
+included/imported by <tt class="docutils literal">one_per.xsd</tt>.</li>
+<li>It places the generated output files in the directory <tt class="docutils literal">OnePer</tt>.</li>
+<li>It adds &quot;One&quot; as a suffix to the name of each generated module.</li>
+</ul>
+<p>Here are a few hints, guidelines, and suggestions:</p>
+<ul>
+<li><p class="first">At least one element definition in an included/imported module
+must be a root element definition in order to cause a
+module to be generated for that schema.  In other words, the
+module must contain an element definition of the form:</p>
+<pre class="literal-block">
+&lt;xs:element name=&quot;Sample&quot; type=&quot;sampleType&quot; /&gt;
+</pre>
+</li>
+<li><p class="first">You may want to write a separate &quot;master&quot; schema that includes
+each of the schemas for which you want to generate a separate
+Python module.</p>
+</li>
+<li><p class="first">Use the <tt class="docutils literal"><span class="pre">--output-directory=&lt;directory&gt;</span></tt> command line option to
+tell <tt class="docutils literal">generateDS.py</tt> to generate the Python modules in a
+specific directory.  The directory must already exist.</p>
+</li>
+<li><p class="first">Use the <tt class="docutils literal"><span class="pre">--module-suffix=&lt;suffix&gt;</span></tt> command line option to add a
+specifc suffix to each module name (the part immediately before
+the extension).  For example, the option <tt class="docutils literal"><span class="pre">--module-suffix=Abc</span></tt>
+causes <tt class="docutils literal">generateDS.py</tt> to generate a file named &quot;schema1Abc.py&quot;
+instead of &quot;schema1.py&quot;.</p>
+</li>
+<li><p class="first">If you want to import files from the output directory and it is
+not in <tt class="docutils literal">sys.path</tt>, add a file named &quot;__init__.py&quot; to that
+directory.  The existence of the file <tt class="docutils literal">__init__.py</tt> turns the
+directory into a Python package.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="approach-2-extraction-and-generation-utilities">
+<h2><a class="toc-backref" href="#id87">13.2&nbsp;&nbsp;&nbsp;Approach 2 -- Extraction and generation utilities</a></h2>
+<p>The <tt class="docutils literal">generateds/utils</tt> subdirectory contains two utility scripts
+that may help with this task.  The procedure is as follows:</p>
+<ol class="arabic simple">
+<li>First, use <tt class="docutils literal">utils/collect_schema_locations.py</tt> to collect a set
+of directives, one for each (included) schema and each module to
+be generated.  This utility writes out a JSON file that contains
+the directives to be used in the next step.</li>
+<li>Next, use <tt class="docutils literal">utils/batch_generate.py</tt> to generate one module (or
+perhaps two modules, see below) for each directive in that JSON
+file.</li>
+</ol>
+<p>Each of these modules gives a reasonable amount of usage information
+in response to the <tt class="docutils literal"><span class="pre">--help</span></tt> command line option.</p>
+<p>A few hints and suggestions:</p>
+<ul class="simple">
+<li>After generating the JSON directives file you can modify it with
+your text editor.  For example, (1) you can add the name of
+sub-class modules to be generated by <tt class="docutils literal">generateDS.py</tt>; (2) you
+can specify command line options to be used by <tt class="docutils literal">generateDS.py</tt>
+when generating specific modules; and (3) you can add new
+directives to generate additional modules.</li>
+<li>If you find yourself typing the same command line options to
+<tt class="docutils literal">utils/batch_generate.py</tt> over and over, there is a facility to
+put command line options that have long names (i.e., not one
+character names) into a configuration file.  The usage information
+produced by <tt class="docutils literal">utils/batch_generate.py <span class="pre">--help</span></tt> shows an example.
+Then use <tt class="docutils literal">utils/batch_generate.py <span class="pre">--config=myoptins.config</span> ...</tt>
+to feed this configuration file to <tt class="docutils literal">utils/batch_generate.py</tt>.
+The options in this configuration file can be overridden by those
+entered on the command line.</li>
+<li>The JSON directives file can contain comments, even though this is
+not part of the JSON standard.  A comment is any line that begins
+with &quot;//&quot; where the &quot;//&quot; is proceeded only by white space
+characters.  <tt class="docutils literal">utils/batch_generate.py</tt> strips these lines out
+before parsing the JSON file.  However, if you plan to process
+this JSON file with other processes, you will likely either not
+want to add comments or plan to pre-process them in some way.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="how-to-modify-the-generated-code">
+<h1><a class="toc-backref" href="#id88">14&nbsp;&nbsp;&nbsp;How to modify the generated code</a></h1>
+<p>This section attempts to explain how to modify and add features to
+the generated code.</p>
+<div class="section" id="adding-features-to-class-definitions">
+<h2><a class="toc-backref" href="#id89">14.1&nbsp;&nbsp;&nbsp;Adding features to class definitions</a></h2>
+<p>You can add new member definitions to a generated class. Look at
+the 'export' and 'exportLiteral' member functions for examples of
+how to access member variables and how to walk nested
+sub-elements.</p>
+<p>Here are interesting places to look in each class definition:</p>
+<ul class="simple">
+<li>The 'export' and 'exportLiteral' methods -- These methods walk
+the object tree. You can consider copying and renaming them to
+produce other tree walking methods.</li>
+<li>The 'build' method -- These methods extract information from the
+minidom node. You can inspect the 'build' methods to learn how
+to extract information for other purposes.</li>
+</ul>
+<p>And, if you need methods that are common to and shared by several
+of the generated subclasses, you can put them in a new class and
+add that class to the superclass list for each of your subclasses.</p>
+<p>Although you can add your own methods to the generated
+superclasses, I'm recommeding that you add methods to the
+generated subclasses in the subclass module generated with the
+&quot;-s&quot; command line option, and then edit the subclass module in
+order to build your application. Why?</p>
+<ul class="simple">
+<li>The superclasses are cluttered with other code. Using the
+subclass file enables you to keep your application code
+separate.</li>
+<li>By putting your application code in the subclass file, you will
+be able to reuse the superclass file. You can generate multiple
+subclass files from the same XML Schema definition file. Each of
+these subclass files can import the same superclass file.</li>
+</ul>
+<p>Here are some alternatives to using the subclass file:</p>
+<ul class="simple">
+<li>Add more than one method to each generated (super-)class. Each
+method implements a separate task or &quot;application&quot;. If the
+number of tasks grows, this will create maintenance
+difficulties, however.</li>
+<li>Re-generate multiple (super-)class files. Add methods to the
+classes in these separate files to implement different tasks.
+This of course will not work well if you have had to modify the
+parser, for example, since generating the file.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="examples-and-demonstrations">
+<h1><a class="toc-backref" href="#id90">15&nbsp;&nbsp;&nbsp;Examples and demonstrations</a></h1>
+<p>Under the directory Demos are several examples:</p>
+<ul class="simple">
+<li>Demos/People provides a simple demonstration of generating
+Python data structures from XML Schema.</li>
+<li>Demos/Outline contains another simple example. Also provided (in
+outline_extended.py) is an example of extending and adding to
+the generating code. Look at the show method in classes outline
+and node in file outline_extended.py. This extension walks the
+outline tree and writes out a outline.</li>
+</ul>
+<p>Suggested uses:</p>
+<ul class="simple">
+<li>Anything that requires a tree walk of the XML document
+structure.</li>
+<li>The implementation of filters and transformations on XML
+documents. The following paper discusses and compares this
+technique with the use of XSLT: <a class="reference external" href="http://www.davekuhlman.org/xsltvsgenerateds.html">XSLT and generateDS --
+Analysis, Comparison, and Evaluation --
+http://www.davekuhlman.org/xsltvsgenerateds.html</a>.</li>
+<li>Anything that requires a <em>customized</em> tree walk of the XML
+document. Because you can add methods to the generated classes
+containing explicit control logic, the order in which nodes of
+the parsed XML document are visited is under your control.</li>
+</ul>
+<div class="section" id="django-generating-models-and-forms">
+<h2><a class="toc-backref" href="#id91">15.1&nbsp;&nbsp;&nbsp;Django -- Generating Models and Forms</a></h2>
+<p><tt class="docutils literal">generateDS.py</tt> can be used to generate Django models and Django
+forms that represent the data structures defined in an XML Schema.</p>
+<p><strong>Note:</strong> In order to use this capability, you must obtain the
+&quot;source&quot; distribution of <tt class="docutils literal">generateDS.py</tt>.  You can do this either
+(1) by downloading <tt class="docutils literal"><span class="pre">generateDS-x.xxy.tar.gz</span></tt> from the Python
+Package Index or (2) by downloading the distribution from Bitbucket
+at <a class="reference external" href="https://bitbucket.org/dkuhlman/generateds">https://bitbucket.org/dkuhlman/generateds</a>.  In particular,
+installing <tt class="docutils literal">generateDS.py</tt> using <tt class="docutils literal">pip</tt> does not give you all the
+files you need in order to use this capability.</p>
+<p><em>Note:</em> You only need to obtain the source distribution (so that you
+can copy the files in the <tt class="docutils literal">django/</tt> directory, for example); you
+do not necessarily need to install from it.  If you have already
+installed <tt class="docutils literal">generateDS.py</tt> using <tt class="docutils literal">pip</tt> or <tt class="docutils literal">easy_install</tt>, you
+do not need to re-install from the source tree.</p>
+<p>There are support files in the <tt class="docutils literal">django</tt> directory in the
+source distribution (but <em>not</em> in the version install using <tt class="docutils literal">pip</tt>
+or <tt class="docutils literal">easy_install</tt>).</p>
+<p>Here is an overview of the process:</p>
+<ul class="simple">
+<li>Step 1.  Generate bindings -- Run <tt class="docutils literal">generateDS.py</tt>.</li>
+<li>Step 2.  Extract simpleType definitions from schema -- Run
+<tt class="docutils literal">gends_extract_simple_types.py</tt>.</li>
+<li>Step 3.  Generate models.py and forms.py -- Run
+<tt class="docutils literal">gends_generate_django.py</tt>.</li>
+</ul>
+<p>The script <tt class="docutils literal">gends_run_gen_django.py</tt> performs these three steps.</p>
+<p>In order to use the script <tt class="docutils literal">gends_run_gen_django.py</tt>, you may need
+to tell it where the <tt class="docutils literal">generateDS.py</tt> script is located.  If so,
+use the &quot;-p&quot; command line option.  For more information, do:</p>
+<pre class="literal-block">
+python gends_run_gen_django.py --help
+</pre>
+<div class="section" id="how-to-generate-django-models-and-forms">
+<h3><a class="toc-backref" href="#id92">15.1.1&nbsp;&nbsp;&nbsp;How to generate Django models and forms</a></h3>
+<p><strong>Warning:</strong> Running this script attempts to over-write the
+following files in the current directory:</p>
+<ul class="simple">
+<li>&lt;schema&gt;lib.py</li>
+<li>generateds_definedsimpletypes.py</li>
+<li>models.py</li>
+<li>forms.py</li>
+</ul>
+<p>To over-write these files, use the <tt class="docutils literal"><span class="pre">-f</span></tt> (or <tt class="docutils literal"><span class="pre">--force</span></tt>) command
+line option.</p>
+<p>So, it's a good idea to create a separate, new directory in which
+to do the following work.</p>
+<p>Now, follow these steps:</p>
+<ol class="arabic">
+<li><p class="first">Create an empty directory:</p>
+<pre class="literal-block">
+$ mkdir WorkDir
+$ cd WorkDir
+</pre>
+</li>
+<li><p class="first">Copy the files in from the sub directory <tt class="docutils literal">django/</tt> in the of
+the source distribution of <tt class="docutils literal">generateDS.py</tt> to the current
+directory:</p>
+<pre class="literal-block">
+$ cp /my_sources/generateDS-n.nn/django/* .
+</pre>
+</li>
+<li><p class="first">Copy the file <tt class="docutils literal">process_includes.py</tt> in the distribution to the
+current directory:</p>
+<pre class="literal-block">
+$ cp /my_sources/generateDS-n.nn/process_includes.py .
+</pre>
+</li>
+<li><p class="first">Run the following:</p>
+<pre class="literal-block">
+$ ./gends_run_gen_django.py myschema.xsd
+</pre>
+<p>There are additional command line options for
+<tt class="docutils literal">gends_run_gen_django.py</tt>.  For help, run
+<tt class="docutils literal">$ python gends_run_gen_django.py <span class="pre">--help</span></tt>.</p>
+</li>
+<li><p class="first">Copy the generated files  <tt class="docutils literal">models.py</tt> and <tt class="docutils literal">forms.py</tt> to your
+Django application.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="how-it-works">
+<h3><a class="toc-backref" href="#id93">15.1.2&nbsp;&nbsp;&nbsp;How it works</a></h3>
+<p>Here are a few notes that might be helpful if and when you need to
+do some debugging or extend the current capabilities or write a new
+&quot;meta-app&quot; that uses the same approach but does something new and
+even entirely different.</p>
+<p><tt class="docutils literal">gends_run_gen_django.py</tt> uses <tt class="docutils literal">Popen</tt> to run other scripts,
+specifically, it runs <tt class="docutils literal">generateDS.py</tt>,
+<tt class="docutils literal">gends_extract_simple_types.py</tt>, and
+<tt class="docutils literal">gends_generate_django.py</tt>.</p>
+<p><tt class="docutils literal">gends_extract_simple_types.py</tt> scans the XML schema doc and
+extracts <tt class="docutils literal">simpleType</tt> definitions.  It writes descriptors of those
+definitions to the file <tt class="docutils literal">generateds_definedsimpletypes.py</tt>.</p>
+<p><tt class="docutils literal">gends_generate_django.py</tt> generates the <tt class="docutils literal">models.py</tt> and
+<tt class="docutils literal">forms.py</tt> files by calling the class method
+<tt class="docutils literal">generate_model_</tt> for each class in the list of classes in
+the variable <tt class="docutils literal">__all__</tt> in the generated bindings.  <tt class="docutils literal">__all__</tt> is
+defined at the bottom of the generated bindings module.</p>
+<p>The class method <tt class="docutils literal">generate_model_</tt> (along with some tables for
+predefined simple types etc) is defined in <tt class="docutils literal">generatedssuper.py</tt>,
+which is imported by the generated bindings module.  We are
+overriding the default version of that class.  <tt class="docutils literal">generate_model_</tt>
+is defined in the class <tt class="docutils literal">GeneratedsSuper</tt>, which is used as the
+root super class of all generated data representation classes.</p>
+</div>
+</div>
+</div>
+<div class="section" id="sample-code-and-extensions">
+<h1><a class="toc-backref" href="#id94">16&nbsp;&nbsp;&nbsp;Sample code and extensions</a></h1>
+<div class="section" id="capturing-xs-date-elements-as-dates">
+<h2><a class="toc-backref" href="#id95">16.1&nbsp;&nbsp;&nbsp;Capturing xs:date elements as dates</a></h2>
+<p>The following extension employs a user method (see <a class="reference internal" href="#user-methods">User
+Methods</a>) in order to capture elements defined as xs:date as date
+objects.</p>
+<p>Thanks to Lars Ericson for this code and explanation.</p>
+<p>By default, <tt class="docutils literal">generateDS.py</tt> treats elements declared as type
+xs:date as though they are strings.</p>
+<p>To get xs:dates stored as dates, in your local copy, add the
+following user method (<a class="reference internal" href="#user-methods">User Methods</a>), a slight modification of
+the sample (in <a class="reference external" href="https://bitbucket.org/dkuhlman/generateds/src">gends_user_methods.py</a>):</p>
+<pre class="literal-block">
+method1 = MethodSpec(name='walk_and_update',
+    source='''\
+    def walk_and_update(self):
+        members = %(class_name)s.member_data_items_
+        for member in members:
+            obj1 = getattr(self, member.get_name())
+            if member.get_data_type() == 'xs:date':
+                newvalue = date_calcs.date_from_string(obj1)
+                setattr(self, member.get_name(), newvalue)
+            elif member.get_container():
+                for child in obj1:
+                    if type(child) == types.InstanceType:
+                        child.walk_and_update()
+            else:
+                obj1 = getattr(self, member.get_name())
+                if type(obj1) == types.InstanceType:
+                    obj1.walk_and_update()
+''',
+    class_names=r'^.*$',
+    )
+</pre>
+<p>Then, define <tt class="docutils literal">date_calcs.py</tt> as:</p>
+<pre class="literal-block">
+#!/usr/bin/env python
+# -*- mode: pymode; coding: latin1; -*-
+
+import datetime
+
+# 2007-09-01
+
+# test=&quot;2007-09-01&quot;
+# print test
+# print date_from_string(test)
+
+def date_from_string(str):
+    year = int(str[:4])
+    month = int(str[5:7])
+    day = int(str[8:10])
+    dt = datetime.date(year, month, day)
+    return dt
+</pre>
+<p>And, add a &quot;str&quot; here in generateDS.py:</p>
+<pre class="literal-block">
+def quote_xml(inStr):
+    s1 = str(inStr)
+    s1 = s1.replace('&amp;', '&amp;amp;')
+    s1 = s1.replace('&lt;', '&amp;lt;')
+    s1 = s1.replace('&quot;', '&amp;quot;')
+    return s1
+</pre>
+<p>Also, add these imports to TEMPLATE_HEADER in generateDS.py:</p>
+<pre class="literal-block">
+import date_calcs
+import types
+</pre>
+</div>
+</div>
+<div class="section" id="limitations-of-generateds">
+<h1><a class="toc-backref" href="#id96">17&nbsp;&nbsp;&nbsp;Limitations of generateDS</a></h1>
+<div class="section" id="xml-schema-limitations">
+<h2><a class="toc-backref" href="#id97">17.1&nbsp;&nbsp;&nbsp;XML Schema limitations</a></h2>
+<p>There are things in Xschema that are not supported. You will have
+to use a restricted sub-set of Xschema to define your data
+structures. See above for supported features. See people.xsd and
+people.xml for examples.</p>
+<p>And, then, try it on your XML Schema, and let me know about what
+does not work.</p>
+</div>
+</div>
+<div class="section" id="includes-the-xml-schema-xs-include-and-xs-import-elements">
+<h1><a class="toc-backref" href="#id98">18&nbsp;&nbsp;&nbsp;Includes -- The XML schema xs:include and xs:import elements</a></h1>
+<p>While <tt class="docutils literal">generateDS.py</tt> itself does not process XML Schema
+<tt class="docutils literal">include</tt> elements, the distribution provides a script
+<tt class="docutils literal">process_includes.py</tt> that can be used as a preprocessor.
+<tt class="docutils literal">process_includes.py</tt> is called automatically and by default by
+<tt class="docutils literal">generateDS.py</tt>.  This behavior can be turned off with the
+<tt class="docutils literal"><span class="pre">--no-process-includes</span></tt> command line option.  <strong>However</strong>, doing
+so is not advised, because unexpected and undesirable behavior has
+been detected this is done.  Instead consider using the
+<tt class="docutils literal"><span class="pre">--no-collect-includes</span></tt> and <tt class="docutils literal"><span class="pre">--no-redefine-groups</span></tt> command line
+options to selectively turn of specific processing done in
+<tt class="docutils literal">process_includes.py</tt>.</p>
+<p>The <tt class="docutils literal">process_includes.py</tt> script scans your XML Schema document
+and, recursively, documents that are included looking for
+<tt class="docutils literal">include</tt> elements; it inserts all content into a single document,
+which it writes out.</p>
+<p>Here are samples of how you might use <tt class="docutils literal">process_includes.py</tt>, if
+your schema contains <tt class="docutils literal">include</tt> elements.</p>
+<p>Example 1:</p>
+<pre class="literal-block">
+$ python process_includes.py definitions1.xsd | \
+$ python generateDS.py -f --super=task1sup -o task1sup.py -s task1sub.py -
+</pre>
+<p>Example 2:</p>
+<pre class="literal-block">
+$ python process_includes.py definitions1.xsd tmp.xsd
+$ python generateDS.py -f --super=task1sup -o task1sup.py -s task1sub.py tmp.xsd
+</pre>
+<p>For help and usage information, run the following:</p>
+<pre class="literal-block">
+$ python process_includes.py --help
+</pre>
+</div>
+<div class="section" id="processing-relaxng-schemas">
+<h1><a class="toc-backref" href="#id99">19&nbsp;&nbsp;&nbsp;Processing RelaxNG schemas</a></h1>
+<p>RelaxNG is a schema definition language and is an alternative to XML
+Schema.  For more information on RelaxNG, see: <a class="reference external" href="http://relaxng.org/">http://relaxng.org/</a>.</p>
+<p><tt class="docutils literal">generateDS.py</tt> does not understand or process RelaxNG schemas.
+However, the <tt class="docutils literal">trang</tt> application is able to convert RelaxNG into
+XML Schemas.  I've tried it, and was able to convert a relatively
+small RelaxNG schema into an XML Schema, and then use
+<tt class="docutils literal">generateDS.py</tt> to generate a bindings module from that.  I have
+not done any serious testing to determine how complete or accurate
+this conversion is.  <tt class="docutils literal">trang</tt> is written in Java, so you will need
+Java and the JDK installed in order to compile and use it.  For what
+it's worth, here are the steps I followed in order to use <tt class="docutils literal">trang</tt>:</p>
+<ol class="arabic">
+<li><p class="first">Clone trang from <a class="reference external" href="https://github.com/relaxng/jing-trang.git">https://github.com/relaxng/jing-trang.git</a>,
+and, then built it with:</p>
+<pre class="literal-block">
+$ git clone https://github.com/relaxng/jing-trang.git
+$ cd jing-trang
+# set JAVA_HOME to location of JDK
+$ export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
+$ ./ant
+</pre>
+</li>
+<li><p class="first">Run <tt class="docutils literal">trang</tt> with the following:</p>
+<pre class="literal-block">
+$ cd jing-trang/build
+$ java -jar trang.jar -I rng -O xsd test01.rng test01.xsd
+</pre>
+<p>The above command produced test01.xsd.</p>
+</li>
+<li><p class="first">Run the resulting XML Schema (<tt class="docutils literal">test01.xsd</tt>, in the above case)
+through <tt class="docutils literal">generateDS.py</tt>:</p>
+<blockquote>
+<p>$ generateDS.py -o test01sup.py -s test01sub.py test01.xsd</p>
+</blockquote>
+</li>
+</ol>
+<p>You can learn more about <tt class="docutils literal">trang</tt> at the RelaxNG web site and here:
+<a class="reference external" href="https://github.com/relaxng/jing-trang">https://github.com/relaxng/jing-trang</a></p>
+</div>
+<div class="section" id="acknowledgments">
+<h1><a class="toc-backref" href="#id100">20&nbsp;&nbsp;&nbsp;Acknowledgments</a></h1>
+<p>Many thanks to those who have used <tt class="docutils literal">generateDS.py</tt> and have
+contributed their comments and suggestions.  These comments have
+been valuable both in teaching me about things I needed to know in
+order to continue work and in motivating me to do the work in the
+first place.</p>
+<p>And, a special thanks to those of you who have contributed patches
+for fixes and new features.  Recent help has been provided by the
+following among others:</p>
+<ul class="simple">
+<li>Chris Allan -- for several feature additions.</li>
+</ul>
+</div>
+<div class="section" id="see-also">
+<h1><a class="toc-backref" href="#id101">21&nbsp;&nbsp;&nbsp;See also</a></h1>
+<p><a class="reference external" href="http://www.python.org">Python</a>: The Python home page.</p>
+<p><a class="reference external" href="http://www.davekuhlman.org">Dave's Page</a>: My home page, which contains more Python stuff.</p>
+<!-- vim:ft=rst: -->
+</div>
+</div>
+<div class="footer">
+<hr class="footer" />
+<a class="reference external" href="generateDS.txt">View document source</a>.
+Generated on: 2018-12-20 21:27 UTC.
+Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+
+</div>
+</body>
+</html>

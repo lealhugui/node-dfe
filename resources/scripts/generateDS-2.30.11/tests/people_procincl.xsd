@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:include schemaLocation="people_procincl_a.xsd" />
+
+    <xs:element name="people">
+        <xs:annotation><xs:documentation>
+          A list of people.
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="comments" type="comments" maxOccurs="unbounded"/>
+                <xs:element name="person" maxOccurs="unbounded" type="person"/>
+                <xs:element name="specialperson" maxOccurs="unbounded" type="specialperson"/>
+                <xs:element name="programmer" maxOccurs="unbounded" type="programmer"/>
+                <xs:element name="python-programmer" maxOccurs="unbounded" type="python-programmer"/>
+                <xs:element name="java-programmer" maxOccurs="unbounded" type="java-programmer"/>
+			</xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+
+ 
+</xs:schema>
+

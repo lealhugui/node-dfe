@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<defaults>
+    <default1>
+        <normal02>a new value 1</normal02>
+        <default01>23</default01>
+        <default02>a new value 2</default02>
+        <normal03>55.659999999999997</normal03>
+        <normal04>6.677000e+01</normal04>
+        <default03>77.879999999999995</default03>
+        <default04>8.899000e+01</default04>
+    </default1>
+    <default2 attrdefault01="xyz" attrdefault02="14"/>
+    <default2 attrdefault01="abcd" attrdefault02="14"/>
+    <default2 attrdefault01="abcd" attrdefault02="14"/>
+    <default2 attrdefault01="abcd" attrdefault02="14" attrnormal01="wxy"/>
+    <default2 attrdefault01="abcd" attrdefault02="14" attrnormal02="89"/>
+</defaults>

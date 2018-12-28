@@ -1,0 +1,28 @@
+<xs:schema xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://cars.example.com/schema"
+    xmlns:target="http://cars.example.com/schema">
+
+  <xs:element name="carrier" type="carrierType"/>
+
+  <xs:complexType name="carrierType">
+      <xs:sequence>
+        <xs:element name="fleet" type="Vehicle" maxOccurs="unbounded" />
+      </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Vehicle" abstract="true"/>
+
+  <xs:complexType name="Car">
+    <xs:complexContent>
+      <xs:extension base="target:Vehicle"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Plane">
+    <xs:complexContent>
+      <xs:extension base="target:Vehicle"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+</xs:schema>

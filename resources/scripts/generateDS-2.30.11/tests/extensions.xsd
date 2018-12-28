@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+  <xs:element name="container" type="containerType" />
+
+  <xs:complexType name="SpecialDate">
+    <xs:simpleContent>
+      <xs:extension base="xs:date">
+        <xs:attribute name="SpecialProperty" type="xs:string">
+                         </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+
+	<xs:simpleType name="RelationType3">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The possible values of the rel attribute.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="right">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						An item in this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="divide">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Add something to this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+	<xs:simpleType name="RelationType2">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The possible values of the rel attribute.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="RelationType3">
+			<xs:enumeration value="up">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						An item in this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="subtract">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Add something to this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+	<xs:simpleType name="RelationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The possible values of the rel attribute.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="RelationType2">
+			<xs:enumeration value="down">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						An item in this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="add">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Add something to this container.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+  <xs:complexType name="ExtremeDate">
+    <xs:simpleContent>
+      <xs:extension base="RelationType">
+        <xs:attribute name="ExtremeProperty" type="xs:string">
+                         </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="singleExtremeDate">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="ExtremeProperty" type="xs:string">
+                         </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="containerType">
+    <xs:sequence>
+      <xs:element name="simplefactoid" type="simpleFactoidType" maxOccurs="unbounded" />
+      <xs:element name="mixedfactoid" type="mixedFactoidType" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="simpleFactoidType">
+    <xs:sequence>
+      <xs:element name="relation" type="RelationType" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="mixedFactoidType" mixed="true">
+    <xs:sequence>
+      <xs:element name="relation" type="RelationType" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="BaseType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="BaseProperty1" type="xs:string"/>
+        <xs:attribute name="BaseProperty2" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="DerivedType">
+    <xs:simpleContent>
+      <xs:extension base="BaseType">
+        <xs:attribute name="DerivedProperty1" type="xs:string"/>
+        <xs:attribute name="DerivedProperty2" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="MyInteger">
+    <xs:simpleContent>
+      <xs:extension base="xs:integer">
+        <xs:attribute name="MyAttr" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="MyBoolean">
+    <xs:simpleContent>
+      <xs:extension base="xs:boolean">
+        <xs:attribute name="MyAttr" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="MyFloat">
+    <xs:simpleContent>
+      <xs:extension base="xs:float">
+        <xs:attribute name="MyAttr" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="MyDouble">
+    <xs:simpleContent>
+      <xs:extension base="xs:double">
+        <xs:attribute name="MyAttr" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+
+</xs:schema>
+

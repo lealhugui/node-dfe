@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xs:schema 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:eitc="http://docs.oasis-open.org/ns/energyinterop/201103"
+    >
+
+    <xs:element name="person" type="PersonType" />
+
+    <xs:complexType name="PersonType">
+        <xs:sequence>
+            <xs:element ref="personId" minOccurs="1"
+                maxOccurs="1" />
+            <xs:element name="fname" type="xs:string" />
+            <xs:element name="lname" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="personId" type="PersonIdType" />
+
+    <xs:simpleType name="PersonIdType">
+		<xs:restriction base="eitc:IdType"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="IdType">
+		<xs:restriction base="xs:integer"/>
+    </xs:simpleType>
+
+</xs:schema>
+

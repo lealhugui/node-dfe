@@ -1,0 +1,62 @@
+tests/validate_simpletypes2_sup.py:1167: UserWarning: Value "2" does not match xsd minExclusive restriction on integer_range_1_st
+  warnings_.warn('Value "%(value)s" does not match xsd minExclusive restriction on integer_range_1_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1177: UserWarning: Value "b'mmaaa1234mnopzzz'" does not match xsd pattern restrictions: [['^aaa.*zzz$', '^bbb.*xxx$'], ['^.*123.*$', '^.*456.*$']]
+  warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_pattern_st_patterns_, ))
+tests/validate_simpletypes2_sup.py:1190: UserWarning: Value "b'floatxx'" does not match xsd enumeration restriction on token_enum_st
+  warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on token_enum_st' % {"value" : value.encode("utf-8")} )
+tests/validate_simpletypes2_sup.py:1197: UserWarning: Value "22" does not match xsd maxInclusive restriction on integer_range_incl_st
+  warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on integer_range_incl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1202: UserWarning: Value "-40" does not match xsd minExclusive restriction on integer_range_excl_st
+  warnings_.warn('Value "%(value)s" does not match xsd minExclusive restriction on integer_range_excl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1211: UserWarning: Value "b'mno pqr'" does not match xsd minLength restriction on min_max_length_st
+  warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on min_max_length_st' % {"value" : value.encode("utf-8")} )
+tests/validate_simpletypes2_sup.py:1216: UserWarning: Value "b'012345'" does not match xsd length restriction on length_st
+  warnings_.warn('Value "%(value)s" does not match xsd length restriction on length_st' % {"value" : value.encode("utf-8")} )
+tests/validate_simpletypes2_sup.py:1300: UserWarning: Value "0.2" does not match xsd minInclusive restriction on anonymous_float_valueType
+  warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on anonymous_float_valueType' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1287: UserWarning: Value "b'efgh'" does not match xsd pattern restrictions: [['^abcd|ef\\|gh$']]
+  warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_vbar_pattern_st_patterns_, ))
+tests/validate_simpletypes2_sup.py:1294: UserWarning: Value "b'ef\xc4\x9fh'" does not match xsd pattern restrictions: [['^abçd|ef\\|gh$']]
+  warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_unicode_pattern_st_patterns_, ))
+tests/validate_simpletypes2_sup.py:1169: UserWarning: Value "9" does not match xsd maxExclusive restriction on integer_range_1_st
+  warnings_.warn('Value "%(value)s" does not match xsd maxExclusive restriction on integer_range_1_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1177: UserWarning: Value "b'aaa1234mnopzzzbcd'" does not match xsd pattern restrictions: [['^aaa.*zzz$', '^bbb.*xxx$'], ['^.*123.*$', '^.*456.*$']]
+  warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_pattern_st_patterns_, ))
+tests/validate_simpletypes2_sup.py:1195: UserWarning: Value "-50" does not match xsd minInclusive restriction on integer_range_incl_st
+  warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on integer_range_incl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1209: UserWarning: Value "b'asdf asdf asdf asdf asdf asdf'" does not match xsd maxLength restriction on min_max_length_st
+  warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on min_max_length_st' % {"value" : value.encode("utf-8")} )
+tests/validate_simpletypes2_sup.py:1216: UserWarning: Value "b'01234567890'" does not match xsd length restriction on length_st
+  warnings_.warn('Value "%(value)s" does not match xsd length restriction on length_st' % {"value" : value.encode("utf-8")} )
+tests/validate_simpletypes2_sup.py:1226: UserWarning: Value "2015-05-01" does not match xsd minInclusive restriction on date_minincl_st
+  warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on date_minincl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1231: UserWarning: Value "2015-11-01" does not match xsd maxInclusive restriction on date_maxincl_st
+  warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on date_maxincl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1236: UserWarning: Value "2015-05-01" does not match xsd minExclusive restriction on date_minexcl_st
+  warnings_.warn('Value "%(value)s" does not match xsd minExclusive restriction on date_minexcl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1241: UserWarning: Value "2015-11-01" does not match xsd maxExclusive restriction on date_maxexcl_st
+  warnings_.warn('Value "%(value)s" does not match xsd maxExclusive restriction on date_maxexcl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1246: UserWarning: Value "13:30:00" does not match xsd minInclusive restriction on time_minincl_st
+  warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on time_minincl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1251: UserWarning: Value "17:00:00" does not match xsd maxInclusive restriction on time_maxincl_st
+  warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on time_maxincl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1256: UserWarning: Value "13:30:00" does not match xsd minExclusive restriction on time_minexcl_st
+  warnings_.warn('Value "%(value)s" does not match xsd minExclusive restriction on time_minexcl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1261: UserWarning: Value "17:00:00" does not match xsd maxExclusive restriction on time_maxexcl_st
+  warnings_.warn('Value "%(value)s" does not match xsd maxExclusive restriction on time_maxexcl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1266: UserWarning: Value "2015-06-01 13:20:10" does not match xsd minInclusive restriction on datetime_minincl_st
+  warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on datetime_minincl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1271: UserWarning: Value "2015-11-01 14:20:10" does not match xsd maxInclusive restriction on datetime_maxincl_st
+  warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on datetime_maxincl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1276: UserWarning: Value "2015-06-01 13:20:10" does not match xsd minExclusive restriction on datetime_minexcl_st
+  warnings_.warn('Value "%(value)s" does not match xsd minExclusive restriction on datetime_minexcl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1281: UserWarning: Value "2015-11-01 14:20:10" does not match xsd maxExclusive restriction on datetime_maxexcl_st
+  warnings_.warn('Value "%(value)s" does not match xsd maxExclusive restriction on datetime_maxexcl_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1302: UserWarning: Value "6.6" does not match xsd maxInclusive restriction on anonymous_float_valueType
+  warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on anonymous_float_valueType' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1174: UserWarning: Value "aaa12zzz" does not match xsd minLength restriction on pattern_st
+  warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on pattern_st' % {"value" : value} )
+tests/validate_simpletypes2_sup.py:1177: UserWarning: Value "b'aaa12zzz'" does not match xsd pattern restrictions: [['^aaa.*zzz$', '^bbb.*xxx$'], ['^.*123.*$', '^.*456.*$']]
+  warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_pattern_st_patterns_, ))
+tests/validate_simpletypes2_sup.py:1742: UserWarning: Value "b'pqrst'" does not match xsd minLength restriction on simpleTwoElementTwoType
+  warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on simpleTwoElementTwoType' % {"value" : value.encode("utf-8")} )

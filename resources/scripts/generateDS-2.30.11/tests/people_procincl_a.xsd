@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<!--
+  <xs:include schemaLocation="people_10b.xsd" />
+-->
+
+  <xs:include schemaLocation="http://www.davekuhlman.org/people_procincl_c.xsd" />
+
+    <xs:element name="comments">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <!-- 
+                <xs:element name="emp" type="xs:string" />
+                -->
+                <xs:element name="emp" type="xs:string" maxOccurs="unbounded"/>
+                <xs:element name="bold" type="xs:string" maxOccurs="unbounded"/>
+			</xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="person">
+        <xs:annotation><xs:documentation>
+          A generic person.  This is the base for a number of different
+          kinds of people.  They are each an extension of this base
+          type of person.
+        </xs:documentation></xs:annotation>
+        <xs:complexType mixed="0">
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="interest" type="xs:string" maxOccurs="unbounded" />
+				<xs:element name="category" type="xs:integer"/>
+                <xs:element name="agent" type="agent" maxOccurs="unbounded" />
+                <xs:element name="promoter" type="booster" maxOccurs="unbounded" />
+                <xs:element name="description" type="xs:string"/>
+			</xs:sequence>
+            <xs:attribute name="value" type="xs:ID" />
+            <xs:attribute name="id" type="xs:integer" />
+            <xs:attribute name="ratio" type="xs:float" />
+            <xs:attributeGroup ref="favorites" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="specialperson">
+      <xs:complexContent>
+        <xs:extension base="person">
+          <xs:sequence>
+            <!--
+            <xs:element name="musicalinstrument" type="xs:string" />
+            -->
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+
+    <!--
+    <xs:element name="description-a" type="xs:string" substitutionGroup="description" />
+    -->
+
+
+
+ 
+</xs:schema>
+

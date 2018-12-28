@@ -1,0 +1,23 @@
+<xs:schema xmlns="http://www.vmware.com/vcloud/v0.8" 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+  targetNamespace="http://www.vmware.com/vcloud/v0.8" 
+  elementFormDefault="qualified" version="1.0">
+
+	<xs:complexType name="test1element">
+		<xs:sequence>
+			<xs:element name="test1member" type="cimAnySimpleType" />
+        </xs:sequence>
+		<xs:attribute name="test1attribute" type="cimAnySimpleType" />
+	</xs:complexType>
+
+
+  <xs:complexType name="cimAnySimpleType">
+    <xs:simpleContent>
+      <xs:extension base="xs:anySimpleType">
+         <xs:anyAttribute namespace="##any" processContents="lax"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+</xs:schema>
+

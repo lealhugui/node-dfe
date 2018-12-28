@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:element name="getUser" type="axlapi:GetUserReq"/>
+
+    <xsd:complexType name="GetUserReq">
+        <xsd:sequence>
+        <xsd:element name="returnedTags" type="axlapi:RUser" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="sequence" type="xsd:unsignedLong"/>
+        <xsd:attributeGroup ref="ValuesGroup01"/>
+    </xsd:complexType>
+
+    <xsd:attributeGroup name="ValuesGroup01">
+        <xsd:attribute name="value01" type="xsd:string"/>
+        <xsd:attribute name="value02" type="xsd:integer"/>
+        <xsd:attributeGroup ref="ValuesGroup02"/>
+    </xsd:attributeGroup>
+
+    <xsd:attributeGroup name="ValuesGroup02">
+        <xsd:attribute name="value03" type="xsd:string"/>
+        <xsd:attribute name="value04" type="xsd:integer"/>
+        <xsd:attributeGroup ref="ValuesGroup03"/>
+    </xsd:attributeGroup>
+
+    <xsd:attributeGroup name="ValuesGroup03">
+        <xsd:attribute name="value05" type="xsd:string"/>
+        <xsd:attribute name="value06" type="xsd:integer"/>
+        <xsd:attribute name="value07" type="xsd:integer"/>
+        <xsd:attributeGroup ref="value08"/>
+    </xsd:attributeGroup>
+
+    <!-- Check for avoidance of infinite recursion.
+    -->
+    <xsd:attributeGroup name="value08">
+        <xsd:attribute name="value08" type="xsd:string"/>
+    </xsd:attributeGroup>
+
+</xsd:schema>
+

@@ -1,0 +1,2 @@
+#!/bin/bash -v
+python member_specs_test.py member_specs_data.xml

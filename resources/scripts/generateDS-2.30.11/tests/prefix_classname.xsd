@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="people">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="comments" type="comments" maxOccurs="unbounded"/>
+                <xs:element name="person" maxOccurs="unbounded" type="person"/>
+                <xs:element name="programmer" maxOccurs="unbounded" type="programmer"/>
+                <xs:element name="python-programmer" maxOccurs="unbounded" type="python-programmer"/>
+                <xs:element name="java-programmer" maxOccurs="unbounded" type="java-programmer"/>
+			</xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="comments">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <!-- 
+                <xs:element name="emp" type="xs:string" />
+                -->
+                <xs:element name="emp" type="xs:string" maxOccurs="unbounded"/>
+			</xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="person">
+        <xs:complexType mixed="0">
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="interest" type="xs:string" maxOccurs="unbounded" />
+				<xs:element name="category" type="xs:integer"/>
+                <xs:element name="agent" type="agent" maxOccurs="unbounded" />
+                <xs:element name="promoter" type="booster" maxOccurs="unbounded" />
+                <xs:element name="description" type="xs:string"/>
+			</xs:sequence>
+            <xs:attribute name="value" type="xs:ID" />
+            <xs:attribute name="id" type="xs:integer" />
+            <xs:attribute name="ratio" type="xs:float" />
+            <xs:attributeGroup ref="favorites" />
+        </xs:complexType>
+    </xs:element>
+
+    <!--
+    <xs:element name="description-a" type="xs:string" substitutionGroup="description" />
+    -->
+
+    <xs:element name="programmer">
+        <xs:complexType mixed="0">
+            <xs:complexContent>
+                <xs:extension base="person">
+                    <xs:sequence>
+                        <!--
+                        <xs:element name="description" type="xs:string"/>
+                        -->
+                        <xs:element name="email" type="xs:string"/>
+                        <xs:element name="elposint" type="xs:positiveInteger"/>
+                        <xs:element name="elnonposint" type="xs:nonPositiveInteger"/>
+                        <xs:element name="elnegint" type="xs:negativeInteger"/>
+                        <xs:element name="elnonnegint" type="xs:nonNegativeInteger"/>
+                        <xs:element name="eldate" type="xs:date"/>
+                        <xs:element name="eldatetime" type="xs:dateTime"/>
+                        <xs:element name="eltoken" type="xs:token"/>
+                        <xs:element name="elshort" type="xs:short"/>
+                        <xs:element name="ellong" type="xs:long"/>
+                        <xs:element name="elparam" type="param"/>
+                        <xs:element name="elarraytypes" type="ArrayTypes"/>
+                        
+                    </xs:sequence>
+                    <xs:attribute name="language" type="xs:string" />
+                    <xs:attribute name="area"/>
+                    <xs:attribute name="attrposint" type="xs:positiveInteger"/>
+                    <xs:attribute name="attrnonposint" type="xs:nonPositiveInteger"/>
+                    <xs:attribute name="attrnegint" type="xs:negativeInteger"/>
+                    <xs:attribute name="attrnonnegint" type="xs:nonNegativeInteger"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="param">
+        <xs:annotation>
+            <xs:documentation>Finding flow attribute unneccesary in practice. A unnamed parameter is unbound/skipped.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="id" type="xs:ID" />
+                    <xs:attribute name="name" type="xs:NCName" />
+                    <xs:attribute name="sid" type="xs:NCName" />
+                    <xs:attribute name="flow" type="FlowType" />
+                    <xs:attribute name="semantic" type="xs:token" />
+                    <xs:attribute name="type" type="xs:NMTOKEN" use="required" />
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:simpleType name="ArrayTypes">
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="float" />
+            <xs:enumeration value="int" />
+            <xs:enumeration value="Name" />
+            <xs:enumeration value="token" />
+        </xs:restriction>
+    </xs:simpleType>
+
+
+
+    <xs:element name="python-programmer">
+        <xs:complexType mixed="0">
+            <xs:complexContent>
+                <xs:extension base="programmer">
+                    <xs:sequence>
+                        <xs:element name="favorite-editor" type="xs:string"/>
+                    </xs:sequence>
+                    <xs:attribute name="nick-name"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="java-programmer">
+        <xs:complexType mixed="0">
+            <xs:complexContent>
+                <xs:extension base="programmer">
+                    <xs:sequence>
+                        <xs:element name="favorite-editor" type="xs:string"/>
+                    </xs:sequence>
+                    <xs:attribute name="nick-name"/>
+                    <xs:attribute name="status"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="agent">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="firstname" type="xs:string"/>
+                <xs:element name="lastname" type="xs:string"/>
+                <xs:element name="priority" type="xs:float"/>
+                <xs:element name="info" type="info"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="special-agent" substitutionGroup="agent">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="firstname" type="xs:string"/>
+                <xs:element name="lastname" type="xs:string"/>
+                <xs:element name="priority" type="xs:float"/>
+                <xs:element name="info" type="info"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="booster">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="firstname" type="xs:string"/>
+                <xs:element name="lastname" type="xs:string"/>
+                <xs:element name="other-name" type="xs:float"/>
+                <xs:element name="class" type="xs:float"/>
+                <xs:element name="other-value" type="xs:float" maxOccurs="unbounded" />
+                <xs:element name="type" type="xs:float" maxOccurs="unbounded" />
+                <xs:element name="client-handler" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="fullname" type="xs:string"/>
+                            <xs:element name="refid" type="xs:integer"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Test for element with attributes but no children.
+         Should use valueOf.
+    -->
+    <xs:element name="info">
+        <xs:complexType>
+            <xs:sequence>
+			</xs:sequence>
+            <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="type" type="xs:integer" />
+            <xs:attribute name="rating" type="xs:float" />
+        </xs:complexType>
+    </xs:element>
+
+
+  <xs:attributeGroup name="favorites">
+    <xs:attribute name="fruit" />
+    <xs:attribute name="vegetable" />
+  </xs:attributeGroup>
+
+ 
+</xs:schema>
+

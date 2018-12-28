@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+  <xs:element name="document1" type="document1Type" />
+
+  <xs:complexType name="document1Type">
+    <xs:annotation><xs:documentation>
+      This is a element of Type 1.  It has some very nice documentation
+      for test purposes.  It should make a somewhat uninteresting
+      docstring.
+    </xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:element name="comments" type="xs:string" />
+      <xs:element name="otherdoc" type="document2Type" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="document2Type">
+    <xs:annotation><xs:documentation>
+      This is a element of Type 2.  It has some very nice documentation
+      for test purposes.  It should make a somewhat uninteresting
+      docstring.
+    </xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:element name="comments" type="xs:string" />
+      <xs:element name="rating" type="xs:integer" />
+      <xs:element name="anotherdoc" type="document3Type" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="document3Type">
+    <xs:annotation><xs:documentation>
+      This is a element of Type 3.  It is short.
+    </xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:element name="comments" type="xs:string" />
+      <xs:element name="rating" type="xs:integer" />
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+

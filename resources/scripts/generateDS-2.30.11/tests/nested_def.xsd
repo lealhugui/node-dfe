@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+
+    <xs:element name="container" type="containerType" />
+
+    <xs:complexType name="containerType">
+        <xs:sequence>
+            <xs:element name="item1" type="classAType" />
+            <xs:element name="item2" type="classBType" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="classA" type="classAType" />
+    <xs:complexType name="classAType">
+        <xs:sequence>
+            <xs:element name="inner">
+                <xs:complexType>
+                    <xs:attribute name="attrA1" type="xs:string"/>
+                    <xs:attribute name="attrA2" type="xs:string"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="classB" type="classBType" />
+    <xs:complexType name="classBType">
+        <xs:sequence>
+            <xs:element name="inner">
+                <xs:complexType>
+                    <xs:attribute name="attrB1" type="xs:string"/>
+                    <xs:attribute name="attrB2" type="xs:string"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

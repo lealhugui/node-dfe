@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="people" type="peopleType">
+        <xs:annotation><xs:documentation>
+          A list of people.
+        </xs:documentation></xs:annotation>
+    </xs:element>
+    <xs:complexType name="peopleType">
+        <xs:sequence>
+            <xs:element name="person" maxOccurs="unbounded" type="personType"/>
+            <xs:element name="specialperson" maxOccurs="unbounded" type="specialperson"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="person" type="personType">
+        <xs:annotation><xs:documentation>
+          A generic person.  This is the base for a number of different
+          kinds of people.  They are each an extension of this base
+          type of person.
+        </xs:documentation></xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="personType" mixed="0">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="interest" type="xs:string" maxOccurs="unbounded" />
+            <xs:element name="category" type="xs:integer" minOccurs="0" />
+            <xs:element name="description" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="value" type="xs:ID" />
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="ratio" type="xs:float" />
+    </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+
+    <xs:element name="defaults" type="DefaultTypes"/>
+
+    <xs:complexType name="DefaultTypes">
+        <xs:sequence>
+            <xs:element name="default1" type="DefaultType1"
+                maxOccurs="unbounded"/>
+            <xs:element name="default2" type="DefaultType2"
+                maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DefaultType1">
+        <xs:sequence>
+            <!--
+                *case 1:*
+                xsd: element optional, no default value given
+                xml: element missing
+                output: element missing
+            -->
+            <xs:element name="normal01" type="xs:integer"
+                minOccurs="0"/>
+            <!--
+                *case 2:*
+                xsd: element optional, no default value given
+                xml: element exists
+                output: element is unchanged
+            -->
+            <xs:element name="normal02" type="xs:string"
+                minOccurs="0"/>
+            <!--
+                *case 3:*
+                xsd: element optional, default value given
+                xml: element missing
+                expected output: element missing
+                current output: missing element is added with default value
+            -->
+            <xs:element name="default01" type="xs:integer" default="23"
+                minOccurs="0"/>
+            <!--
+                *case 4:*
+                xsd: element optional, default value given
+                xml: element exists
+                output: element is unchanged
+            -->
+            <xs:element name="default02" type="xs:string" default="Peach"
+                minOccurs="0"/>
+            <!--
+                *case 5:*
+                xsd: element mandatory, no default value given
+                xml: element missing
+                error on reading xml
+            -->
+            <xs:element name="normal03" type="xs:float"
+                minOccurs="1"/>
+            <!--
+                *case 6:*
+                xsd: element mandatory, no default value given
+                xml: element exists
+                output: element is unchanged
+            -->
+            <xs:element name="normal04" type="xs:double"
+                minOccurs="1"/>
+            <!--
+                *case 7:*
+                xsd: element mandatory, default value given
+                xml: element missing
+                error on reading xml
+                output: missing element is generated with default value
+            -->
+            <xs:element name="default03" type="xs:float" default="23.45"
+                minOccurs="1"/>
+            <!--
+                *case 8:*
+                xsd: element mandatory, default value given
+                xml: element exists
+                output: element is unchanged
+            -->
+            <xs:element name="default04" type="xs:double" default="54.32"
+                minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DefaultType2">
+        <xs:sequence>
+        </xs:sequence>
+        <xs:attribute name="attrdefault01" type="xs:string" default="abcd"/>
+        <xs:attribute name="attrdefault02" type="xs:integer" default="14"/>
+        <xs:attribute name="attrnormal01" type="xs:string"/>
+        <xs:attribute name="attrnormal02" type="xs:integer"/>
+    </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    attributeFormDefault="unqualified"
+    elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+  <xs:element name="FooList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Foo">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="FooType">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                      <xs:minLength value="10"/>
+                      <xs:maxLength value="19"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Bar">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="BarType">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                      <xs:minLength value="20"/>
+                      <xs:maxLength value="29"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Baz">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="BazType">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                      <xs:minLength value="30"/>
+                      <xs:maxLength value="39"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

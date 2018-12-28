@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+    <default1>
+        <!-- case 1 -->
+        <!-- case 2 -->
+        <normal02>a new value 1</normal02>
+        <!-- case 3 -->
+        <!-- case 4 -->
+        <default02>a new value 2</default02>
+        <!-- case 5 -->
+        <!--
+        -->
+        <normal03>55.66</normal03>
+        <!-- case 6 -->
+        <normal04>66.77</normal04>
+        <!-- case 7 -->
+        <!--
+        -->
+        <default03>77.88</default03>
+        <!-- case 8 -->
+        <default04>88.99</default04>
+    </default1>
+
+    <default2 attrdefault01="xyz"/>
+    <default2 attrdefault02="14"/>
+    <default2 />
+    <default2 attrnormal01="wxy"/>
+    <default2 attrnormal02="89"/>
+
+    <!-- `fixed` attribute tests.
+    -->
+
+    <fixed1>
+        <!-- case 1 -->
+        <!-- case 2 -->
+        <normal02>a new value 1</normal02>
+        <!-- case 3 -->
+        <!-- case 4 -->
+        <fixed02>a new value 2</fixed02>
+        <!-- case 5 -->
+        <!--
+        -->
+        <normal03>55.66</normal03>
+        <!-- case 6 -->
+        <normal04>66.77</normal04>
+        <!-- case 7 -->
+        <!--
+        -->
+        <fixed03>77.88</fixed03>
+        <!-- case 8 -->
+        <fixed04>88.99</fixed04>
+    </fixed1>
+
+    <fixed2 attrfixed01="xyz"/>
+    <fixed2 attrfixed02="14"/>
+    <fixed2 />
+    <fixed2 attrnormal01="wxy"/>
+    <fixed2 attrnormal02="89"/>
+
+</defaults>
+

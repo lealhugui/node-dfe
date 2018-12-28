@@ -1,0 +1,16 @@
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+
+
+    <xs:element name="Package" type="PackageType"/>
+
+    <xs:complexType name="PackageType">
+        <xs:sequence>
+            <xs:element name="Address" type="xs:string"
+                minOccurs="0" maxOccurs="unbounded">
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

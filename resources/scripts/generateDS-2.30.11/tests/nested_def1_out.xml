@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<container>
+    <item1>
+        <inner attrA1="attrA1value" attrA2="attrA2value"/>
+    </item1>
+    <item2>
+        <inner attrB1="attrB1value" attrB2="attrB2value"/>
+    </item2>
+</container>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+
+    <xs:element name="cdata" type="cdataListType"/>
+
+    <xs:complexType name="cdataListType">
+        <xs:sequence>
+            <xs:element name="cdatalist" type="cdataType"
+                minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="cdataType">
+        <xs:sequence>
+            <xs:element name="script" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
