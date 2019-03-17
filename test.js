@@ -1,3 +1,4 @@
+/*
 const lib = require('./lib');
 const n = new lib.NFeProcessor();
 //console.log(n.processarDocumento())
@@ -18,3 +19,23 @@ parser.addSchema('http://www.portalfiscal.inf.br/nfe', schema, function (err, im
     console.log(x.Builder)
     //console.log(err, util.inspect(importsAndIncludes, false, null));
 });
+
+*/
+const lib = require('../node-nfe/src/factory/processor/nfeProcessor');
+const sign = require('../node-nfe/src/factory/signature');
+const xmlHelper = require('../node-nfe/src/factory/xmlHelper');
+
+let signUtils = new sign.Signature();
+let nfeProc = new lib.NFeProcessor();
+let XmlHelper = new xmlHelper.XmlHelper();
+
+let xml = nfeProc.gerarXmlStatusServico('4.00', 2, 'RS');
+
+//Test deserialize:
+let obj = XmlHelper.deserializeXml(xml);
+console.log(obj)
+
+let xmlAssinado = signUtils.signXml(xml, 'consStatServ', 'C:/Projetos/node-nfe/node_modules/xml-crypto/example/client.pem')
+//console.log('Xml Assinado -->', xmlAssinado)
+
+nfeProc.consultarStatusServico(xml);
