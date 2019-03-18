@@ -31,10 +31,13 @@ export class NFeProcessor {
 
     gerarXmlStatusServico(versao: string, ambiente: number, uf: string) {
         let status = <schema.TConsStatServ>{
-            xServ: schema.TConsStatServXServ.STATUS,
-            cUF: schema.TCodUfIBGE.Item43, // RS -> todo: get enum by uf
+            $: {
+                versao: versao,
+                xmlns: 'http://www.portalfiscal.inf.br/nfe'
+            },
             tpAmb: ambiente == 1 ? schema.TAmb.PRD : schema.TAmb.HML,
-            versao: versao
+            cUF: schema.TCodUfIBGE.Item43, // RS -> todo: get enum by uf
+            xServ: schema.TConsStatServXServ.STATUS
         };
           
         return new XmlHelper().serializeXml(status, 'consStatServ');

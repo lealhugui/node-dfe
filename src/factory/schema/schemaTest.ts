@@ -10,11 +10,9 @@ export enum TAmb {
 
   //[System.Xml.Serialization.XmlRootAttribute("consStatServ", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TConsStatServ {
-
     tpAmb: TAmb;
     cUF: TCodUfIBGE;
     xServ: TConsStatServXServ;
-    versao: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -50,5 +48,5 @@ export enum TCodUfIBGE {
 
 //System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export enum TConsStatServXServ {
-    STATUS,
+    STATUS="STATUS",
 }

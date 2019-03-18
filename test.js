@@ -30,6 +30,7 @@ let nfeProc = new lib.NFeProcessor();
 let XmlHelper = new xmlHelper.XmlHelper();
 
 let xml = nfeProc.gerarXmlStatusServico('4.00', 2, 'RS');
+console.log('xml', xml)
 
 //Test deserialize:
 let obj = XmlHelper.deserializeXml(xml);
