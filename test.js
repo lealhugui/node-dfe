@@ -21,22 +21,21 @@ parser.addSchema('http://www.portalfiscal.inf.br/nfe', schema, function (err, im
 });
 
 */
-const lib = require('../node-nfe/src/factory/processor/nfeProcessor');
-const sign = require('../node-nfe/src/factory/signature');
-const xmlHelper = require('../node-nfe/src/factory/xmlHelper');
+const lib = require('./lib');
+const libFactory = require('./lib/factory');
 
-let signUtils = new sign.Signature();
-let nfeProc = new lib.NFeProcessor();
-let XmlHelper = new xmlHelper.XmlHelper();
+const nfeProc = new lib.NFeProcessor();
+const signUtils = new libFactory.Signature();
+const XmlHelper = new libFactory.XmlHelper();
 
 let xml = nfeProc.gerarXmlStatusServico('4.00', 2, 'RS');
-console.log('xml', xml)
+//console.log('xml', xml);
 
 //Test deserialize:
 let obj = XmlHelper.deserializeXml(xml);
-console.log(obj)
+//console.log(obj)
 
-let xmlAssinado = signUtils.signXml(xml, 'consStatServ', 'C:/Projetos/node-nfe/node_modules/xml-crypto/example/client.pem')
-//console.log('Xml Assinado -->', xmlAssinado)
+let xmlAssinado = signUtils.signXml(xml, 'consStatServ', 'C:\\Users\\201508\\Desktop\\PDV\\cert\\newKey.key');
+console.log('Xml Assinado -->', xmlAssinado)
 
 nfeProc.consultarStatusServico(xml);
