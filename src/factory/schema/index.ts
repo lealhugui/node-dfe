@@ -7,7 +7,7 @@ export interface TConsReciNFe {
 
     tpAmb: TAmb;
     nRec: string;
-    versao: string;
+    $: { versao: string };
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -44,7 +44,7 @@ export interface TConsStatServ {
     tpAmb: TAmb;
     cUF: TCodUfIBGE;
     xServ: TConsStatServXServ;
-    versao: string;
+    $: { versao: string };
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -80,7 +80,7 @@ export enum TCodUfIBGE {
 
 //System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export enum TConsStatServXServ {
-    STATUS,
+    STATUS="STATUS",
 }
 
 /*
@@ -92,7 +92,7 @@ export interface TEnviNFe {
     idLote: string;
     indSinc: TEnviNFeIndSinc;
     nFe: TNFe[];
-    versao: string;
+    $: { versao: string };
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -132,7 +132,7 @@ export interface TNFeInfNFe {
     compra: TNFeInfNFeCompra;
     cana: TNFeInfNFeCana;
     infRespTec: TInfRespTec;
-    versao: string;
+    $: { versao: string };
     id: string;
 }
 
@@ -2470,7 +2470,7 @@ export interface X509DataType {
 export interface TInutNFe {
     infInut: TInutNFeInfInut;
     signature: SignatureType;
-    versao: string;
+    $: { versao: string };
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -2498,7 +2498,7 @@ export enum TInutNFeInfInutXServ {
 export interface TProcInutNFe {
     inutNFe: TInutNFe;
     retInutNFe: TRetInutNFe;
-    versao: string;
+    $: { versao: string };
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -2506,7 +2506,7 @@ export interface TProcInutNFe {
 export interface TRetInutNFe {
     infInut: TRetInutNFeInfInut;
     signature: SignatureType;
-    versao: string;
+    $: { versao: string };
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]

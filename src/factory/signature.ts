@@ -3,15 +3,15 @@ const fs = require('fs');
 let SignedXml = require('xml-crypto').SignedXml;
 export class Signature {
 
-  signXml(xml: string, tag: string, certPath: string) {
+  signXml(xml: string, tag: string, cert: any) {
     let sig = new SignedXml()
     sig.addReference("//*[local-name(.)='"+tag+"']","","","","","", true);
-    sig.signingKey = fs.readFileSync(certPath);
+    sig.signingKey = cert;
     sig.computeSignature(xml);
     return sig.getSignedXml();
   }
 
-  signXmlX509(xml: string, tag:string, certPath:string){
+  signXmlX509(xml: string, tag:string, cert: any){
 
     const transforms = [
       'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
@@ -35,9 +35,9 @@ export class Signature {
 
     let sig = new SignedXml();
     sig.addReference("//*[local-name(.)='"+tag+"']", transforms, "", "", "", "", true);
-    sig.signingKey = fs.readFileSync(certPath);
+    sig.signingKey = cert;
     sig.canonicalizationAlgorithm = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
-    //sig.keyInfoProvider = infoProvider(pem); //todo: x509 data
+    //sig.keyInfoProvider = infoProvider(pem); //todo: x509 cDATA
     sig.computeSignature(xml);
 
     return sig.getSignedXml();

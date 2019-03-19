@@ -39,9 +39,11 @@ let obj = XmlHelper.deserializeXml(xml);
 
 
 let cert = {
-    certPath: '',
-    keyPath: '',
-}
+    certPath: fs.readFileSync(''),
+    keyPath: fs.readFileSync(''),
+    pfx: fs.readFileSync(''),
+    password: ''
+};
 
 //Test assinatura
 //let xmlAssinado = signUtils.signXml(xml, 'consStatServ', cert.keyPath);

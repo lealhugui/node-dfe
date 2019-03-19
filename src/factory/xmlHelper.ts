@@ -3,7 +3,14 @@ import * as xml2js from 'xml2js';
 export class XmlHelper {
 
     serializeXml(obj: any, rootTag: string) {
-        let builder = new xml2js.Builder({rootName: rootTag, explicitArray: false});
+        let builder = new xml2js.Builder({
+            rootName: rootTag,
+            explicitArray: false,
+            headless: true,
+            renderOpts: {
+                pretty: false
+            }
+        });
         return builder.buildObject(obj);
     }
 
