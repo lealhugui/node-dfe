@@ -1,4 +1,5 @@
 const fs = require('fs');
+
 let SignedXml = require('xml-crypto').SignedXml;
 export class Signature {
 
@@ -17,8 +18,8 @@ export class Signature {
       'http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
     ];
 
-    /*
-    const infoProvider = (pem) => {
+    
+    const infoProvider = (pem: any) => {
       return {
         getKeyInfo() {
           const cert = this.getCert();
@@ -26,11 +27,11 @@ export class Signature {
         },
         getCert() {
           const certLines = pem.certificate.split('\n');
-          return certLines.filter((e, i) => i && e && e.indexOf('-----') !== 0).join('');
+          return certLines.filter((e: any, i: any) => i && e && e.indexOf('-----') !== 0).join('');
         }
       };
     };
-    */
+    
 
     let sig = new SignedXml();
     sig.addReference("//*[local-name(.)='"+tag+"']", transforms, "", "", "", "", true);

@@ -21,6 +21,8 @@ parser.addSchema('http://www.portalfiscal.inf.br/nfe', schema, function (err, im
 });
 
 */
+const fs = require('fs');
+
 const lib = require('./lib');
 const libFactory = require('./lib/factory');
 
@@ -35,7 +37,14 @@ let xml = nfeProc.gerarXmlStatusServico('4.00', 2, 'RS');
 let obj = XmlHelper.deserializeXml(xml);
 //console.log(obj)
 
-let xmlAssinado = signUtils.signXml(xml, 'consStatServ', 'C:\\Users\\201508\\Desktop\\PDV\\cert\\newKey.key');
-console.log('Xml Assinado -->', xmlAssinado)
 
-nfeProc.consultarStatusServico(xml);
+let cert = {
+    certPath: '',
+    keyPath: '',
+}
+
+//Test assinatura
+//let xmlAssinado = signUtils.signXml(xml, 'consStatServ', cert.keyPath);
+//console.log('Xml Assinado -->', xmlAssinado)
+
+nfeProc.consultarStatusServico(xml, cert);

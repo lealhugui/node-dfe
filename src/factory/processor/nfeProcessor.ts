@@ -3,7 +3,7 @@ import { Evento } from '../interface/evento';
 
 import * as schema from '../schema/schemaTest'
 import { XmlHelper } from '../xmlHelper';
-
+const fs = require('fs');
 /**
  * Classe para processamento de NFe/NFCe
  */
@@ -21,12 +21,23 @@ export class NFeProcessor {
         return '';
     }
 
-    consultarStatusServico(xml: string) {
-        let url = 'https://nfe.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx?wsdl';
-        require('soap').createClient(url, {}, function (err: any, client: any) {
-            console.log(client);
-            console.log(err);
-          });
+    consultarStatusServico(xml: string, cert: any) {
+        let url = 'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx?wsdl';
+        require('soap').createClient(url, {
+            wsdl_options: {
+                rejectUnauthorized: false, 
+                cert: fs.readFileSync(cert.certPath),
+                key: fs.readFileSync(cert.keyPath)
+            }
+        }, function(err: any, client: any) {
+            console.log('client', client);
+            //console.log(err);
+            client.nfeStatusServicoNF(xml, function (err: any, result: any, body: any) {
+                console.log(err);
+                console.log(result);
+                console.log(body);
+            });
+        });
     }
 
     gerarXmlStatusServico(versao: string, ambiente: number, uf: string) {
