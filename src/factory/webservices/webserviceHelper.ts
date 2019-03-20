@@ -1,10 +1,10 @@
-const axios = require("axios");
-const https = require("https");
+import axios from 'axios';
+import * as https from 'https';
 import { XmlHelper } from '../xmlHelper';
 
-export class WebServiceHelper {
+export abstract class WebServiceHelper {
 
-    buildSoapEnvelope(xml: string, soapMethod: string) {
+    public static buildSoapEnvelope(xml: string, soapMethod: string) {
         let soapEnvelopeObj = {
             '$': { 'xmlns:soap': 'http://www.w3.org/2003/05/soap-envelope',
                     'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
@@ -23,7 +23,7 @@ export class WebServiceHelper {
         return soapEnvXml.replace('[XML]', xml);
     }
 
-    getHttpsAgent(cert: any) {
+    public static getHttpsAgent(cert: any) {
         return new https.Agent({
             //rejectUnauthorized: false,
             //strictSSL: false,
@@ -32,16 +32,16 @@ export class WebServiceHelper {
         });
     }
 
-    async makeSoapRequest(xml: string, cert: any, service: any) {
+    public static async makeSoapRequest(xml: string, cert: any, soap: any) {
         try {
             let res = await axios({
-                url: service.url,
+                url: soap.url,
                 method: "post",
                 httpsAgent: this.getHttpsAgent(cert),
-                data: this.buildSoapEnvelope(xml, service.soapMethod),
+                data: this.buildSoapEnvelope(xml, soap.method),
                 headers: {
                     "Content-Type": "text/xml;charset=utf-8",
-                    "SOAPAction": service.soapAction
+                    "SOAPAction": soap.action
                 }
             });
 

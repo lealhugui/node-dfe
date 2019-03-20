@@ -26,16 +26,12 @@ const fs = require('fs');
 const lib = require('./lib');
 const libFactory = require('./lib/factory');
 
+const statusProc = new lib.StatusServicoProcessor();
 const nfeProc = new lib.NFeProcessor();
 const signUtils = new libFactory.Signature();
 const XmlHelper = new libFactory.XmlHelper();
 
-let xml = nfeProc.gerarXmlStatusServico('4.00', 2, 'RS');
-//console.log('xml', xml);
 
-//Test deserialize:
-let obj = XmlHelper.deserializeXml(xml);
-//console.log(obj)
 
 
 let cert = {
@@ -44,12 +40,26 @@ let cert = {
     password: fs.readFileSync('C:\\cert\\senha.txt')
 };
 
+// TESTES STATUS SERVICO:
+let dados = {
+    versao: '4.00',
+    ambiente: 2,
+    uf: 'RS',
+    cert: cert
+};
+
+let xml = statusProc.processarDocumento(dados);
+//console.log('xml', xml);
+
+//Test deserialize:
+//let obj = XmlHelper.deserializeXml(xml);
+//console.log(obj)
+
 //Test assinatura
 //let xmlAssinado = signUtils.signXml(xml, 'consStatServ', cert.key);
 //console.log('Xml Assinado -->', xmlAssinado)
 
-const consultaStatusWs = require('./lib/factory/webservices/consultaStatusServico');
-new consultaStatusWs.ConsultarStatusServico().consultarStatusServico(xml, cert);
+
 
 
 //console.log(nfeProc.gerarXmlNfe({}))

@@ -3,10 +3,7 @@ import { Evento } from '../interface/evento';
 
 import * as schema from '../schema/index'
 import { XmlHelper } from '../xmlHelper';
-import * as util from "util";
-const fs = require('fs');
-const axios = require("axios");
-const https = require("https");
+
 /**
  * Classe para processamento de NFe/NFCe
  */
@@ -114,20 +111,6 @@ export class NFeProcessor {
         return <schema.TNFeInfNFeInfAdic>{
             
         }
-    }
-
-    gerarXmlStatusServico(versao: string, ambiente: number, uf: string) {
-        let status = <schema.TConsStatServ>{
-            $: {
-                versao: versao,
-                xmlns: 'http://www.portalfiscal.inf.br/nfe'
-            },
-            tpAmb: ambiente == 1 ? schema.TAmb.PRD : schema.TAmb.HML,
-            cUF: schema.TCodUfIBGE.Item43, // RS -> todo: get enum by uf
-            xServ: schema.TConsStatServXServ.STATUS
-        };
-
-        return new XmlHelper().serializeXml(status, 'consStatServ');
     }
 
 }

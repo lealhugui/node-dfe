@@ -1,10 +1,8 @@
-const fs = require('fs');
-
 let SignedXml = require('xml-crypto').SignedXml;
 export class Signature {
 
   signXml(xml: string, tag: string, cert: any) {
-    let sig = new SignedXml()
+    let sig = new SignedXml();
     sig.addReference("//*[local-name(.)='"+tag+"']","","","","","", true);
     sig.signingKey = cert;
     sig.computeSignature(xml);
