@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/lealhugui/node-nfe#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "cxsd": "^0.1.1",
     "debug": "^4.1.0",
     "lodash": "^4.17.11",

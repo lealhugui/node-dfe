@@ -39,14 +39,17 @@ let obj = XmlHelper.deserializeXml(xml);
 
 
 let cert = {
-    certPath: fs.readFileSync(''),
-    keyPath: fs.readFileSync(''),
-    pfx: fs.readFileSync(''),
-    password: ''
+    key: fs.readFileSync('C:\\cert\\newKey.key'),
+    pfx: fs.readFileSync('C:\\cert\\certificado.pfx'),
+    password: fs.readFileSync('C:\\cert\\senha.txt')
 };
 
 //Test assinatura
-//let xmlAssinado = signUtils.signXml(xml, 'consStatServ', cert.keyPath);
+//let xmlAssinado = signUtils.signXml(xml, 'consStatServ', cert.key);
 //console.log('Xml Assinado -->', xmlAssinado)
 
-nfeProc.consultarStatusServico(xml, cert);
+const consultaStatusWs = require('./lib/factory/webservices/consultaStatusServico');
+new consultaStatusWs.ConsultarStatusServico().consultarStatusServico(xml, cert);
+
+
+//console.log(nfeProc.gerarXmlNfe({}))

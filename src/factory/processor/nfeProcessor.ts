@@ -24,62 +24,53 @@ export class NFeProcessor {
         return '';
     }
 
-    buildSoapEnvelope(xml: string, soapMethod: string) {
-        let soapEnvelopeObj = {
-            '$': { 'xmlns:soap': 'http://www.w3.org/2003/05/soap-envelope',
-                    'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-                    'xmlns:xsd': 'http://www.w3.org/2001/XMLSchema' },
-                'soap:Body': {
-                    'nfeDadosMsg': {
-                        '$': {
-                            'xmlns': soapMethod
-                        },
-                        _: '[XML]'
-                    }
-                }
+    gerarXmlNfe(dados: any) {
+        let NFe = <schema.TNFe> {
+                infNFe: this.getInfNfe()
             };
 
-        let soapEnvXml = new XmlHelper().serializeXml(soapEnvelopeObj, 'soap:Envelope');
-        return soapEnvXml.replace('[XML]', xml);
+        return new XmlHelper().serializeXml(NFe, 'NFe');
     }
 
-    consultarStatusServico(xml: string, cert: any) {
-        const url = 'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx?wsdl';
+    getInfNfe() {
+        return <schema.TNFeInfNFe> {
+            id: '',
+            ide: this.getIde(),
+            emit: this.getEmit(),
+            infAdic: this.getInfoAdic(),
+            dest: this.getDest(),
+            det: this.getDet()
+        }
+    }
 
-        const agent = new https.Agent({
-            rejectUnauthorized: false,
-            strictSSL: false,
-            pfx: cert.pfx,
-            passphrase: cert.password
-        });
+    getIde() {
+        return <schema.TNFeInfNFeIde>{
 
-        const xmlSoapEnv = this.buildSoapEnvelope(xml, 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4');
+        }
+    }
 
-        (async () => {
-            try {
-                let res = await axios({
-                    url: url,
-                    method: "post",
-                    httpsAgent: agent,
-                    data: xmlSoapEnv,
-                    headers: {
-                        "Content-Type": "text/xml;charset=utf-8",
-                        "SOAPAction": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF"
-                    }
-                });
+    getEmit() {
+        return <schema.TNFeInfNFeEmit>{
+            
+        }
+    }
 
-                if (res.status == 200) {
-                    // TODO: tratar retornos
-                    console.log(res.data);
-                    //console.log(util.inspect(new XmlHelper().deserializeXml(res.data)));
-                }
+    getInfoAdic() {
+        return <schema.TNFeInfNFeInfAdic>{
+            
+        }
+    }
 
-                return res.data;
-            } catch (err) {
-                console.error(err);
-            }
-        })();
+    getDest() {
+        return <schema.TNFeInfNFeDest>{
+            
+        }
+    }
 
+    getDet() {
+        return <schema.TNFeInfNFeDet[]>{
+            
+        }
     }
 
     gerarXmlStatusServico(versao: string, ambiente: number, uf: string) {
