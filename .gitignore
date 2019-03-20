@@ -1,3 +1,6 @@
+#ide stuff
+.idea
+
 # Logs
 logs
 *.log
