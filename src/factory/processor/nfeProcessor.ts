@@ -12,7 +12,7 @@ const https = require("https");
  */
 export class NFeProcessor {
 
-    constructor(private empresa?: Empresa) {
+    constructor(private empresa: Empresa) {
 
     }
 
@@ -35,29 +35,48 @@ export class NFeProcessor {
     getInfNfe() {
         return <schema.TNFeInfNFe> {
             id: '',
-            ide: this.getIde(),
+            ide: this.getIde({}),
             emit: this.getEmit(),
-            infAdic: this.getInfoAdic(),
             dest: this.getDest(),
-            det: this.getDet()
+            det: this.getDet(),
+            total: this.getTotal(),
+            transp: this.getTransp(),
+            pag: this.getPag(),
+            infAdic: this.getInfoAdic()
         }
     }
 
-    getIde() {
+    getIde(ideObj: any) {
         return <schema.TNFeInfNFeIde>{
-
+            cDV: '',
+            cMunFG: '',
+            cNF: '',
+            cUF: schema.TCodUfIBGE.Item11,
+            dhCont: '',
+            dhEmi: '',
+            dhSaiEnt: '',
+            finNFe: schema.TFinNFe.Item1,
+            idDest: schema.TNFeInfNFeIdeIdDest.Item1,
+            indFinal: schema.TNFeInfNFeIdeIndFinal.Item0,
+            indPres: schema.TNFeInfNFeIdeIndPres.Item0,
+            mod: schema.TMod.Item65,
+            //nFref: schema.TNFeInfNFeIdeNFref[],
+            nNF: '',
+            natOp: '',
+            procEmi: schema.TProcEmi.Item0,
+            serie: '',
+            tpAmb: schema.TAmb.HML,
+            tpEmis: schema.TNFeInfNFeIdeTpEmis.Item1,
+            tpImp: schema.TNFeInfNFeIdeTpImp.Item1,
+            tpNF: schema.TNFeInfNFeIdeTpNF.Item1,
+            verProc: '',
+            xJust: '',
         }
     }
 
     getEmit() {
         return <schema.TNFeInfNFeEmit>{
-            
-        }
-    }
-
-    getInfoAdic() {
-        return <schema.TNFeInfNFeInfAdic>{
-            
+            cNAE: this.empresa.CNAE,
         }
     }
 
@@ -69,6 +88,30 @@ export class NFeProcessor {
 
     getDet() {
         return <schema.TNFeInfNFeDet[]>{
+            
+        }
+    }
+
+    getTotal() {
+        return <schema.TNFeInfNFeTotal>{
+            
+        }
+    }
+
+    getTransp() {
+        return <schema.TNFeInfNFeTransp>{
+            
+        }
+    }
+
+    getPag() {
+        return <schema.TNFeInfNFePag>{
+            
+        }
+    }
+
+    getInfoAdic() {
+        return <schema.TNFeInfNFeInfAdic>{
             
         }
     }
