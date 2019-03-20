@@ -115,6 +115,8 @@ export interface TNFe {
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFe {
+    $: { versao: string };
+    id: string;
     ide: TNFeInfNFeIde;
     emit: TNFeInfNFeEmit;
     avulsa: TNFeInfNFeAvulsa;
@@ -132,8 +134,6 @@ export interface TNFeInfNFe {
     compra: TNFeInfNFeCompra;
     cana: TNFeInfNFeCana;
     infRespTec: TInfRespTec;
-    $: { versao: string };
-    id: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]

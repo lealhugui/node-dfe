@@ -2,6 +2,8 @@
 import * as schema from '../schema/index'
 import { XmlHelper } from "../xmlHelper";
 import { WebServiceHelper } from "../webservices/webserviceHelper";
+import {Empresa} from "../interface/nfe";
+import * as Utils from "../utils/utils";
 
 const soap = {
     //TODO: buscar URL conforme UF e Ambiente
@@ -15,15 +17,23 @@ const soap = {
  */
 export class StatusServicoProcessor {
 
-    constructor(){
+    constructor(private empresa: Empresa){
 
     }
 
-    async processarDocumento(dados: any){
-        let xml = this.gerarXmlStatusServico(dados.versao, dados.ambiente, dados.uf);
+    async processarDocumento(){
+        let resultado = {
+            xml_enviado: '',
+            xml_retorno: ''
+        };
 
-        let retornoConsulta = await this.consultarStatusServico(xml, dados.cert);
+        let xml = this.gerarXmlStatusServico('4.00', 2, this.empresa.endereco.uf); //TODO: ambiente
+        resultado.xml_enviado = xml;
 
+        let retornoConsulta = await this.consultarStatusServico(xml, this.empresa.certificado);
+        resultado.xml_retorno = retornoConsulta;
+
+        return resultado;
         //TODO: retornar dados
     }
 
@@ -37,8 +47,8 @@ export class StatusServicoProcessor {
                 versao: versao,
                 xmlns: 'http://www.portalfiscal.inf.br/nfe'
             },
-            tpAmb: ambiente == 1 ? schema.TAmb.PRD : schema.TAmb.HML,
-            cUF: schema.TCodUfIBGE.Item43, // RS -> todo: get enum by uf
+            tpAmb: Utils.getEnumByValue(schema.TAmb, ambiente),
+            cUF: Utils.getEnumByValue(schema.TCodUfIBGE, '43'), //TODO buscar codigo ibge pela uf (ex: 'RS' -> 43)
             xServ: schema.TConsStatServXServ.STATUS
         };
 

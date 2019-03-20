@@ -1,38 +1,8 @@
-/*
-const lib = require('./lib');
-const n = new lib.NFeProcessor();
-//console.log(n.processarDocumento())
-
-
-const x = require('xml4js');
-
-// Most of xml2js options should still work
-var options = {};
-
-var fs = require('fs');
-var util = require('util');
-var parser = new x.Parser(options);
-
-var schema = fs.readFileSync('./resources/PL_009_V4_2016_002_v160b/consStatServ_v4.00.xsd', {encoding: 'utf-8'});
-parser.addSchema('http://www.portalfiscal.inf.br/nfe', schema, function (err, importsAndIncludes) {
-    // importsAndIncludes contains schemas to be added as well to satisfy all imports and includes found in schema.xsd
-    console.log(x.Builder)
-    //console.log(err, util.inspect(importsAndIncludes, false, null));
-});
-
-*/
 const fs = require('fs');
-
 const lib = require('./lib');
 const libFactory = require('./lib/factory');
-
-const statusProc = new lib.StatusServicoProcessor();
-const nfeProc = new lib.NFeProcessor();
 const signUtils = new libFactory.Signature();
 const XmlHelper = new libFactory.XmlHelper();
-
-
-
 
 let cert = {
     key: fs.readFileSync('C:\\cert\\newKey.key'),
@@ -40,16 +10,33 @@ let cert = {
     password: fs.readFileSync('C:\\cert\\senha.txt')
 };
 
-// TESTES STATUS SERVICO:
-let dados = {
-    versao: '4.00',
-    ambiente: 2,
-    uf: 'RS',
-    cert: cert
+let empresa = {
+    razaoSocial: 'TESTE',
+    nomeFantasia: 'TEST',
+    cnpj: '99999999999999',
+    inscricaoEstadual: '',
+    inscricaoMunicipal: '',
+    codRegimeTributario: '3',
+    endereco: {
+        logradouro: 'Rua Teste',
+        numero: 123,
+        complemento: '',
+        bairro: 'Bairro Teste',
+        municipio: 'Cachoeirinha',
+        codIbge: '4303103',
+        uf: 'RS',
+        cep: '99999999',
+        telefone: '999999999'
+    },
+    certificado: cert
 };
 
-let xml = statusProc.processarDocumento(dados);
-//console.log('xml', xml);
+// TESTES STATUS SERVICO:
+async function testeConsultaStatusServico(empresa) {
+    const statusProc = new lib.StatusServicoProcessor(empresa);
+    await statusProc.processarDocumento();
+}
+
 
 //Test deserialize:
 //let obj = XmlHelper.deserializeXml(xml);
@@ -60,6 +47,22 @@ let xml = statusProc.processarDocumento(dados);
 //console.log('Xml Assinado -->', xmlAssinado)
 
 
+let documento = {
+    modelo: '65',
+    numeroNota: 1,
+    serie: '1',
+    naturezaOperacao: 'VENDA',
+    codIbge: '',
+    codigoNotaFiscal: '',
+    tipoDocumentoFiscal: '',
+    identificadorDestinoOperacao: '',
+    codIbgeEmitente: '43'
+};
 
+function testeEmissaoNFCe(empresa) {
+    const nfeProc = new lib.NFeProcessor(empresa);
+    console.log(nfeProc.gerarXmlNfce(documento));
+}
 
-//console.log(nfeProc.gerarXmlNfe({}))
+//testeConsultaStatusServico(empresa);
+testeEmissaoNFCe(empresa);
