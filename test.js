@@ -6,6 +6,7 @@ const XmlHelper = new libFactory.XmlHelper();
 
 let cert = {
     key: fs.readFileSync('C:\\cert\\newKey.key'),
+    pem: fs.readFileSync('C:\\cert\\test.pem'),
     pfx: fs.readFileSync('C:\\cert\\certificado.pfx'),
     password: fs.readFileSync('C:\\cert\\senha.txt')
 };
@@ -34,7 +35,8 @@ let empresa = {
 // TESTES STATUS SERVICO:
 async function testeConsultaStatusServico(empresa) {
     const statusProc = new lib.StatusServicoProcessor(empresa);
-    await statusProc.processarDocumento();
+    let result = await statusProc.processarDocumento();
+    console.log(result.xml_enviado);
 }
 
 
@@ -42,9 +44,7 @@ async function testeConsultaStatusServico(empresa) {
 //let obj = XmlHelper.deserializeXml(xml);
 //console.log(obj)
 
-//Test assinatura
-//let xmlAssinado = signUtils.signXml(xml, 'consStatServ', cert.key);
-//console.log('Xml Assinado -->', xmlAssinado)
+
 
 
 let documento = {
@@ -64,5 +64,13 @@ function testeEmissaoNFCe(empresa) {
     console.log(nfeProc.gerarXmlNfce(documento));
 }
 
+function testeAssinaturaXML() {
+    //Test assinatura
+    let xml_test = '<consStatServ id="test" versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>2</tpAmb><cUF>43</cUF><xServ>STATUS</xServ></consStatServ>';
+    let xmlAssinado = signUtils.signXmlX509(xml_test, 'consStatServ', cert);
+    console.log(xmlAssinado)
+}
+
+testeAssinaturaXML();
 //testeConsultaStatusServico(empresa);
-testeEmissaoNFCe(empresa);
+//testeEmissaoNFCe(empresa);
