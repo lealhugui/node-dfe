@@ -24,6 +24,67 @@ export interface DocumentoFiscal {
     justificativaContingencia: string;
 }
 
+export interface Produto {
+    codigo: string;
+    cEAN: string;
+    descricao: string;
+    NCM: string;
+    CFOP: string;
+    unidadeComercial: string;
+    quantidade: string;
+    valorUnitario: string;
+    valorTotal: string;
+    cEANTrib: string;
+    unidadeTributavel: string;
+    quantidadeTributavel: string;
+    valorUnitarioTributavel: string;
+    indicadorTotal: string;
+    // TODO: demais campos
+
+    imposto: Imposto;
+}
+
+export interface Imposto {
+    valorAproximadoTributos: number;
+    icms: Icms;
+    pis: Pis;
+    cofins: Cofins;
+}
+
+export interface Icms {
+    cst: string;
+}
+
+export interface Pis {
+    cst: string;
+}
+
+export interface Cofins {
+    cst: string;
+}
+
+export interface Total {
+    icmsTot: IcmsTot;
+    issqnTot: IssqnTot;
+}
+
+export interface IcmsTot {
+
+}
+
+export interface IssqnTot {
+
+}
+
+export interface Transporte {
+    modalidateFrete: string;
+    //..
+}
+
+export interface Pagamento {
+
+}
+
 export interface Empresa {
     cnpj: string;
     razaoSocial: string;
@@ -39,6 +100,10 @@ export interface Empresa {
 
 export interface Destinatario {
     documento: string;
+    nome: string;
+    endereco: Endereco;
+    indicadorIEDestinario: string;
+    email: string;
 }
 
 export interface Endereco {

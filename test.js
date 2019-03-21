@@ -45,18 +45,24 @@ async function testeConsultaStatusServico(empresa) {
 //console.log(obj)
 
 
-
-
 let documento = {
+    ambiente: '2',
     modelo: '65',
     numeroNota: 1,
     serie: '1',
     naturezaOperacao: 'VENDA',
-    codIbge: '',
+    codIbge: '43',
     codigoNotaFiscal: '',
-    tipoDocumentoFiscal: '',
-    identificadorDestinoOperacao: '',
-    codIbgeEmitente: '43'
+    tipoDocumentoFiscal: '1',
+    identificadorDestinoOperacao: '1',
+    codIbgeEmitente: '43',
+    processoEmissao: '0',
+    finalidadeEmissao: '1',
+    indConsumidorFinal: '0',
+    indPresenca: '0',
+    tipoEmissao: '1',
+    tipoImpressao: '0',
+    versaoAplicativoEmissao: '1.0',
 };
 
 function testeEmissaoNFCe(empresa) {
@@ -71,6 +77,6 @@ function testeAssinaturaXML() {
     console.log(xmlAssinado)
 }
 
-testeAssinaturaXML();
+//testeAssinaturaXML();
 //testeConsultaStatusServico(empresa);
-//testeEmissaoNFCe(empresa);
+testeEmissaoNFCe(empresa);

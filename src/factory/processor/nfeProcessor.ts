@@ -61,7 +61,7 @@ export class NFeProcessor {
             natOp: documento.naturezaOperacao,
             serie: documento.serie,
             tpAmb: Utils.getEnumByValue(schema.TAmb, documento.ambiente),
-            procEmi: Utils.getEnumByValue(schema.TProcEmi.Item0, documento.processoEmissao),
+            procEmi: Utils.getEnumByValue(schema.TProcEmi, documento.processoEmissao),
             finNFe: Utils.getEnumByValue(schema.TFinNFe, documento.finalidadeEmissao),
             idDest: Utils.getEnumByValue(schema.TNFeInfNFeIdeIdDest, documento.identificadorDestinoOperacao),
             indFinal: Utils.getEnumByValue(schema.TNFeInfNFeIdeIndFinal, documento.indConsumidorFinal),

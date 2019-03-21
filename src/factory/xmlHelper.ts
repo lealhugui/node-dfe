@@ -2,6 +2,8 @@
 import * as xml2js from 'xml2js';
 export class XmlHelper {
 
+    //TODO: tratar tags specified ao serializar xml ...
+
     serializeXml(obj: any, rootTag: string) {
         let builder = new xml2js.Builder({
             rootName: rootTag,
