@@ -1,9 +1,3 @@
-import {
-    TNFeInfNFeDetProdDetExport,
-    TNFeInfNFeDetProdDI,
-    TNFeInfNFeDetProdIndEscala,
-    TNFeInfNFeDetProdIndTot, TNFeInfNFeDetProdRastro
-} from "../../schema";
 
 export interface NFeDocumento {
     docFiscal: DocumentoFiscal;
@@ -11,7 +5,7 @@ export interface NFeDocumento {
     produtos: Produto[];
     total: Total;
     transporte: Transporte;
-    pagamentos: Pagamento[];
+    pagamento: Pagamento;
     infoAdicional: InfoAdicional;
 }
 
@@ -21,7 +15,7 @@ export interface NFCeDocumento {
     produtos: Produto[];
     total: Total;
     transporte: Transporte;
-    pagamentos: Pagamento[];
+    pagamento: Pagamento;
     infoAdicional: InfoAdicional;
 }
 
@@ -34,13 +28,11 @@ export interface DocumentoFiscal {
     dhEmissao: string;
     dhSaiEnt: string;
     codIbgeEmitente: string;
-    codNotaFiscal: string;
     tipoDocumentoFiscal: string;
     identificadorDestinoOperacao: string;
     codIbgeFatoGerador: string;
     tipoImpressao: string;
     tipoEmissao: string;
-    codDigitoVerificador: string;
     finalidadeEmissao: string;
     indPresenca: string;
     indConsumidorFinal: string;
@@ -54,7 +46,7 @@ export interface Produto {
     prod: DetalhesProduto;
     imposto: Imposto;
     infoAdicional: string;
-    numeroItem: number;
+    numeroItem: string;
 }
 
 export interface DetalhesProduto {
@@ -95,7 +87,7 @@ export interface DetalhesProduto {
 }
 
 export interface Imposto {
-    valorAproximadoTributos: number;
+    valorAproximadoTributos: string;
     icms: Icms;
     pis: Pis;
     cofins: Cofins;
@@ -103,6 +95,14 @@ export interface Imposto {
 
 export interface Icms {
     cst: string;
+    origem: string;
+    baseCalc: string;
+    aliquota: string;
+    valor: string;
+    baseCalcST: string;
+    valorST: string;
+    aliquotaST: string;
+    percentualReducaoBaseCalc: string;
 }
 
 export interface Pis {
@@ -132,7 +132,22 @@ export interface Transporte {
 }
 
 export interface Pagamento {
+    valorTroco: string;
+    pagamentos: DetalhePagamento[]
+}
 
+export interface DetalhePagamento {
+    indicadorFormaPagamento: string;
+    formaPagamento: string;
+    valor: string;
+    dadosCartao: DetalhePgtoCartao;
+}
+
+export interface DetalhePgtoCartao {
+    tipoIntegracao: string;
+    cnpj: string;
+    bandeira: string;
+    codAutorizacao: string;
 }
 
 export interface InfoAdicional {

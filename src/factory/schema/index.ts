@@ -106,7 +106,7 @@ export enum TEnviNFeIndSinc {
 [System.Xml.Serialization.XmlRootAttribute("NFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 */
 export interface TNFe {
-
+    $: { xmlns: string },
     infNFe: TNFeInfNFe;
     infNFeSupl: TNFeInfNFeSupl;
     //[System.Xml.Serialization.XmlElementAttribute(Namespace="http://www.w3.org/2000/09/xmldsig#")]
@@ -115,8 +115,7 @@ export interface TNFe {
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFe {
-    $: { versao: string };
-    id: string;
+    $: { versao: string, id: string };
     ide: TNFeInfNFeIde;
     emit: TNFeInfNFeEmit;
     avulsa: TNFeInfNFeAvulsa;

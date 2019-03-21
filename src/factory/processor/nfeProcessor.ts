@@ -1,11 +1,29 @@
-import { Empresa, Endereco, NFCeDocumento, NFeDocumento, DocumentoFiscal, Destinatario, Transporte, Pagamento, Produto, Total, InfoAdicional, DetalhesProduto} from '../interface/nfe'
-import { Evento } from '../interface/evento';
+import {
+    Empresa,
+    Endereco,
+    NFCeDocumento,
+    NFeDocumento,
+    DocumentoFiscal,
+    Destinatario,
+    Transporte,
+    Pagamento,
+    Produto,
+    Total,
+    InfoAdicional,
+    DetalhesProduto,
+    Imposto,
+    Icms,
+    Cofins,
+    Pis,
+    IcmsTot,
+    IssqnTot,
+    DetalhePagamento, DetalhePgtoCartao
+} from '../interface/nfe';
 
+import { Evento } from '../interface/evento';
 import * as schema from '../schema/index'
 import { XmlHelper } from '../xmlHelper';
-
 import * as Utils from '../utils/utils';
-import {TNFeInfNFeDetProd} from "../schema";
 
 /**
  * Classe para processamento de NFe/NFCe
@@ -28,11 +46,75 @@ export class NFeProcessor {
     }
 
     gerarXml(documento: NFeDocumento | NFCeDocumento) {
+        let dadosChave = this.gerarChaveNF(this.empresa, documento.docFiscal);
         let NFe = <schema.TNFe> {
-                infNFe: this.gerarNFCe(documento)
+                $: {
+                    xmlns: 'http://www.portalfiscal.inf.br/nfe'
+                },
+                infNFe: this.gerarNFCe(documento, dadosChave)
             };
 
         return new XmlHelper().serializeXml(NFe, 'NFe');
+    }
+
+    gerarChaveNF(empresa: Empresa, docFiscal: DocumentoFiscal){
+        let chave = [];
+
+        //TODO: ajustar para receber dhEmissao e formatar em ano/mes
+        let dataEmissao = new Date();
+        let ano = dataEmissao.getFullYear().toString().substring(2,4);
+        let mes = dataEmissao.getMonth() + 1;
+
+        chave.push(docFiscal.codIbgeEmitente);
+        chave.push(ano + (mes.toString().length == 1 ? '0' + mes : mes));
+        chave.push(empresa.cnpj);
+        chave.push(docFiscal.modelo);
+        chave.push(docFiscal.serie.padStart(3,'0'));
+        chave.push(docFiscal.numeroNota.toString().padStart(9, '0'));
+        chave.push(docFiscal.tipoEmissao);
+
+        let cnf = Math.floor(Math.random() * 100000000);
+        let digitoVerificador = this.obterDigitoVerificador(chave);
+
+        chave.push(cnf);
+        chave.push(digitoVerificador);
+
+        return {
+            chave: chave.join(''),
+            cnf: cnf,
+            dv: digitoVerificador
+        };
+    }
+
+    obterDigitoVerificador(chave: any) {
+        let soma = 0;
+        let mod = -1;
+        let dv = -1;
+        let peso = 2;
+
+        for (let i = chave.length - 1; i !== -1; i--)
+        {
+            let ch = Number(chave[i].toString());
+            soma += ch*peso;
+            if (peso < 9)
+                peso += 1;
+            else
+                peso = 2;
+        }
+
+        mod = soma%11;
+        if (mod === 0 || mod === 1)
+            dv = 0;
+        else
+            dv = 11 - mod;
+
+        return dv.toString();
+    }
+
+    gerarQRCodeNFCe(urlSefaz: string, chave: string, versaoQRCode: string, ambiente: string, csc: string) {
+        //urls qrcode: http://nfce.encat.org/consulte-sua-nota-qr-code-versao-2-0/
+
+        // http://<dominio>/nfce/qrcode?p=<chave_acesso>|<versao_qrcode>|<tipo_ambiente>|<identificador_csc>|<codigo_hash>
     }
 
     gerarNFe(documento: NFeDocumento) {
@@ -41,26 +123,25 @@ export class NFeProcessor {
         };
     }
 
-    gerarNFCe(documento: NFCeDocumento) {
+    gerarNFCe(documento: NFCeDocumento, dadosChave: any) {
         return <schema.TNFeInfNFe> {
-            $: { versao: '4.00' },
-            id: '',
-            ide: this.getIde(documento.docFiscal),
+            $: { versao: '4.00', id: 'NFe' + dadosChave.chave },
+            ide: this.getIde(documento.docFiscal, dadosChave),
             emit: this.getEmit(this.empresa),
             dest: this.getDest(documento.destinatario),
             det: this.getDet(documento.produtos),
             total: this.getTotal(),
             transp: this.getTransp(documento.transporte),
-            pag: this.getPag(),
+            pag: this.getPag(documento.pagamento),
             infAdic: this.getInfoAdic(documento.infoAdicional),
         }
     }
 
-    getIde(documento: DocumentoFiscal) {
+    getIde(documento: DocumentoFiscal, dadosChave: any) {
         return <schema.TNFeInfNFeIde>{
-            cDV: documento.codDigitoVerificador,
+            cDV: dadosChave.dv,
             cMunFG: documento.codIbgeFatoGerador,
-            cNF: documento.codNotaFiscal,
+            cNF: dadosChave.cnf,
             cUF: Utils.getEnumByValue(schema.TCodUfIBGE, documento.codIbgeEmitente),
             dhEmi: documento.dhEmissao,
             dhSaiEnt: documento.dhSaiEnt,
@@ -119,8 +200,10 @@ export class NFeProcessor {
     }
 
     getDest(destinatario: Destinatario) {
-        return <schema.TNFeInfNFeDest>{
-            indIEDest: destinatario.indicadorIEDestinario
+        if (destinatario) {
+            return <schema.TNFeInfNFeDest>{
+                indIEDest: destinatario.indicadorIEDestinario
+            }
         }
     }
 
@@ -129,6 +212,9 @@ export class NFeProcessor {
         for (const produto of produtos) {
             det_list.push(<schema.TNFeInfNFeDet>{
                 prod: this.getDetProd(produto.prod),
+                imposto: this.getDetImposto(produto.imposto),
+                infAdProd: produto.infoAdicional,
+                nItem: produto.numeroItem
             });
         }
 
@@ -165,25 +251,62 @@ export class NFeProcessor {
         }
     }
 
-    getDetImposto(imposto: any) {
+    getDetImposto(imposto: Imposto) {
+        let test = <schema.TNFeInfNFeDetImposto>{
+            vTotTrib: '0.00',
+            items: [this.getImpostoIcms(imposto.icms)]
 
+        };
+
+        return test;
+    }
+
+    getImpostoIcms(icms: Icms) {
+        // case icms.cst ...
+        return <schema.TNFeInfNFeDetImpostoICMSICMS60> {
+            cST: icms.cst,
+            orig: icms.origem,
+
+        };
     }
 
     getTotal() {
         return <schema.TNFeInfNFeTotal>{
-            
+
         }
     }
 
     getTransp(transp: Transporte) {
         return <schema.TNFeInfNFeTransp>{
-            
+            modFrete: transp.modalidateFrete
         }
     }
 
-    getPag() {
+    getPag(pagamento: Pagamento) {
         return <schema.TNFeInfNFePag>{
-            
+            vTroco: pagamento.valorTroco,
+            detPag: this.getDetalhamentoPagamentos(pagamento.pagamentos)
+        }
+    }
+
+    getDetalhamentoPagamentos(pagamentos: DetalhePagamento[]){
+        let listPagamentos = [];
+        for (const pag of pagamentos) {
+            listPagamentos.push(<schema.TNFeInfNFePagDetPag>{
+                indPag: pag.indicadorFormaPagamento,
+                vPag: pag.valor,
+                tPag: pag.formaPagamento,
+                card: this.getDetalhamentoCartao(pag.dadosCartao)
+            });
+        }
+        return listPagamentos;
+    }
+
+    getDetalhamentoCartao(dadosCartao: DetalhePgtoCartao) {
+        if (dadosCartao) {
+            return <schema.TNFeInfNFePagDetPagCard>{
+
+            }
         }
     }
 

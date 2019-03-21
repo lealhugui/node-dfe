@@ -47,14 +47,12 @@ async function testeConsultaStatusServico(empresa) {
 
 
 let documento = {
-    codDigitoVerificador: '1',
     ambiente: '2',
     modelo: '65',
     numeroNota: 1,
     serie: '1',
     naturezaOperacao: 'VENDA',
     codIbge: '43',
-    codigoNotaFiscal: '',
     tipoDocumentoFiscal: '1',
     identificadorDestinoOperacao: '1',
     codIbgeEmitente: '43',
@@ -88,15 +86,55 @@ let produtos = [];
     eXTIPI: string;*/
 produtos.push({
     prod: {
-
+        codigo: '1234',
+        cEAN: '',
+        descricao: 'PRODUTO TESTE',
+        cest: '0500100',
+        NCM: '25232910',
+        CFOP: '5405',
+        unidadeComercial: 'SAC',
+        quantidadeComercial: '1.0000',
+        valorUnitarioComercial: '31.8000000000',
+        valorTotal: '31.80',
+        cEANTrib: '',
+        unidadeTributavel: 'SAC',
+        quantidadeTributavel: '1.0000',
+        valorUnitarioTributavel: '31.8000000000',
+        indicadorTotal: '1',
+        valorFrete: '0',
+        valorSeguro: '0',
+        valorDesconto: '0',
+        valorOutros: '0',
+        numeroPedido: '123',
+        numeroItemPedido: '1',
     },
     imposto: {
-
+        valorAproximadoTributos: 0,
+        icms: {
+            cst: '60',
+            origem: '5',
+            baseCalc: '31.80',
+            aliquota: '0.00',
+            valor: '0.00',
+            baseCalcST: '31.80',
+            valorST: '0.00',
+            aliquotaST: '0.00',
+            percentualReducaoBaseCalc: '0.00',
+        }
     },
     infoAdicional: 'TEST',
     numeroItem: 1,
 });
 
+let pagamento = {
+  valorTroco: '0.00',
+  pagamentos: [{
+      indicadorFormaPagamento: '0',
+      formaPagamento: '01',
+      valor: '10.00',
+      //dadosCartao: {}
+  }]
+};
 
 let nfce = {
     docFiscal: documento,
@@ -104,7 +142,7 @@ let nfce = {
     produtos: produtos,
     total: {},
     transporte: transp,
-    pagamentos: [],
+    pagamento: pagamento,
     infoAdicional: infoAdic
 };
 
