@@ -1,3 +1,4 @@
+
 const fs = require('fs');
 const lib = require('./lib');
 const libFactory = require('./lib/factory');
@@ -46,6 +47,7 @@ async function testeConsultaStatusServico(empresa) {
 
 
 let documento = {
+    codDigitoVerificador: '1',
     ambiente: '2',
     modelo: '65',
     numeroNota: 1,
@@ -65,9 +67,50 @@ let documento = {
     versaoAplicativoEmissao: '1.0',
 };
 
+let dest = {
+    indicadorIEDestinario: '9'
+};
+
+
+let transp = {
+  modalidateFrete: '9'
+};
+
+let infoAdic = {
+  infoComplementar: 'TEST'
+};
+
+let produtos = [];
+
+/*
+    cNPJFab: string;
+    cBenef: string;
+    eXTIPI: string;*/
+produtos.push({
+    prod: {
+
+    },
+    imposto: {
+
+    },
+    infoAdicional: 'TEST',
+    numeroItem: 1,
+});
+
+
+let nfce = {
+    docFiscal: documento,
+    destinatario: dest,
+    produtos: produtos,
+    total: {},
+    transporte: transp,
+    pagamentos: [],
+    infoAdicional: infoAdic
+};
+
 function testeEmissaoNFCe(empresa) {
     const nfeProc = new lib.NFeProcessor(empresa);
-    console.log(nfeProc.gerarXmlNfce(documento));
+    console.log(nfeProc.processarDocumento(nfce));
 }
 
 function testeAssinaturaXML() {

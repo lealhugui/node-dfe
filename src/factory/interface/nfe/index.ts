@@ -1,3 +1,29 @@
+import {
+    TNFeInfNFeDetProdDetExport,
+    TNFeInfNFeDetProdDI,
+    TNFeInfNFeDetProdIndEscala,
+    TNFeInfNFeDetProdIndTot, TNFeInfNFeDetProdRastro
+} from "../../schema";
+
+export interface NFeDocumento {
+    docFiscal: DocumentoFiscal;
+    destinatario: Destinatario;
+    produtos: Produto[];
+    total: Total;
+    transporte: Transporte;
+    pagamentos: Pagamento[];
+    infoAdicional: InfoAdicional;
+}
+
+export interface NFCeDocumento {
+    docFiscal: DocumentoFiscal;
+    destinatario: Destinatario;
+    produtos: Produto[];
+    total: Total;
+    transporte: Transporte;
+    pagamentos: Pagamento[];
+    infoAdicional: InfoAdicional;
+}
 
 export interface DocumentoFiscal {
     serie: string;
@@ -25,23 +51,47 @@ export interface DocumentoFiscal {
 }
 
 export interface Produto {
+    prod: DetalhesProduto;
+    imposto: Imposto;
+    infoAdicional: string;
+    numeroItem: number;
+}
+
+export interface DetalhesProduto {
     codigo: string;
     cEAN: string;
     descricao: string;
+    cest: string;
     NCM: string;
     CFOP: string;
     unidadeComercial: string;
-    quantidade: string;
-    valorUnitario: string;
+    quantidadeComercial: string;
+    valorUnitarioComercial: string;
     valorTotal: string;
     cEANTrib: string;
     unidadeTributavel: string;
     quantidadeTributavel: string;
     valorUnitarioTributavel: string;
+    valorFrete: string;
+    valorSeg: string;
+    valorDesc: string;
+    valorOutro: string;
     indicadorTotal: string;
-    // TODO: demais campos
-
-    imposto: Imposto;
+    numeroPedido: string;
+    numeroItemPedido: string;
+    cNPJFab: string;
+    cBenef: string;
+    eXTIPI: string;
+    /*
+    TODO: demais campos
+    nVE: string[];
+    indEscala: TNFeInfNFeDetProdIndEscala;
+    indEscalaSpecified: boolean;
+    di: TNFeInfNFeDetProdDI[];
+    detExport: TNFeInfNFeDetProdDetExport[];
+    nFCI: string;
+    rastro: TNFeInfNFeDetProdRastro[];
+    */
 }
 
 export interface Imposto {
@@ -83,6 +133,12 @@ export interface Transporte {
 
 export interface Pagamento {
 
+}
+
+export interface InfoAdicional {
+    infoComplementar: string;
+    infoFisco: string;
+    // ..
 }
 
 export interface Empresa {
