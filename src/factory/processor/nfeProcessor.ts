@@ -11,11 +11,18 @@ import { Signature } from '../signature'
 const sha1 = require('sha1');
 
 
-const soap = {
+const soapEnvio = {
     //TODO: buscar URL conforme UF e Ambiente
     url: 'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx?wsdl',
     method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4',
     action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote'
+};
+
+const soapConsulta = {
+    //TODO: buscar URL conforme UF e Ambiente
+    url: 'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao4.asmx?wsdl',
+    method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4',
+    action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4/nfeRetAutorizacaoLote'
 };
 
 /**
@@ -40,12 +47,29 @@ export class NFeProcessor {
 
         let retornoEnvio = await this.testeEnvioNF(xmlAssinado, this.empresa.certificado);
         console.log(retornoEnvio);
+
+        //TODO: buscar recibo e consultar ..
+        //let xmlConRecNFe = this.gerarXmlConsultaProc(documento.docFiscal.ambiente, '');
+        //let retornoConsulta = await this.consultarProc(xmlConRecNFe, this.empresa.certificado);
         
         return '';
     }
 
+    gerarXmlConsultaProc(ambiente: string, recibo: string){
+        let consulta = <schema.TConsReciNFe> {
+            $: {versao: '4.00'},
+            tpAmb: ambiente,
+            nRec: recibo
+        }
+        return XmlHelper.serializeXml(consulta, 'consReciNFe');
+    }
+
+    async consultarProc(xml:string, cert: any) {
+        return await WebServiceHelper.makeSoapRequest(xml, cert, soapConsulta);
+    }
+
     async testeEnvioNF(xml: string, cert: any) {
-        return await WebServiceHelper.makeSoapRequest(xml, cert, soap);
+        return await WebServiceHelper.makeSoapRequest(xml, cert, soapEnvio);
     }
 
     gerarXml(documento: NFeDocumento | NFCeDocumento) {

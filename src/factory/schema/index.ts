@@ -4,10 +4,9 @@
 [System.Xml.Serialization.XmlRootAttribute("consReciNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 */
 export interface TConsReciNFe {
-
+    $: { versao: string };
     tpAmb: TAmb;
     nRec: string;
-    $: { versao: string };
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
