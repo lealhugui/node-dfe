@@ -431,9 +431,12 @@ export interface TNFeInfNFeAvulsa {
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDest {
 
-    item: string;
+    //item: string;
     //CNPJ/CPF/idEstrangeiro
-    itemElementName: ItemChoiceType3;
+    //itemElementName: ItemChoiceType3;
+    CNPJ: string;
+    CPF: string;
+    idEstrangeiro: string;
 
     xNome: string;
 

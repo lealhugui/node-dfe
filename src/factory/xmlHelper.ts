@@ -20,7 +20,9 @@ export abstract class XmlHelper {
     public static deserializeXml(xml: string) {
         let resultObj;
         let parser = new xml2js.Parser({
-            mergeAttrs:true
+            mergeAttrs:true, 
+            ignoreAttrs: true,
+            explicitArray: false,
         });
 
         parser.parseString(xml, function(err: any, result: any){

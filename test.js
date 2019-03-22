@@ -51,11 +51,15 @@ function testeDesereliaze() {
 
 let moment = require('moment');
 
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 let documento = {
     dhEmissao: moment().format(),
     ambiente: '2',
     modelo: '65',
-    numeroNota: 1,
+    numeroNota: randomInt(2, 999),
     serie: '1',
     naturezaOperacao: 'VENDA',
     tipoDocumentoFiscal: '1',
@@ -72,7 +76,9 @@ let documento = {
 };
 
 let dest = {
-    indicadorIEDestinario: '9'
+    indicadorIEDestinario: '9',
+    documento: 94162433020,
+    nome: 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
 };
 
 
@@ -81,7 +87,7 @@ let transp = {
 };
 
 let infoAdic = {
-  infoComplementar: 'TEST'
+  infoComplementar: 'TESTTESTETSTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT'
 };
 
 let produtos = [];
@@ -93,16 +99,16 @@ let produtos = [];
 produtos.push({
     prod: {
         codigo: '1234',
-        cEAN: '',
-        descricao: 'PRODUTO TESTE',
-        cest: '0500100',
+        cEAN: '7898221456293',
+        descricao: 'NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL',
+        cest: '2104400',
         NCM: '25232910',
         CFOP: '5405',
         unidadeComercial: 'SAC',
         quantidadeComercial: '1.0000',
         valorUnitarioComercial: '31.8000000000',
         valorTotal: '31.80',
-        cEANTrib: '',
+        cEANTrib: '7898221456293',
         unidadeTributavel: 'SAC',
         quantidadeTributavel: '1.0000',
         valorUnitarioTributavel: '31.8000000000',
@@ -118,7 +124,7 @@ produtos.push({
         valorAproximadoTributos: 0,
         icms: {
             cst: '60',
-            origem: '5',
+            origem: '2',
             baseCalc: '31.80',
             aliquota: '0.00',
             valor: '0.00',
@@ -128,14 +134,14 @@ produtos.push({
             percentualReducaoBaseCalc: '0.00',
         }
     },
-    infoAdicional: 'TEST',
+    //infoAdicional: 'TEST',
     numeroItem: 1,
 });
 
 let pagamento = {
-  valorTroco: '0.00',
+  //valorTroco: '',
   pagamentos: [{
-      indicadorFormaPagamento: '0',
+      indicadorFormaPagamento: '',
       formaPagamento: '01',
       valor: '31.80',
       //dadosCartao: {}
@@ -165,12 +171,12 @@ let icmsTot = {
     vCOFINS: '0.00',
     vOutro: '0.00',
     vNF: '31.80',
-    vTotTrib: '0.00',
+    //vTotTrib: '0.00',
 };
 
 let nfce = {
     docFiscal: documento,
-    //destinatario: dest,
+    destinatario: dest,
     produtos: produtos,
     total: {icmsTot: icmsTot},
     transporte: transp,

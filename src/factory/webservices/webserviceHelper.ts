@@ -49,8 +49,12 @@ export abstract class WebServiceHelper {
                 // TODO: tratar retornos
                 //console.log(res.data);
                 //console.log(util.inspect(new XmlHelper().deserializeXml(res.data)));
-                let obj = XmlHelper.deserializeXml(res.data);
-                console.log(require('util').inspect(obj, false, null))
+                let retorno = require('util').inspect(XmlHelper.deserializeXml(res.data), false, null);
+                if (retorno) {
+                    console.log(retorno)
+                }
+               
+                //console.log(require('util').inspect(retorno, false, null))
             }
 
             return res.data;

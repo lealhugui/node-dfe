@@ -1,23 +1,5 @@
-import {
-    Empresa,
-    Endereco,
-    NFCeDocumento,
-    NFeDocumento,
-    DocumentoFiscal,
-    Destinatario,
-    Transporte,
-    Pagamento,
-    Produto,
-    Total,
-    InfoAdicional,
-    DetalhesProduto,
-    Imposto,
-    Icms,
-    Cofins,
-    Pis,
-    IcmsTot,
-    IssqnTot,
-    DetalhePagamento, DetalhePgtoCartao
+import { Empresa, Endereco, NFCeDocumento, NFeDocumento, DocumentoFiscal, Destinatario, Transporte, Pagamento, Produto, Total, 
+    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao
 } from '../interface/nfe';
 
 import { WebServiceHelper } from "../webservices/webserviceHelper";
@@ -54,7 +36,7 @@ export class NFeProcessor {
         xml = xml.replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[')
         //console.log(xml);
         let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
-        //console.log(xmlAssinado);
+        console.log(xmlAssinado);
 
         let retornoEnvio = await this.testeEnvioNF(xmlAssinado, this.empresa.certificado);
         console.log(retornoEnvio);
@@ -76,10 +58,10 @@ export class NFeProcessor {
         };
  
         if (documento.docFiscal.modelo == '65') {
-            let qrCode = this.gerarQRCodeNFCeOnline('https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?', dadosChave.chave, '2', '2', '1', '123456');
+            let qrCode = this.gerarQRCodeNFCeOnline('https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?p=', dadosChave.chave, '2', '2', '1', '123456');
             NFe.infNFeSupl = <schema.TNFeInfNFeSupl>{
                 qrCode: '<' + qrCode + '>',
-                urlChave: 'https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?'
+                urlChave: 'http://www.sefaz.rs.gov.br/nfce/consulta'
             };
         }    
 
@@ -226,7 +208,7 @@ export class NFeProcessor {
             xFant: empresa.nomeFantasia,
             enderEmit: this.getEnderEmit(empresa.endereco),
             IE: empresa.inscricaoEstadual,
-            IM: empresa.inscricaoMunicipal,
+            //IM: empresa.inscricaoMunicipal,
             CRT: empresa.codRegimeTributario,
             //iEST: empresa.inscricaoEstadualST,
             //CNAE: empresa.CNAE
@@ -253,6 +235,8 @@ export class NFeProcessor {
 
     getDest(destinatario: Destinatario) {
         return <schema.TNFeInfNFeDest>{
+            CPF: destinatario.documento,
+            xNome: destinatario.nome,
             indIEDest: destinatario.indicadorIEDestinario
         }
     }
@@ -264,7 +248,7 @@ export class NFeProcessor {
                 $: {nItem: produto.numeroItem},
                 prod: this.getDetProd(produto.prod),
                 imposto: this.getDetImposto(produto.imposto),
-                infAdProd: produto.infoAdicional
+                //infAdProd: produto.infoAdicional
             });
         }
 
@@ -277,6 +261,7 @@ export class NFeProcessor {
             cEAN: produto.cEAN,
             xProd: produto.descricao,
             NCM: produto.NCM,
+            CEST: produto.cest,
             CFOP: produto.CFOP,
             uCom: produto.unidadeComercial,
             qCom: produto.quantidadeComercial,
@@ -296,7 +281,7 @@ export class NFeProcessor {
             //cBenef: produto.cBenef,
             //cNPJFab: produto.cNPJFab,
             //eXTIPI: produto.eXTIPI,
-            //CEST: produto.cest
+            //
             //..
         }
     }
@@ -339,10 +324,12 @@ export class NFeProcessor {
     }
 
     getPag(pagamento: Pagamento) {
-        return <schema.TNFeInfNFePag>{
-            detPag: this.getDetalhamentoPagamentos(pagamento.pagamentos),
-            vTroco: pagamento.valorTroco
-        }
+        let pag = <schema.TNFeInfNFePag>{};
+        pag.detPag = this.getDetalhamentoPagamentos(pagamento.pagamentos);
+        if (pagamento.valorTroco)
+            pag.vTroco = pagamento.valorTroco;
+
+        return pag;
     }
 
     getDetalhamentoPagamentos(pagamentos: DetalhePagamento[]){
@@ -350,11 +337,14 @@ export class NFeProcessor {
         let detPag;
 
         for (const pag of pagamentos) {
-            detPag = <schema.TNFeInfNFePagDetPag>{
-                indPag: pag.indicadorFormaPagamento,
-                tPag: pag.formaPagamento,
-                vPag: pag.valor,
-            }
+            detPag = <schema.TNFeInfNFePagDetPag>{};
+
+            if (pag.indicadorFormaPagamento)
+                detPag.indPag = Utils.getEnumByValue(schema.TNFeInfNFePagDetPagIndPag, pag.indicadorFormaPagamento);
+
+            detPag.tPag = Utils.getEnumByValue(schema.TNFeInfNFePagDetPagTPag, pag.formaPagamento);
+            detPag.vPag = pag.valor;
+            
             if (pag.dadosCartao) {
                 detPag.card = this.getDetalhamentoCartao(pag.dadosCartao);
             }
