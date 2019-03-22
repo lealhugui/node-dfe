@@ -52,7 +52,7 @@ export class StatusServicoProcessor {
             xServ: schema.TConsStatServXServ.STATUS
         };
 
-        return new XmlHelper().serializeXml(status, 'consStatServ');
+        return XmlHelper.serializeXml(status, 'consStatServ');
     }
 
 }

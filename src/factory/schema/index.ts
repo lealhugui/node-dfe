@@ -2042,8 +2042,8 @@ export interface TNFeInfNFeDetImpostoDevolIPI {
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeTotal {
-    iCMSTot: TNFeInfNFeTotalICMSTot;
-    iSSQNtot: TNFeInfNFeTotalISSQNtot;
+    ICMSTot: TNFeInfNFeTotalICMSTot;
+    ISSQNtot: TNFeInfNFeTotalISSQNtot;
     retTrib: TNFeInfNFeTotalRetTrib;
 }
 

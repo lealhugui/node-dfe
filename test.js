@@ -15,9 +15,9 @@ let cert = {
 let empresa = {
     razaoSocial: 'TESTE',
     nomeFantasia: 'TEST',
-    cnpj: '99999999999999',
-    inscricaoEstadual: '123123',
-    inscricaoMunicipal: '12312312',
+    cnpj: '',
+    inscricaoEstadual: '',
+    inscricaoMunicipal: '',
     codRegimeTributario: '3',
     endereco: {
         logradouro: 'Rua Teste',
@@ -64,10 +64,10 @@ let documento = {
     codIbgeFatoGerador: '4303103',
     processoEmissao: '0',
     finalidadeEmissao: '1',
-    indConsumidorFinal: '0',
-    indPresenca: '0',
+    indConsumidorFinal: '1',
+    indPresenca: '1',
     tipoEmissao: '1',
-    tipoImpressao: '0',
+    tipoImpressao: '4',
     versaoAplicativoEmissao: '1.0',
 };
 
@@ -137,24 +137,50 @@ let pagamento = {
   pagamentos: [{
       indicadorFormaPagamento: '0',
       formaPagamento: '01',
-      valor: '10.00',
+      valor: '31.80',
       //dadosCartao: {}
   }]
+};
+
+let icmsTot = {
+    vBC: '0.00',
+    vICMS: '0.00',
+    vICMSDeson: '0.00',
+    vFCPUFDest: '0.00',
+    vICMSUFDest:'0.00',
+    vICMSUFRemet: '0.00',
+    vFCP: '0.00',
+    vBCST: '0.00',
+    vST: '0.00',
+    vFCPST: '0.00',
+    vFCPSTRet: '0.00',
+    vProd: '31.80',
+    vFrete: '0.00',
+    vSeg: '0.00',
+    vDesc: '0.00',
+    vII: '0.00',
+    vIPI: '0.00',
+    vIPIDevol: '0.00',
+    vPIS: '0.00',
+    vCOFINS: '0.00',
+    vOutro: '0.00',
+    vNF: '31.80',
+    vTotTrib: '0.00',
 };
 
 let nfce = {
     docFiscal: documento,
     //destinatario: dest,
     produtos: produtos,
-    total: {},
+    total: {icmsTot: icmsTot},
     transporte: transp,
     pagamento: pagamento,
     infoAdicional: infoAdic
 };
 
-function testeEmissaoNFCe(empresa) {
+async function testeEmissaoNFCe(empresa) {
     const nfeProc = new lib.NFeProcessor(empresa);
-    console.log(nfeProc.processarDocumento(nfce));
+    await nfeProc.processarDocumento(nfce);
 }
 
 function testeAssinaturaXML() {
@@ -167,7 +193,7 @@ function testeAssinaturaXML() {
 function testeQRcodeNFCe(){
     //urls qrcode: http://nfce.encat.org/consulte-sua-nota-qr-code-versao-2-0/
     const nfeProc = new lib.NFeProcessor(empresa);
-    console.log(nfeProc.gerarQRCodeNFCeOnline('http://www.sefazexemplo.gov.br/nfce/qrcode?p=', '43190399999999999999650010000000011544962464', '2', '2', '1', '123456'));
+    console.log(nfeProc.gerarQRCodeNFCeOnline('https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?', '43190399999999999999650010000000011544962464', '2', '2', '1', '123456'));
 }
 
 //testeAssinaturaXML();
@@ -175,3 +201,4 @@ function testeQRcodeNFCe(){
 //testeDesereliaze();
 testeEmissaoNFCe(empresa);
 //testeQRcodeNFCe();
+

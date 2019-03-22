@@ -1,9 +1,9 @@
 
 let SignedXml = require('xml-crypto').SignedXml;
 
-export class Signature {
+export abstract class Signature {
 
-  signXml(xml: string, tag: string, certificado: any) {
+  public static signXml(xml: string, tag: string, certificado: any) {
     let sig = new SignedXml();
     sig.addReference("//*[local-name(.)='"+tag+"']","","","","","", true);
     sig.signingKey = certificado.key;
@@ -11,7 +11,7 @@ export class Signature {
     return sig.getSignedXml();
   }
 
-  signXmlX509(xml: string, tag: string, certificado: any){
+  public static signXmlX509(xml: string, tag: string, certificado: any){
 
     const transforms = [
       'http://www.w3.org/2000/09/xmldsig#enveloped-signature',

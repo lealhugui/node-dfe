@@ -19,7 +19,7 @@ export abstract class WebServiceHelper {
                 }
             };
 
-        let soapEnvXml = new XmlHelper().serializeXml(soapEnvelopeObj, 'soap:Envelope');
+        let soapEnvXml = XmlHelper.serializeXml(soapEnvelopeObj, 'soap:Envelope');
         return soapEnvXml.replace('[XML]', xml);
     }
 
@@ -47,8 +47,10 @@ export abstract class WebServiceHelper {
 
             if (res.status == 200) {
                 // TODO: tratar retornos
-                console.log(res.data);
+                //console.log(res.data);
                 //console.log(util.inspect(new XmlHelper().deserializeXml(res.data)));
+                let obj = XmlHelper.deserializeXml(res.data);
+                console.log(require('util').inspect(obj, false, null))
             }
 
             return res.data;
