@@ -139,7 +139,7 @@ export class NFeProcessor {
             $: { versao: '4.00', Id: 'NFe' + dadosChave.chave },
             ide: this.getIde(documento.docFiscal, dadosChave),
             emit: this.getEmit(this.empresa),
-            dest: this.getDest(documento.destinatario),
+            //dest: this.getDest(documento.destinatario), //ajustar self-closed
             det: this.getDet(documento.produtos),
             total: this.getTotal(),
             transp: this.getTransp(documento.transporte),
@@ -179,16 +179,16 @@ export class NFeProcessor {
 
     getEmit(empresa: Empresa) {
         return <schema.TNFeInfNFeEmit>{
-            item: empresa.cnpj,
-            itemElementName: schema.ItemChoiceType2.CNPJ,
+            CNPJ: empresa.cnpj,
+            //itemElementName: schema.ItemChoiceType2.CNPJ,
             xNome: empresa.razaoSocial,
             xFant: empresa.nomeFantasia,
-            ie: empresa.inscricaoEstadual,
-            cNAE: empresa.CNAE,
-            cRT: empresa.codRegimeTributario,
-            im: empresa.inscricaoMunicipal,
-            iEST: empresa.inscricaoEstadualST,
-            enderEmit: this.getEnderEmit(empresa.endereco)
+            enderEmit: this.getEnderEmit(empresa.endereco),
+            IE: empresa.inscricaoEstadual,
+            IM: empresa.inscricaoMunicipal,
+            CRT: empresa.codRegimeTributario,
+            //iEST: empresa.inscricaoEstadualST,
+            //CNAE: empresa.CNAE
         }
     }
 
@@ -196,17 +196,17 @@ export class NFeProcessor {
         return <schema.TEnderEmi>{
             xLgr: endereco.logradouro,
             nro: endereco.numero,
-            xCpl: endereco.complemento,
+            //xCpl: endereco.complemento,
             xBairro: endereco.bairro,
-            xMun: endereco.municipio,
             cMun: endereco.codMunicipio,
+            xMun: endereco.municipio,
+            UF: schema.TUfEmi.RS, //TODO: endereco.uf,
+            CEP: endereco.cep,
             cPais: schema.TEnderEmiCPais.Item1058,
-            cPaisSpecified: true,
-            cEP: endereco.cep,
-            uf: schema.TUfEmi.RS, //TODO: endereco.uf,
-            fone: endereco.telefone,
+            //cPaisSpecified: true,
             xPais: schema.TEnderEmiXPais.BRASIL,
-            xPaisSpecified: true
+            //xPaisSpecified: true
+            fone: endereco.telefone,
         }
     }
 
@@ -215,6 +215,9 @@ export class NFeProcessor {
             return <schema.TNFeInfNFeDest>{
                 indIEDest: destinatario.indicadorIEDestinario
             }
+        } else {
+            //TODO: remover self-closed tags do xml
+            return null;
         }
     }
 
@@ -222,10 +225,10 @@ export class NFeProcessor {
         let det_list = [];
         for (const produto of produtos) {
             det_list.push(<schema.TNFeInfNFeDet>{
+                $: {nItem: produto.numeroItem},
                 prod: this.getDetProd(produto.prod),
                 imposto: this.getDetImposto(produto.imposto),
-                infAdProd: produto.infoAdicional,
-                nItem: produto.numeroItem
+                infAdProd: produto.infoAdicional
             });
         }
 
@@ -235,29 +238,29 @@ export class NFeProcessor {
     getDetProd(produto: DetalhesProduto) {
         return <schema.TNFeInfNFeDetProd>{
             cProd: produto.codigo,
-            xProd: produto.descricao,
-            cEST: produto.cest,
             cEAN: produto.cEAN,
-            cFOP: produto.CFOP,
-            nCM: produto.NCM,
-            cBenef: produto.cBenef,
-            cNPJFab: produto.cNPJFab,
-            qCom: produto.quantidadeComercial,
+            xProd: produto.descricao,
+            NCM: produto.NCM,
+            CFOP: produto.CFOP,
             uCom: produto.unidadeComercial,
+            qCom: produto.quantidadeComercial,
             vUnCom: produto.valorUnitarioComercial,
+            vProd: produto.valorTotal,
+            cEANTrib: produto.cEANTrib,
+            uTrib: produto.unidadeTributavel,
             qTrib: produto.quantidadeTributavel,
             vUnTrib: produto.valorUnitarioTributavel,
-            uTrib: produto.unidadeTributavel,
-            vProd: produto.valorTotal,
             indTot: produto.indicadorTotal,
-            vDesc: produto.valorDesc,
-            vFrete: produto.valorFrete,
-            vOutro: produto.valorOutro,
-            vSeg: produto.valorSeg,
             xPed: produto.numeroPedido,
             nItemPed: produto.numeroItemPedido,
-            cEANTrib: produto.cEANTrib,
-            eXTIPI: produto.eXTIPI
+            //vDesc: produto.valorDesc,
+            //vFrete: produto.valorFrete,
+            //vOutro: produto.valorOutro,
+            //vSeg: produto.valorSeg,
+            //cBenef: produto.cBenef,
+            //cNPJFab: produto.cNPJFab,
+            //eXTIPI: produto.eXTIPI,
+            //CEST: produto.cest
             //..
         }
     }
@@ -265,7 +268,7 @@ export class NFeProcessor {
     getDetImposto(imposto: Imposto) {
         let test = <schema.TNFeInfNFeDetImposto>{
             vTotTrib: '0.00',
-            items: [this.getImpostoIcms(imposto.icms)]
+            ICMS: [this.getImpostoIcms(imposto.icms)]
 
         };
 
@@ -274,10 +277,11 @@ export class NFeProcessor {
 
     getImpostoIcms(icms: Icms) {
         // case icms.cst ...
-        return <schema.TNFeInfNFeDetImpostoICMSICMS60> {
-            cST: icms.cst,
-            orig: icms.origem,
-
+        return { 
+            ICMS60: <schema.TNFeInfNFeDetImpostoICMSICMS60> {
+                orig: icms.origem,
+                CST: icms.cst,
+            }
         };
     }
 
@@ -295,8 +299,8 @@ export class NFeProcessor {
 
     getPag(pagamento: Pagamento) {
         return <schema.TNFeInfNFePag>{
-            vTroco: pagamento.valorTroco,
-            detPag: this.getDetalhamentoPagamentos(pagamento.pagamentos)
+            detPag: this.getDetalhamentoPagamentos(pagamento.pagamentos),
+            vTroco: pagamento.valorTroco
         }
     }
 
@@ -324,7 +328,7 @@ export class NFeProcessor {
     getInfoAdic(info: InfoAdicional) {
         return <schema.TNFeInfNFeInfAdic>{
             infCpl: info.infoComplementar,
-            infAdFisco: info.infoFisco
+            //infAdFisco: info.infoFisco
         }
     }
 

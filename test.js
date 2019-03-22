@@ -16,8 +16,8 @@ let empresa = {
     razaoSocial: 'TESTE',
     nomeFantasia: 'TEST',
     cnpj: '99999999999999',
-    inscricaoEstadual: '',
-    inscricaoMunicipal: '',
+    inscricaoEstadual: '123123',
+    inscricaoMunicipal: '12312312',
     codRegimeTributario: '3',
     endereco: {
         logradouro: 'Rua Teste',
@@ -25,7 +25,7 @@ let empresa = {
         complemento: '',
         bairro: 'Bairro Teste',
         municipio: 'Cachoeirinha',
-        codIbge: '4303103',
+        codMunicipio: '4303103',
         uf: 'RS',
         cep: '99999999',
         telefone: '999999999'
@@ -40,10 +40,14 @@ async function testeConsultaStatusServico(empresa) {
     console.log(result.xml_enviado);
 }
 
+function testeDesereliaze() {
+    let xml = `<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nfeResultMsg xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4"><retConsStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>2</tpAmb><verAplic>RSnfce201805211008</verAplic><cStat>107</cStat><xMotivo>Servico em Operacao</xMotivo><cUF>43</cUF><dhRecbto>2019-03-21T22:37:44-03:00</dhRecbto><tMed>1</tMed></retConsStatServ></nfeResultMsg></soap:Body></soap:Envelope>
+    <consStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>2</tpAmb><cUF>43</cUF><xServ>STATUS</xServ></consStatServ>`; 
 
-//Test deserialize:
-//let obj = XmlHelper.deserializeXml(xml);
-//console.log(obj)
+    let obj = XmlHelper.deserializeXml(xml);
+    console.log(require('util').inspect(obj, false, null))
+}
+
 
 let moment = require('moment');
 
@@ -168,5 +172,6 @@ function testeQRcodeNFCe(){
 
 //testeAssinaturaXML();
 //testeConsultaStatusServico(empresa);
+//testeDesereliaze();
 testeEmissaoNFCe(empresa);
 //testeQRcodeNFCe();
