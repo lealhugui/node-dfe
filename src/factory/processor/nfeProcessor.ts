@@ -24,6 +24,7 @@ import { Evento } from '../interface/evento';
 import * as schema from '../schema/index'
 import { XmlHelper } from '../xmlHelper';
 import * as Utils from '../utils/utils';
+const sha1 = require('sha1');
 
 /**
  * Classe para processamento de NFe/NFCe
@@ -65,7 +66,7 @@ export class NFeProcessor {
         let ano = dataEmissao.getFullYear().toString().substring(2,4);
         let mes = dataEmissao.getMonth() + 1;
 
-        chave.push(docFiscal.codIbgeEmitente);
+        chave.push(docFiscal.codUF);
         chave.push(ano + (mes.toString().length == 1 ? '0' + mes : mes));
         chave.push(empresa.cnpj);
         chave.push(docFiscal.modelo);
@@ -111,10 +112,20 @@ export class NFeProcessor {
         return dv.toString();
     }
 
-    gerarQRCodeNFCe(urlSefaz: string, chave: string, versaoQRCode: string, ambiente: string, csc: string) {
-        //urls qrcode: http://nfce.encat.org/consulte-sua-nota-qr-code-versao-2-0/
+    gerarQRCodeNFCeOnline(urlConsultaNFCe: string, chave: string, versaoQRCode: string, ambiente: string, idCSC: string, CSC: string) {
+        let s = '|';
+        let concat = [chave, versaoQRCode, ambiente, idCSC].join(s);
+        let hash = sha1(concat + CSC);
 
-        // http://<dominio>/nfce/qrcode?p=<chave_acesso>|<versao_qrcode>|<tipo_ambiente>|<identificador_csc>|<codigo_hash>
+        return urlConsultaNFCe + concat + s + hash;
+    }
+
+    gerarQRCodeNFCeOffline(urlConsultaNFCe: string, chave: string, versaoQRCode: string, ambiente: string, diaEmissao: string, valorTotal:string, digestValue: string, idCSC: string, CSC: string) {
+        let s = '|';
+        let concat = [chave, versaoQRCode, ambiente, diaEmissao, valorTotal, digestValue, idCSC].join(s);
+        let hash = sha1(concat + CSC);
+
+        return urlConsultaNFCe + concat + s + hash;
     }
 
     gerarNFe(documento: NFeDocumento) {
@@ -125,7 +136,7 @@ export class NFeProcessor {
 
     gerarNFCe(documento: NFCeDocumento, dadosChave: any) {
         return <schema.TNFeInfNFe> {
-            $: { versao: '4.00', id: 'NFe' + dadosChave.chave },
+            $: { versao: '4.00', Id: 'NFe' + dadosChave.chave },
             ide: this.getIde(documento.docFiscal, dadosChave),
             emit: this.getEmit(this.empresa),
             dest: this.getDest(documento.destinatario),
@@ -139,29 +150,29 @@ export class NFeProcessor {
 
     getIde(documento: DocumentoFiscal, dadosChave: any) {
         return <schema.TNFeInfNFeIde>{
-            cDV: dadosChave.dv,
-            cMunFG: documento.codIbgeFatoGerador,
+            cUF: Utils.getEnumByValue(schema.TCodUfIBGE, documento.codUF),
             cNF: dadosChave.cnf,
-            cUF: Utils.getEnumByValue(schema.TCodUfIBGE, documento.codIbgeEmitente),
-            dhEmi: documento.dhEmissao,
-            dhSaiEnt: documento.dhSaiEnt,
-            mod: Utils.getEnumByValue(schema.TMod, documento.modelo),
-            nNF: documento.numeroNota,
             natOp: documento.naturezaOperacao,
+            mod: Utils.getEnumByValue(schema.TMod, documento.modelo),
             serie: documento.serie,
-            tpAmb: Utils.getEnumByValue(schema.TAmb, documento.ambiente),
-            procEmi: Utils.getEnumByValue(schema.TProcEmi, documento.processoEmissao),
-            finNFe: Utils.getEnumByValue(schema.TFinNFe, documento.finalidadeEmissao),
+            nNF: documento.numeroNota,
+            dhEmi: documento.dhEmissao,
+            tpNF: Utils.getEnumByValue(schema.TNFeInfNFeIdeTpNF, documento.tipoDocumentoFiscal),
             idDest: Utils.getEnumByValue(schema.TNFeInfNFeIdeIdDest, documento.identificadorDestinoOperacao),
+            cMunFG: documento.codIbgeFatoGerador,
+            tpImp: Utils.getEnumByValue(schema.TNFeInfNFeIdeTpImp, documento.tipoImpressao),
+            tpEmis: Utils.getEnumByValue(schema.TNFeInfNFeIdeTpEmis, documento.tipoEmissao),
+            cDV: dadosChave.dv,
+            tpAmb: Utils.getEnumByValue(schema.TAmb, documento.ambiente),
+            finNFe: Utils.getEnumByValue(schema.TFinNFe, documento.finalidadeEmissao),
             indFinal: Utils.getEnumByValue(schema.TNFeInfNFeIdeIndFinal, documento.indConsumidorFinal),
             indPres: Utils.getEnumByValue(schema.TNFeInfNFeIdeIndPres, documento.indPresenca),
-            tpEmis: Utils.getEnumByValue(schema.TNFeInfNFeIdeTpEmis, documento.tipoEmissao),
-            tpImp: Utils.getEnumByValue(schema.TNFeInfNFeIdeTpImp, documento.tipoImpressao),
-            tpNF: Utils.getEnumByValue(schema.TNFeInfNFeIdeTpNF, documento.tipoDocumentoFiscal),
+            procEmi: Utils.getEnumByValue(schema.TProcEmi, documento.processoEmissao),
             verProc: documento.versaoAplicativoEmissao,
-            //contingencia
-            dhCont: documento.dhContingencia,
-            xJust: documento.justificativaContingencia,
+            
+            //dhSaiEnt: documento.dhSaiEnt,
+            //dhCont: documento.dhContingencia,
+            //xJust: documento.justificativaContingencia,
             //nFref: schema.TNFeInfNFeIdeNFref[],
         }
     }

@@ -27,7 +27,7 @@ export interface DocumentoFiscal {
     ambiente: string;
     dhEmissao: string;
     dhSaiEnt: string;
-    codIbgeEmitente: string;
+    codUF: string;
     tipoDocumentoFiscal: string;
     identificadorDestinoOperacao: string;
     codIbgeFatoGerador: string;

@@ -45,17 +45,19 @@ async function testeConsultaStatusServico(empresa) {
 //let obj = XmlHelper.deserializeXml(xml);
 //console.log(obj)
 
+let moment = require('moment');
 
 let documento = {
+    dhEmissao: moment().format(),
     ambiente: '2',
     modelo: '65',
     numeroNota: 1,
     serie: '1',
     naturezaOperacao: 'VENDA',
-    codIbge: '43',
     tipoDocumentoFiscal: '1',
     identificadorDestinoOperacao: '1',
-    codIbgeEmitente: '43',
+    codUF: '43',
+    codIbgeFatoGerador: '4303103',
     processoEmissao: '0',
     finalidadeEmissao: '1',
     indConsumidorFinal: '0',
@@ -138,7 +140,7 @@ let pagamento = {
 
 let nfce = {
     docFiscal: documento,
-    destinatario: dest,
+    //destinatario: dest,
     produtos: produtos,
     total: {},
     transporte: transp,
@@ -158,6 +160,13 @@ function testeAssinaturaXML() {
     console.log(xmlAssinado)
 }
 
+function testeQRcodeNFCe(){
+    //urls qrcode: http://nfce.encat.org/consulte-sua-nota-qr-code-versao-2-0/
+    const nfeProc = new lib.NFeProcessor(empresa);
+    console.log(nfeProc.gerarQRCodeNFCeOnline('http://www.sefazexemplo.gov.br/nfce/qrcode?p=', '43190399999999999999650010000000011544962464', '2', '2', '1', '123456'));
+}
+
 //testeAssinaturaXML();
 //testeConsultaStatusServico(empresa);
 testeEmissaoNFCe(empresa);
+//testeQRcodeNFCe();
