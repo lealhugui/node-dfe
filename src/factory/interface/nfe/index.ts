@@ -189,6 +189,8 @@ export interface Empresa {
     codRegimeTributario: string;
     endereco: Endereco;
     certificado: Certificado;
+    idCSC: string;
+    CSC: string;
 }
 
 export interface Destinatario {

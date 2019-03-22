@@ -82,7 +82,7 @@ export class NFeProcessor {
         };
  
         if (documento.docFiscal.modelo == '65') {
-            let qrCode = this.gerarQRCodeNFCeOnline('https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?p=', dadosChave.chave, '2', '2', '1', '123456');
+            let qrCode = this.gerarQRCodeNFCeOnline('https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?p=', dadosChave.chave, '2', '2', this.empresa.idCSC, this.empresa.CSC);
             NFe.infNFeSupl = <schema.TNFeInfNFeSupl>{
                 qrCode: '<' + qrCode + '>',
                 urlChave: 'http://www.sefaz.rs.gov.br/nfce/consulta'

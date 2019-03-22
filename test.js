@@ -30,7 +30,9 @@ let empresa = {
         cep: '99999999',
         telefone: '999999999'
     },
-    certificado: cert
+    certificado: cert,
+    idCSC: '',
+    CSC: ''
 };
 
 // TESTES STATUS SERVICO:
@@ -60,7 +62,7 @@ let documento = {
     ambiente: '2',
     modelo: '65',
     numeroNota: randomInt(2, 999),
-    serie: '1',
+    serie: '2',
     naturezaOperacao: 'VENDA',
     tipoDocumentoFiscal: '1',
     identificadorDestinoOperacao: '1',
@@ -72,12 +74,12 @@ let documento = {
     indPresenca: '1',
     tipoEmissao: '1',
     tipoImpressao: '4',
-    versaoAplicativoEmissao: '1.0',
+    versaoAplicativoEmissao: 'NODE-NFE TEST 1.0',
 };
 
 let dest = {
     indicadorIEDestinario: '9',
-    documento: 94162433020,
+    documento: '41267310324',
     nome: 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
 };
 
@@ -203,8 +205,8 @@ function testeQRcodeNFCe(){
 }
 
 //testeAssinaturaXML();
-//testeConsultaStatusServico(empresa);
+testeConsultaStatusServico(empresa);
 //testeDesereliaze();
-testeEmissaoNFCe(empresa);
+//testeEmissaoNFCe(empresa);
 //testeQRcodeNFCe();
 
