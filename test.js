@@ -35,22 +35,6 @@ let empresa = {
     CSC: ''
 };
 
-// TESTES STATUS SERVICO:
-async function testeConsultaStatusServico(empresa) {
-    const statusProc = new lib.StatusServicoProcessor(empresa);
-    let result = await statusProc.processarDocumento();
-    console.log(result.xml_enviado);
-}
-
-function testeDesereliaze() {
-    let xml = `<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nfeResultMsg xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4"><retConsStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>2</tpAmb><verAplic>RSnfce201805211008</verAplic><cStat>107</cStat><xMotivo>Servico em Operacao</xMotivo><cUF>43</cUF><dhRecbto>2019-03-21T22:37:44-03:00</dhRecbto><tMed>1</tMed></retConsStatServ></nfeResultMsg></soap:Body></soap:Envelope>
-    <consStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>2</tpAmb><cUF>43</cUF><xServ>STATUS</xServ></consStatServ>`; 
-
-    let obj = XmlHelper.deserializeXml(xml);
-    console.log(require('util').inspect(obj, false, null))
-}
-
-
 let moment = require('moment');
 
 function randomInt(min, max) {
@@ -188,7 +172,9 @@ let nfce = {
 
 async function testeEmissaoNFCe(empresa) {
     const nfeProc = new lib.NFeProcessor(empresa);
-    await nfeProc.processarDocumento(nfce);
+    let result = await nfeProc.processarDocumento(nfce);
+    result = require('util').inspect(result, false, null);
+    console.log('Resultado Emissão NFC-e: \n\n' + result);
 }
 
 function testeAssinaturaXML() {
@@ -202,6 +188,23 @@ function testeQRcodeNFCe(){
     //urls qrcode: http://nfce.encat.org/consulte-sua-nota-qr-code-versao-2-0/
     const nfeProc = new lib.NFeProcessor(empresa);
     console.log(nfeProc.gerarQRCodeNFCeOnline('https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?', '43181296418264011920650200000086101048053960', '2', '2', empresa.idCSC, empresa.CSC));
+}
+
+// TESTES STATUS SERVICO:
+async function testeConsultaStatusServico(empresa) {
+    const statusProc = new lib.StatusServicoProcessor(empresa);
+    let result = await statusProc.processarDocumento();
+    console.log(result.data);
+    
+    console.log(result.data.retConsStatServ.xMotivo);
+}
+
+function testeDesereliaze() {
+    let xml = `<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nfeResultMsg xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4"><retConsStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>2</tpAmb><verAplic>RSnfce201805211008</verAplic><cStat>107</cStat><xMotivo>Servico em Operacao</xMotivo><cUF>43</cUF><dhRecbto>2019-03-21T22:37:44-03:00</dhRecbto><tMed>1</tMed></retConsStatServ></nfeResultMsg></soap:Body></soap:Envelope>
+    <consStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>2</tpAmb><cUF>43</cUF><xServ>STATUS</xServ></consStatServ>`; 
+
+    let obj = XmlHelper.deserializeXml(xml);
+    console.log(require('util').inspect(obj, false, null))
 }
 
 //testeAssinaturaXML();

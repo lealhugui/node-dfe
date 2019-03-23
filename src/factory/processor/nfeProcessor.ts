@@ -3,7 +3,6 @@ import { Empresa, Endereco, NFCeDocumento, NFeDocumento, DocumentoFiscal, Destin
 } from '../interface/nfe';
 
 import { WebServiceHelper } from "../webservices/webserviceHelper";
-import { Evento } from '../interface/evento';
 import * as schema from '../schema/index'
 import { XmlHelper } from '../xmlHelper';
 import * as Utils from '../utils/utils';
@@ -42,24 +41,59 @@ export class NFeProcessor {
      */
     async processarDocumento(documento: NFeDocumento | NFCeDocumento) {
 
-        let xml = this.gerarXml(documento);
-        xml = xml.replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[')
-        console.log('XML ANTES DE ASSINAR\n\n' + xml + '\n\n');
+        let result = {
+            success: false,
+            error: '',
+            envioNF: {},
+            consultaProc: {}
+        };
 
-        let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
-        //console.log(xmlAssinado);
+        try {
+            let xml = this.gerarXml(documento);
+            xml = xml.replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[')
+            //console.log('XML ANTES DE ASSINAR\n\n' + xml + '\n\n');
+    
+            let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
+            //console.log(xmlAssinado);
+    
+            let xmlLote = this.gerarXmlLote(xmlAssinado);
+            //console.log('\n' + xmlLote + '\n');
+    
+            let retornoEnvio = await this.enviarNF(xmlLote, this.empresa.certificado);
+            //console.log('\n' + Object(retornoEnvio));
+            result.envioNF = retornoEnvio;
+    
+            let retEnviNFe = Object(retornoEnvio.data).retEnviNFe;
+            if (retEnviNFe.cStat == '103') {
+                let recibo = retEnviNFe.infRec.nRec;
+                let xmlConRecNFe = this.gerarXmlConsultaProc(documento.docFiscal.ambiente, recibo);
 
-        let xmlLote = this.gerarXmlLote(xmlAssinado);
-        console.log('\n' + xmlLote + '\n');
+                let retornoConsulta = null; 
+                let retConsReciNFe = null;
+                let cStat = '105';
 
-        let retornoEnvio = await this.enviarNF(xmlLote, this.empresa.certificado);
-        console.log('\n' + retornoEnvio);
+                do {
+                    retornoConsulta = await this.consultarProc(xmlConRecNFe, this.empresa.certificado);
+                    retConsReciNFe = Object(retornoConsulta.data).retConsReciNFe;
+                    cStat = retConsReciNFe.cStat;
+                } while (cStat == '105'); // nota em processamento, realiza a consulta novamente até obter um status diferente.
+    
+                result.consultaProc = retornoConsulta;
 
-        //TODO: buscar recibo e consultar ..
-        //let xmlConRecNFe = this.gerarXmlConsultaProc(documento.docFiscal.ambiente, '');
-        //let retornoConsulta = await this.consultarProc(xmlConRecNFe, this.empresa.certificado);
-        
-        return '';
+                if (cStat == '104' && retConsReciNFe.protNFe.infProt.cStat == '100') {
+                    result.success = true;
+                }
+                
+            } else {
+                result.success = false;
+            }
+
+        } catch (ex) {
+            result.success = false;
+            result.error = ex;
+        }
+
+        return result;
     }
 
     async consultarProc(xml:string, cert: any) {
@@ -101,7 +135,7 @@ export class NFeProcessor {
             $: {
                 xmlns: 'http://www.portalfiscal.inf.br/nfe'
             },
-            infNFe: this.gerarNFCe(documento, dadosChave)
+            infNFe: documento.docFiscal.modelo == '65' ? this.gerarNFCe(documento, dadosChave) : this.gerarNFe(documento, dadosChave)
         };
  
         if (documento.docFiscal.modelo == '65') {
@@ -188,10 +222,12 @@ export class NFeProcessor {
         return urlConsultaNFCe + concat + s + hash;
     }
 
-    gerarNFe(documento: NFeDocumento) {
-        return <schema.TNFeInfNFe> {
-
+    gerarNFe(documento: NFeDocumento, dadosChave: any) {
+        let nfe = <schema.TNFeInfNFe> {
+            $: { versao: '4.00', Id: 'NFe' + dadosChave.chave }
         };
+        
+        return nfe;
     }
 
     gerarNFCe(documento: NFCeDocumento, dadosChave: any) {

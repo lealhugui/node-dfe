@@ -209,6 +209,7 @@ export interface Endereco {
     codMunicipio: string;
     municipio: string;
     uf: string;
+    cUf: string;
     cep: string;
     codPais: string;
     pais: string;

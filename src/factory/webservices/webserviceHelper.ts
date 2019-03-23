@@ -2,6 +2,15 @@ import axios from 'axios';
 import * as https from 'https';
 import { XmlHelper } from '../xmlHelper';
 
+export interface iResult {
+    xml_enviado: string,
+    xml_recebido: string,
+    status: number,
+    success: boolean,
+    data: Object,
+    error: string
+};
+
 export abstract class WebServiceHelper {
 
     public static buildSoapEnvelope(xml: string, soapMethod: string) {
@@ -32,7 +41,9 @@ export abstract class WebServiceHelper {
         });
     }
 
+
     public static async makeSoapRequest(xml: string, cert: any, soap: any) {
+        let result = <iResult>{};
         try {
             let res = await axios({
                 url: soap.url,
@@ -45,28 +56,26 @@ export abstract class WebServiceHelper {
                 }
             });
 
-            if (res.status == 200) {
-                // TODO: tratar retornos
-                //console.log(res.data);
-                //console.log(util.inspect(new XmlHelper().deserializeXml(res.data)));
+            result.status = res.status;
+            result.xml_recebido = res.data;
 
-                //let test = XmlHelper.deserializeXml(res.data)
-                //console.log(test);
+            if (res.status == 200) {
+                result.success = true;
                 
-                //let retorno = JSON.parse(XmlHelper.deserializeXml(res.data));
-                //console.log(retorno['q'])
-                let retorno = (require('util').inspect(XmlHelper.deserializeXml(res.data), false, null));
+                //let retorno = (require('util').inspect(XmlHelper.deserializeXml(res.data), false, null));
+                let retorno = XmlHelper.deserializeXml(res.data);
                 if (retorno) {
-                    //console.log(Object(retorno))
-                    console.log(retorno)
+                    //result.data = retorno;
+                    result.data = Object(retorno)['soap:Envelope']['soap:Body']['nfeResultMsg'];
+                    //console.log(result.data)
                 }
-               
-                //console.log(require('util').inspect(retorno, false, null))
             }
 
-            return res.data;
+            return result;
         } catch (err) {
-            console.error(err);
+            result.success = false;
+            result.error = err;
+            return result;
         }
     }
 }

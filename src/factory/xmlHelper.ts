@@ -2,8 +2,6 @@
 import * as xml2js from 'xml2js';
 export abstract class XmlHelper {
 
-    //TODO: tratar tags specified ao serializar xml ...
-
     public static serializeXml(obj: any, rootTag: string) {
         let builder = new xml2js.Builder({
             rootName: rootTag,
@@ -20,9 +18,9 @@ export abstract class XmlHelper {
     public static deserializeXml(xml: string) {
         let resultObj;
         let parser = new xml2js.Parser({
-            mergeAttrs:true, 
+            mergeAttrs: true, 
             ignoreAttrs: true,
-            explicitArray: false,
+            explicitArray: false
         });
 
         parser.parseString(xml, function(err: any, result: any){
