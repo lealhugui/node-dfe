@@ -62,7 +62,7 @@ let documento = {
     ambiente: '2',
     modelo: '65',
     numeroNota: randomInt(2, 999),
-    serie: '2',
+    serie: '20',
     naturezaOperacao: 'VENDA',
     tipoDocumentoFiscal: '1',
     identificadorDestinoOperacao: '1',
@@ -80,7 +80,7 @@ let documento = {
 let dest = {
     indicadorIEDestinario: '9',
     documento: '41267310324',
-    nome: 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
+    nome: 'DESTINATARIO TESTE'
 };
 
 
@@ -100,11 +100,11 @@ let produtos = [];
     eXTIPI: string;*/
 produtos.push({
     prod: {
-        codigo: '1234',
+        codigo: '84233',
         cEAN: '7898221456293',
-        descricao: 'NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL',
+        descricao: 'PRODUTO TESTE',
         cest: '2104400',
-        NCM: '25232910',
+        NCM: '85164000',
         CFOP: '5405',
         unidadeComercial: 'SAC',
         quantidadeComercial: '1.0000',
@@ -119,8 +119,8 @@ produtos.push({
         valorSeguro: '0',
         valorDesconto: '0',
         valorOutros: '0',
-        numeroPedido: '123',
-        numeroItemPedido: '1',
+        //numeroPedido: '123',
+        //numeroItemPedido: '1',
     },
     imposto: {
         valorAproximadoTributos: 0,
@@ -154,9 +154,9 @@ let icmsTot = {
     vBC: '0.00',
     vICMS: '0.00',
     vICMSDeson: '0.00',
-    vFCPUFDest: '0.00',
-    vICMSUFDest:'0.00',
-    vICMSUFRemet: '0.00',
+    //vFCPUFDest: '0.00',
+    //vICMSUFDest:'0.00',
+    //vICMSUFRemet: '0.00',
     vFCP: '0.00',
     vBCST: '0.00',
     vST: '0.00',
@@ -201,12 +201,12 @@ function testeAssinaturaXML() {
 function testeQRcodeNFCe(){
     //urls qrcode: http://nfce.encat.org/consulte-sua-nota-qr-code-versao-2-0/
     const nfeProc = new lib.NFeProcessor(empresa);
-    console.log(nfeProc.gerarQRCodeNFCeOnline('https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?', '43190399999999999999650010000000011544962464', '2', '2', '1', '123456'));
+    console.log(nfeProc.gerarQRCodeNFCeOnline('https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?', '43181296418264011920650200000086101048053960', '2', '2', empresa.idCSC, empresa.CSC));
 }
 
 //testeAssinaturaXML();
-testeConsultaStatusServico(empresa);
+//testeConsultaStatusServico(empresa);
 //testeDesereliaze();
-//testeEmissaoNFCe(empresa);
+testeEmissaoNFCe(empresa);
 //testeQRcodeNFCe();
 

@@ -4,7 +4,7 @@
 [System.Xml.Serialization.XmlRootAttribute("consReciNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 */
 export interface TConsReciNFe {
-    $: { versao: string };
+    $: { versao: string, xmlns: string };
     tpAmb: TAmb;
     nRec: string;
 }
@@ -87,11 +87,11 @@ export enum TConsStatServXServ {
 [System.Xml.Serialization.XmlRootAttribute("enviNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 */
 export interface TEnviNFe {
-
+    $: { versao: string , xmlns: string };
     idLote: string;
     indSinc: TEnviNFeIndSinc;
-    nFe: TNFe[];
-    $: { versao: string };
+    //nFe: TNFe[];
+    _: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]

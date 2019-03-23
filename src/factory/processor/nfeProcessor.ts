@@ -7,7 +7,7 @@ import { Evento } from '../interface/evento';
 import * as schema from '../schema/index'
 import { XmlHelper } from '../xmlHelper';
 import * as Utils from '../utils/utils';
-import { Signature } from '../signature'
+import { Signature } from '../signature';
 const sha1 = require('sha1');
 
 
@@ -15,7 +15,9 @@ const soapEnvio = {
     //TODO: buscar URL conforme UF e Ambiente
     url: 'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx?wsdl',
     method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4',
-    action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote'
+    action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote',
+    urlQRCode: 'https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?p=',
+    urlConsultaNFCe: 'http://www.sefaz.rs.gov.br/nfce/consulta'
 };
 
 const soapConsulta = {
@@ -39,14 +41,19 @@ export class NFeProcessor {
      * @param documento Array de documentos modelo 55 ou 1 documento modelo 65
      */
     async processarDocumento(documento: NFeDocumento | NFCeDocumento) {
+
         let xml = this.gerarXml(documento);
         xml = xml.replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[')
-        //console.log(xml);
-        let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
-        console.log(xmlAssinado);
+        console.log('XML ANTES DE ASSINAR\n\n' + xml + '\n\n');
 
-        let retornoEnvio = await this.testeEnvioNF(xmlAssinado, this.empresa.certificado);
-        console.log(retornoEnvio);
+        let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
+        //console.log(xmlAssinado);
+
+        let xmlLote = this.gerarXmlLote(xmlAssinado);
+        console.log('\n' + xmlLote + '\n');
+
+        let retornoEnvio = await this.enviarNF(xmlLote, this.empresa.certificado);
+        console.log('\n' + retornoEnvio);
 
         //TODO: buscar recibo e consultar ..
         //let xmlConRecNFe = this.gerarXmlConsultaProc(documento.docFiscal.ambiente, '');
@@ -55,21 +62,37 @@ export class NFeProcessor {
         return '';
     }
 
+    async consultarProc(xml:string, cert: any) {
+        return await WebServiceHelper.makeSoapRequest(xml, cert, soapConsulta);
+    }
+
+    async enviarNF(xml: string, cert: any) {
+        return await WebServiceHelper.makeSoapRequest(xml, cert, soapEnvio);
+    }
+
     gerarXmlConsultaProc(ambiente: string, recibo: string){
         let consulta = <schema.TConsReciNFe> {
-            $: {versao: '4.00'},
+            $: {versao: '4.00', xmlns: 'http://www.portalfiscal.inf.br/nfe'},
             tpAmb: ambiente,
             nRec: recibo
         }
         return XmlHelper.serializeXml(consulta, 'consReciNFe');
     }
 
-    async consultarProc(xml:string, cert: any) {
-        return await WebServiceHelper.makeSoapRequest(xml, cert, soapConsulta);
-    }
+    gerarXmlLote(xml: string){
+        //TODO: ajustar para receber uma lista de xmls...
 
-    async testeEnvioNF(xml: string, cert: any) {
-        return await WebServiceHelper.makeSoapRequest(xml, cert, soapEnvio);
+        let loteId = Utils.randomInt(1,999999999999999).toString();
+
+        let enviNFe = <schema.TEnviNFe>{
+            $: { versao: '4.00', xmlns: 'http://www.portalfiscal.inf.br/nfe'},
+            idLote: loteId,
+            indSinc: schema.TEnviNFeIndSinc.Item0,
+            _: '[XMLS]'
+        };
+
+        let xmlLote = XmlHelper.serializeXml(enviNFe, 'enviNFe');
+        return xmlLote.replace('[XMLS]', xml);
     }
 
     gerarXml(documento: NFeDocumento | NFCeDocumento) {
@@ -82,10 +105,10 @@ export class NFeProcessor {
         };
  
         if (documento.docFiscal.modelo == '65') {
-            let qrCode = this.gerarQRCodeNFCeOnline('https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?p=', dadosChave.chave, '2', '2', this.empresa.idCSC, this.empresa.CSC);
+            let qrCode = this.gerarQRCodeNFCeOnline(soapEnvio.urlQRCode, dadosChave.chave, '2', documento.docFiscal.ambiente, this.empresa.idCSC, this.empresa.CSC);
             NFe.infNFeSupl = <schema.TNFeInfNFeSupl>{
                 qrCode: '<' + qrCode + '>',
-                urlChave: 'http://www.sefaz.rs.gov.br/nfce/consulta'
+                urlChave: soapEnvio.urlConsultaNFCe
             };
         }    
 
@@ -100,19 +123,15 @@ export class NFeProcessor {
         let ano = dataEmissao.getFullYear().toString().substring(2,4);
         let mes = dataEmissao.getMonth() + 1;
 
-        chave += (docFiscal.codUF);
+        chave += (docFiscal.codUF.padStart(2,'0'));
         chave += (ano + (mes.toString().length == 1 ? '0' + mes : mes));
-        chave += (empresa.cnpj);
-        chave += (docFiscal.modelo);
+        chave += (empresa.cnpj.padStart(14,'0'));
+        chave += (docFiscal.modelo.padStart(2,'0'));
         chave += (docFiscal.serie.padStart(3,'0'));
         chave += (docFiscal.numeroNota.toString().padStart(9, '0'));
         chave += (docFiscal.tipoEmissao);
 
-        function randomInt(min: number, max: number) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        let cnf = (randomInt(10000000, 99999999)).toString();
+        let cnf = (Utils.randomInt(10000000, 99999999)).toString();
         chave += cnf;
 
         let digitoVerificador = this.obterDigitoVerificador(chave);
@@ -184,9 +203,9 @@ export class NFeProcessor {
         nfce.emit = this.getEmit(this.empresa);
 
         if (documento.destinatario)
-            nfce.dest = this.getDest(documento.destinatario);
+            nfce.dest = this.getDest(documento.destinatario, documento.docFiscal.ambiente);
         
-        nfce.det = this.getDet(documento.produtos);
+        nfce.det = this.getDet(documento.produtos, documento.docFiscal.ambiente);
         nfce.total = this.getTotal(documento.total);
         nfce.transp = this.getTransp(documento.transporte);
         nfce.pag = this.getPag(documento.pagamento);
@@ -257,21 +276,22 @@ export class NFeProcessor {
         }
     }
 
-    getDest(destinatario: Destinatario) {
+    getDest(destinatario: Destinatario, ambiente: string) {
         return <schema.TNFeInfNFeDest>{
             CPF: destinatario.documento,
-            xNome: destinatario.nome,
+            xNome: ambiente == '2' ? 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL' : destinatario.nome,
             indIEDest: destinatario.indicadorIEDestinario
         }
     }
 
-    getDet(produtos: Produto[]) {
+    getDet(produtos: Produto[], ambiente: string) {
         let det_list = [];
-        for (const produto of produtos) {
+
+        for (let i = 0; i < produtos.length; i++){
             det_list.push(<schema.TNFeInfNFeDet>{
-                $: {nItem: produto.numeroItem},
-                prod: this.getDetProd(produto.prod),
-                imposto: this.getDetImposto(produto.imposto),
+                $: {nItem: produtos[i].numeroItem},
+                prod: this.getDetProd(produtos[i].prod, ambiente, i == 0),
+                imposto: this.getDetImposto(produtos[i].imposto),
                 //infAdProd: produto.infoAdicional
             });
         }
@@ -279,11 +299,11 @@ export class NFeProcessor {
         return det_list;
     }
 
-    getDetProd(produto: DetalhesProduto) {
+    getDetProd(produto: DetalhesProduto, ambiente: string, isPrimeiroProduto: boolean) {
         return <schema.TNFeInfNFeDetProd>{
             cProd: produto.codigo,
             cEAN: produto.cEAN,
-            xProd: produto.descricao,
+            xProd: (ambiente == '2' && isPrimeiroProduto) ? 'NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL' : produto.descricao,
             NCM: produto.NCM,
             CEST: produto.cest,
             CFOP: produto.CFOP,
@@ -296,8 +316,8 @@ export class NFeProcessor {
             qTrib: produto.quantidadeTributavel,
             vUnTrib: produto.valorUnitarioTributavel,
             indTot: produto.indicadorTotal,
-            xPed: produto.numeroPedido,
-            nItemPed: produto.numeroItemPedido,
+            //xPed: produto.numeroPedido,
+            //nItemPed: produto.numeroItemPedido,
             //vDesc: produto.valorDesc,
             //vFrete: produto.valorFrete,
             //vOutro: produto.valorOutro,
