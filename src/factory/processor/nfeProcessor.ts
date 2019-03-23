@@ -144,8 +144,10 @@ export class NFeProcessor {
                 qrCode: '<' + qrCode + '>',
                 urlChave: soapEnvio.urlConsultaNFCe
             };
-        }    
+        }
 
+        Utils.removeSelfClosedFields(NFe);
+        
         return XmlHelper.serializeXml(NFe, 'NFe');
     }
 

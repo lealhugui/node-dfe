@@ -10,3 +10,16 @@ export function getEnumByValue (enumType: any, value: any): any {
 export function randomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+
+export function removeSelfClosedFields(o: Object | any): void{
+    Object.keys(o).forEach(key => {
+        if (o[key] !== null && typeof o[key] === 'object') {
+            removeSelfClosedFields(o[key]);
+            return;
+        }
+        if (o[key] === undefined) {
+            delete o[key];
+        }
+    });
+}

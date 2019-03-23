@@ -43,7 +43,7 @@ export abstract class WebServiceHelper {
 
 
     public static async makeSoapRequest(xml: string, cert: any, soap: any) {
-        let result = <iResult>{};
+        let result = <iResult>{ xml_enviado: xml };
         try {
             let res = await axios({
                 url: soap.url,
