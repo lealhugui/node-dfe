@@ -65,8 +65,8 @@ export interface DetalhesProduto {
     quantidadeTributavel: string;
     valorUnitarioTributavel: string;
     valorFrete: string;
-    valorSeg: string;
-    valorDesc: string;
+    valorSeguro: string;
+    valorDesconto: string;
     valorOutro: string;
     indicadorTotal: string;
     numeroPedido: string;
@@ -96,9 +96,11 @@ export interface Imposto {
 export interface Icms {
     cst: string;
     origem: string;
+    modalidadeBaseCalc: string;
     baseCalc: string;
     aliquota: string;
     valor: string;
+    modalidadeBaseCalcST: string;
     baseCalcST: string;
     valorST: string;
     aliquotaST: string;
@@ -199,6 +201,10 @@ export interface Destinatario {
     endereco: Endereco;
     indicadorIEDestinario: string;
     email: string;
+    inscricaoEstadual: string;
+    inscricaoMunicipal: string;
+    inscricaoSuframa: string;
+    isEstrangeiro: boolean;
 }
 
 export interface Endereco {

@@ -336,29 +336,17 @@ export enum ItemChoiceType2 {
 export interface TEnderEmi {
 
     xLgr: string;
-
     nro: string;
-
     xCpl: string;
-
     xBairro: string;
-
     cMun: string;
-
     xMun: string;
-
     UF: TUfEmi;
-
     CEP: string;
-
     cPais: TEnderEmiCPais;
-
     cPaisSpecified: boolean;
-
     xPais: TEnderEmiXPais;
-
     xPaisSpecified: boolean;
-
     fone: string;
 }
 
@@ -443,11 +431,11 @@ export interface TNFeInfNFeDest {
 
     indIEDest: TNFeInfNFeDestIndIEDest;
 
-    ie: string;
+    IE: string;
 
-    iSUF: string;
+    ISUF: string;
 
-    im: string;
+    IM: string;
 
     email: string;
 
@@ -468,8 +456,8 @@ export interface TEndereco {
     xBairro: string;
     cMun: string;
     xMun: string;
-    uf: TUf;
-    cEP: string;
+    UF: TUf;
+    CEP: string;
     cPais: string;
     xPais: string;
     fone: string;
@@ -477,34 +465,34 @@ export interface TEndereco {
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export enum TUf {
-    AC,
-    AL,
-    AM,
-    AP,
-    BA,
-    CE,
-    DF,
-    ES,
-    GO,
-    MA,
-    MG,
-    MS,
-    MT,
-    PA,
-    PB,
-    PE,
-    PI,
-    PR,
-    RJ,
-    RN,
-    RO,
-    RR,
-    RS,
-    SC,
-    SE,
-    SP,
-    TO,
-    EX,
+    AC="AC",
+    AL="AL",
+    AM="AM",
+    AP="AP",
+    BA="BA",
+    CE="CE",
+    DF="DF",
+    ES="ES",
+    GO="GO",
+    MA="MA",
+    MG="MG",
+    MS="MS",
+    MT="MT",
+    PA="PA",
+    PB="PB",
+    PE="PE",
+    PI="PI",
+    PR="PR",
+    RJ="RJ",
+    RN="RN",
+    RO="RO",
+    RR="RR",
+    RS="RS",
+    SC="SC",
+    SE="SE",
+    SP="SP",
+    TO="TO",
+    EX="EX",
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -1243,7 +1231,7 @@ export interface TNFeInfNFeDetImpostoICMSICMSPart {
     pICMSST: string;
     vICMSST: string;
     pBCOp: string;
-    uFST: TUf;
+    UFST: TUf;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -2270,7 +2258,7 @@ export enum TNFeInfNFePagDetPagTPag {
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFePagDetPagCard {
     tpIntegra: TNFeInfNFePagDetPagCardTpIntegra;
-    cNPJ: string;
+    CNPJ: string;
     tBand: TNFeInfNFePagDetPagCardTBand;
     tBandSpecified: boolean;
     cAut: string;

@@ -64,7 +64,21 @@ let documento = {
 let dest = {
     indicadorIEDestinario: '9',
     documento: '41267310324',
-    nome: 'DESTINATARIO TESTE'
+    nome: 'DESTINATARIO TESTE',
+    email: 'test@test.com',
+    isEstrangeiro: false,
+    endereco: {
+        logradouro: 'RUA TEST',
+        numero: 1231,
+        complemento: '',
+        bairro: 'teste',
+        municipio: 'testeee',
+        codMunicipio: '4303103',
+        cUf: '43',
+        uf: 'RS',
+        cep: '11111111',
+        telefone: '5111111111'
+    }
 };
 
 
@@ -77,60 +91,66 @@ let infoAdic = {
 };
 
 let produtos = [];
+let valorProduto = 31.80;
+let valorTotalProdutos = 0;
+for (let i = 1; i <= 3; i++) {
+    valorTotalProdutos += valorProduto;
+    produtos.push({
+        prod: {
+            codigo: '84233',
+            cEAN: '7898221456293',
+            descricao: 'PRODUTO TESTE',
+            cest: '2104400',
+            NCM: '85164000',
+            CFOP: '5405',
+            unidadeComercial: 'SAC',
+            quantidadeComercial: '1.0000',
+            valorUnitarioComercial: valorProduto.toFixed(2),
+            valorTotal: valorProduto.toFixed(2),
+            cEANTrib: '7898221456293',
+            unidadeTributavel: 'SAC',
+            quantidadeTributavel: '1.0000',
+            valorUnitarioTributavel: valorProduto.toFixed(2),
+            indicadorTotal: '1',
+            valorFrete: '',
+            valorSeguro: '',
+            valorDesconto: '',
+            valorOutro: '',
+            numeroPedido: '123',
+            numeroItemPedido: '1',
+        },
+        imposto: {
+            valorAproximadoTributos: 0,
+            icms: {
+                cst: '60',
+                origem: '2',
+                baseCalc: '31.80',
+                aliquota: '0.00',
+                valor: '0.00',
+                baseCalcST: '31.80',
+                valorST: '0.00',
+                aliquotaST: '0.00',
+                percentualReducaoBaseCalc: '0.00',
+            }
+        },
+        //infoAdicional: 'TEST',
+        numeroItem: i,
+    });
+}
 
-/*
-    cNPJFab: string;
-    cBenef: string;
-    eXTIPI: string;*/
-produtos.push({
-    prod: {
-        codigo: '84233',
-        cEAN: '7898221456293',
-        descricao: 'PRODUTO TESTE',
-        cest: '2104400',
-        NCM: '85164000',
-        CFOP: '5405',
-        unidadeComercial: 'SAC',
-        quantidadeComercial: '1.0000',
-        valorUnitarioComercial: '31.8000000000',
-        valorTotal: '31.80',
-        cEANTrib: '7898221456293',
-        unidadeTributavel: 'SAC',
-        quantidadeTributavel: '1.0000',
-        valorUnitarioTributavel: '31.8000000000',
-        indicadorTotal: '1',
-        valorFrete: '0',
-        valorSeguro: '0',
-        valorDesconto: '0',
-        valorOutros: '0',
-        //numeroPedido: '123',
-        //numeroItemPedido: '1',
-    },
-    imposto: {
-        valorAproximadoTributos: 0,
-        icms: {
-            cst: '60',
-            origem: '2',
-            baseCalc: '31.80',
-            aliquota: '0.00',
-            valor: '0.00',
-            baseCalcST: '31.80',
-            valorST: '0.00',
-            aliquotaST: '0.00',
-            percentualReducaoBaseCalc: '0.00',
-        }
-    },
-    //infoAdicional: 'TEST',
-    numeroItem: 1,
-});
 
 let pagamento = {
   //valorTroco: '',
   pagamentos: [{
       indicadorFormaPagamento: '',
       formaPagamento: '01',
-      valor: '31.80',
-      //dadosCartao: {}
+      valor: valorTotalProdutos.toFixed(2),
+      dadosCartao: {
+        tipoIntegracao: '1',
+        cnpj: '99999999999999',
+        bandeira: '01',
+        codAutorizacao: '1321231231'
+      }
   }]
 };
 
@@ -146,7 +166,7 @@ let icmsTot = {
     vST: '0.00',
     vFCPST: '0.00',
     vFCPSTRet: '0.00',
-    vProd: '31.80',
+    vProd: valorTotalProdutos.toFixed(2),
     vFrete: '0.00',
     vSeg: '0.00',
     vDesc: '0.00',
@@ -156,7 +176,7 @@ let icmsTot = {
     vPIS: '0.00',
     vCOFINS: '0.00',
     vOutro: '0.00',
-    vNF: '31.80',
+    vNF: valorTotalProdutos.toFixed(2),
     //vTotTrib: '0.00',
 };
 

@@ -1,5 +1,9 @@
 
 export function getEnumByValue (enumType: any, value: any): any {
+    if (!value) {
+        return '';
+    }
+        
     let result = Object.keys(enumType).filter(i => enumType[i as any] == value);
     if (result.length <= 0)
         throw new Error('Valor ('+ value +') não localizado no Enum.');
@@ -18,7 +22,7 @@ export function removeSelfClosedFields(o: Object | any): void{
             removeSelfClosedFields(o[key]);
             return;
         }
-        if (o[key] === undefined) {
+        if (o[key] === undefined || o[key] === '') {
             delete o[key];
         }
     });

@@ -147,7 +147,7 @@ export class NFeProcessor {
         }
 
         Utils.removeSelfClosedFields(NFe);
-        
+
         return XmlHelper.serializeXml(NFe, 'NFe');
     }
 
@@ -274,9 +274,9 @@ export class NFeProcessor {
             procEmi: Utils.getEnumByValue(schema.TProcEmi, documento.processoEmissao),
             verProc: documento.versaoAplicativoEmissao,
             
-            //dhSaiEnt: documento.dhSaiEnt,
-            //dhCont: documento.dhContingencia,
-            //xJust: documento.justificativaContingencia,
+            dhSaiEnt: documento.dhSaiEnt,
+            dhCont: documento.dhContingencia,
+            xJust: documento.justificativaContingencia,
             //nFref: schema.TNFeInfNFeIdeNFref[],
         }
     }
@@ -284,15 +284,14 @@ export class NFeProcessor {
     getEmit(empresa: Empresa) {
         return <schema.TNFeInfNFeEmit>{
             CNPJ: empresa.cnpj,
-            //itemElementName: schema.ItemChoiceType2.CNPJ,
             xNome: empresa.razaoSocial,
             xFant: empresa.nomeFantasia,
             enderEmit: this.getEnderEmit(empresa.endereco),
             IE: empresa.inscricaoEstadual,
-            //IM: empresa.inscricaoMunicipal,
+            IM: empresa.inscricaoMunicipal,
             CRT: empresa.codRegimeTributario,
-            //iEST: empresa.inscricaoEstadualST,
-            //CNAE: empresa.CNAE
+            iEST: empresa.inscricaoEstadualST,
+            CNAE: empresa.CNAE
         }
     }
 
@@ -300,26 +299,56 @@ export class NFeProcessor {
         return <schema.TEnderEmi>{
             xLgr: endereco.logradouro,
             nro: endereco.numero,
-            //xCpl: endereco.complemento,
+            xCpl: endereco.complemento,
             xBairro: endereco.bairro,
             cMun: endereco.codMunicipio,
             xMun: endereco.municipio,
-            UF: schema.TUfEmi.RS, //TODO: endereco.uf,
+            UF: Utils.getEnumByValue(schema.TUfEmi, endereco.uf),
             CEP: endereco.cep,
             cPais: schema.TEnderEmiCPais.Item1058,
-            //cPaisSpecified: true,
             xPais: schema.TEnderEmiXPais.BRASIL,
-            //xPaisSpecified: true
+            fone: endereco.telefone,
+        }
+    }
+
+    getEnderDest(endereco: Endereco){
+        return <schema.TEndereco>{
+            xLgr: endereco.logradouro,
+            nro: endereco.numero,
+            xCpl: endereco.complemento,
+            xBairro: endereco.bairro,
+            cMun: endereco.codMunicipio,
+            xMun: endereco.municipio,
+            UF: Utils.getEnumByValue(schema.TUf, endereco.uf),
+            CEP: endereco.cep,
+            cPais: endereco.codPais,
+            xPais: endereco.pais,
             fone: endereco.telefone,
         }
     }
 
     getDest(destinatario: Destinatario, ambiente: string) {
-        return <schema.TNFeInfNFeDest>{
-            CPF: destinatario.documento,
-            xNome: ambiente == '2' ? 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL' : destinatario.nome,
-            indIEDest: destinatario.indicadorIEDestinario
-        }
+        let dest = <schema.TNFeInfNFeDest>{};
+
+        if (destinatario.isEstrangeiro)
+            dest.idEstrangeiro = destinatario.documento;
+        if (destinatario.documento.length == 14)
+            dest.CNPJ = destinatario.documento;
+        else
+            dest.CPF = destinatario.documento;
+        
+        dest.xNome = ambiente == '2' ? 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL' : destinatario.nome;
+
+        if (destinatario.endereco)
+            dest.enderDest = this.getEnderDest(destinatario.endereco);
+        
+        dest.indIEDest = Utils.getEnumByValue(schema.TNFeInfNFeDestIndIEDest, destinatario.indicadorIEDestinario);
+        dest.IE = destinatario.inscricaoEstadual;
+        dest.ISUF = destinatario.inscricaoSuframa;
+        dest.IM = destinatario.inscricaoMunicipal;
+        dest.email = destinatario.email;
+
+        return dest;
     }
 
     getDet(produtos: Produto[], ambiente: string) {
@@ -330,7 +359,7 @@ export class NFeProcessor {
                 $: {nItem: produtos[i].numeroItem},
                 prod: this.getDetProd(produtos[i].prod, ambiente, i == 0),
                 imposto: this.getDetImposto(produtos[i].imposto),
-                //infAdProd: produto.infoAdicional
+                infAdProd: produtos[i].infoAdicional
             });
         }
 
@@ -343,7 +372,12 @@ export class NFeProcessor {
             cEAN: produto.cEAN,
             xProd: (ambiente == '2' && isPrimeiroProduto) ? 'NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL' : produto.descricao,
             NCM: produto.NCM,
+            //nVE: string[];
             CEST: produto.cest,
+            //indEscala: TNFeInfNFeDetProdIndEscala;
+            cNPJFab: produto.cNPJFab,
+            cBenef: produto.cBenef,
+            eXTIPI: produto.eXTIPI,
             CFOP: produto.CFOP,
             uCom: produto.unidadeComercial,
             qCom: produto.quantidadeComercial,
@@ -353,18 +387,22 @@ export class NFeProcessor {
             uTrib: produto.unidadeTributavel,
             qTrib: produto.quantidadeTributavel,
             vUnTrib: produto.valorUnitarioTributavel,
+            vFrete: produto.valorFrete,
+            vSeg: produto.valorSeguro,
+            vDesc: produto.valorDesconto,
+            vOutro: produto.valorOutro,
             indTot: produto.indicadorTotal,
-            //xPed: produto.numeroPedido,
-            //nItemPed: produto.numeroItemPedido,
-            //vDesc: produto.valorDesc,
-            //vFrete: produto.valorFrete,
-            //vOutro: produto.valorOutro,
-            //vSeg: produto.valorSeg,
-            //cBenef: produto.cBenef,
-            //cNPJFab: produto.cNPJFab,
-            //eXTIPI: produto.eXTIPI,
-            //
-            //..
+            //di: TNFeInfNFeDetProdDI[];
+            //detExport: TNFeInfNFeDetProdDetExport[];
+            xPed: produto.numeroPedido,
+            nItemPed: produto.numeroItemPedido,
+            //nFCI: string;
+            //rastro: TNFeInfNFeDetProdRastro[];
+            //arma
+            //comb
+            //med
+            //nRECOPI
+            //veicProd
         }
     }
 
@@ -379,13 +417,136 @@ export class NFeProcessor {
     }
 
     getImpostoIcms(icms: Icms) {
-        // case icms.cst ...
-        return { 
-            ICMS60: <schema.TNFeInfNFeDetImpostoICMSICMS60> {
-                orig: icms.origem,
-                CST: icms.cst,
-            }
-        };
+        let result;
+
+        /**ICMS00
+    ICMS10
+    ICMS20
+    ICMS30
+    ICMS40
+    ICMS51
+    ICMS60
+    ICMS70
+    ICMS90
+    ICMSPart
+    ICMSSN101
+    ICMSSN102
+    ICMSSN201
+    ICMSSN202
+    ICMSSN500
+    ICMSSN900
+    ICMSST */
+        switch (icms.cst) {
+            case '00':
+                result = {
+                    ICMS00: <schema.TNFeInfNFeDetImpostoICMSICMS00> {
+                        orig: icms.origem,
+                        CST: icms.cst,
+                        modBC: schema.TNFeInfNFeDetImpostoICMSICMS00ModBC.Item0,
+                        pICMS: '',
+                        vBC: '',
+                        vICMS: '',
+                        pFCP: '',
+                        vFCP: ''
+                    }
+                }
+                break;
+            case '10':
+                //TODO: verificar logica para definir se é partilha do icms
+                if (true) {
+                    result = {
+                        ICMS10: <schema.TNFeInfNFeDetImpostoICMSICMSPart> {
+                            orig: icms.origem,
+                            CST: icms.cst,
+                            modBC: schema.TNFeInfNFeDetImpostoICMSICMSPartModBC.Item0,
+                            vBC: '',
+                            pRedBC: '',
+                            pICMS: '',
+                            vICMS: '',
+                            modBCST: schema.TNFeInfNFeDetImpostoICMSICMSPartModBCST.Item0,
+                            pMVAST: '',
+                            pRedBCST: '',
+                            vBCST: '',
+                            pICMSST: '',
+                            vICMSST: '',
+                            pBCOp: '',
+                            UFST: schema.TUf.AC,
+                        }
+                    }
+                } else {
+                    result = {
+                        ICMS10: <schema.TNFeInfNFeDetImpostoICMSICMS10> {
+                            orig: icms.origem,
+                            CST: icms.cst,
+                            modBC: schema.TNFeInfNFeDetImpostoICMSICMS10ModBC.Item0,
+                            pICMS: '',
+                            vBC: '',
+                            vICMS: '',
+                            pFCP: '',
+                            vFCP: '',
+                            modBCST: schema.TNFeInfNFeDetImpostoICMSICMS10ModBCST.Item0,
+                            pFCPST: '',
+                            pICMSST: '',
+                            pMVAST: '',
+                            pRedBCST: '',
+                            vBCFCP: '',
+                            vBCFCPST: '',
+                            vBCST: '',
+                            vFCPST: '',
+                            vICMSST: '',
+                        }
+                    }
+                }
+                break;
+            case '20':
+                result = {
+                    ICMS20: <schema.TNFeInfNFeDetImpostoICMSICMS20>{
+                        orig: icms.origem,
+                        CST: icms.cst,
+                        modBC: schema.TNFeInfNFeDetImpostoICMSICMS20ModBC.Item0,
+                        pRedBC: '',
+                        vBC: '',
+                        pICMS: '',
+                        vICMS: '',
+                        vBCFCP: '',
+                        pFCP: '',
+                        vFCP: '',
+                        vICMSDeson: '',
+                        motDesICMS: schema.TNFeInfNFeDetImpostoICMSICMS20MotDesICMS.Item3
+                    }
+                }
+                break;
+            case '30':
+                result = {
+                    ICMS30: <schema.TNFeInfNFeDetImpostoICMSICMS30> {
+
+                    }
+                }
+                break;
+            case '40':
+            case '51':
+            case '60':
+                result = {
+                    ICMS60: <schema.TNFeInfNFeDetImpostoICMSICMS60> {
+                        orig: icms.origem,
+                        CST: icms.cst,
+                    }
+                }
+                break;
+            case '70':
+            case '90':
+                result = {
+                    ICMS90: <schema.TNFeInfNFeDetImpostoICMSICMS90> {
+                        orig: icms.origem,
+                        CST: icms.cst,
+                    }
+                }
+                break;
+            default:
+                //throw exception?
+                break;
+        }
+        return result;
     }
 
     getTotal(total: Total) {
@@ -402,14 +563,24 @@ export class NFeProcessor {
     getTransp(transp: Transporte) {
         return <schema.TNFeInfNFeTransp>{
             modFrete: transp.modalidateFrete
+            /**
+             * transporta: TNFeInfNFeTranspTransporta;
+                retTransp: TNFeInfNFeTranspRetTransp;
+                //balsa
+                //reboque
+                //vagao
+                //veicTransp
+                items: object[];
+                itemsElementName: ItemsChoiceType5[];
+                vol: TNFeInfNFeTranspVol[]; 
+            */
         }
     }
 
     getPag(pagamento: Pagamento) {
         let pag = <schema.TNFeInfNFePag>{};
         pag.detPag = this.getDetalhamentoPagamentos(pagamento.pagamentos);
-        if (pagamento.valorTroco)
-            pag.vTroco = pagamento.valorTroco;
+        pag.vTroco = pagamento.valorTroco;
 
         return pag;
     }
@@ -421,9 +592,7 @@ export class NFeProcessor {
         for (const pag of pagamentos) {
             detPag = <schema.TNFeInfNFePagDetPag>{};
 
-            if (pag.indicadorFormaPagamento)
-                detPag.indPag = Utils.getEnumByValue(schema.TNFeInfNFePagDetPagIndPag, pag.indicadorFormaPagamento);
-
+            detPag.indPag = Utils.getEnumByValue(schema.TNFeInfNFePagDetPagIndPag, pag.indicadorFormaPagamento);
             detPag.tPag = Utils.getEnumByValue(schema.TNFeInfNFePagDetPagTPag, pag.formaPagamento);
             detPag.vPag = pag.valor;
             
@@ -438,14 +607,17 @@ export class NFeProcessor {
 
     getDetalhamentoCartao(dadosCartao: DetalhePgtoCartao) {
         return <schema.TNFeInfNFePagDetPagCard>{
-
+            tpIntegra: Utils.getEnumByValue(schema.TNFeInfNFePagDetPagCardTpIntegra, dadosCartao.tipoIntegracao),
+            CNPJ: dadosCartao.cnpj,
+            tBand: Utils.getEnumByValue(schema.TNFeInfNFePagDetPagCardTBand, dadosCartao.bandeira),
+            cAut: dadosCartao.codAutorizacao
         }
     }
 
     getInfoAdic(info: InfoAdicional) {
         return <schema.TNFeInfNFeInfAdic>{
             infCpl: info.infoComplementar,
-            //infAdFisco: info.infoFisco
+            infAdFisco: info.infoFisco
         }
     }
 
