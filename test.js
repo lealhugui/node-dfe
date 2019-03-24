@@ -45,7 +45,7 @@ let documento = {
     dhEmissao: moment().format(),
     ambiente: '2',
     modelo: '65',
-    numeroNota: randomInt(2, 999),
+    numeroNota: randomInt(2, 9999),
     serie: '20',
     naturezaOperacao: 'VENDA',
     tipoDocumentoFiscal: '1',
@@ -93,7 +93,7 @@ let infoAdic = {
 let produtos = [];
 let valorProduto = 31.80;
 let valorTotalProdutos = 0;
-for (let i = 1; i <= 3; i++) {
+for (let i = 1; i <= 2; i++) {
     valorTotalProdutos += valorProduto;
     produtos.push({
         prod: {
@@ -122,8 +122,8 @@ for (let i = 1; i <= 3; i++) {
         imposto: {
             valorAproximadoTributos: 0,
             icms: {
-                cst: '60',
-                origem: '2',
+                CST: '60',
+                orig: '2',
                 baseCalc: '31.80',
                 aliquota: '0.00',
                 valor: '0.00',

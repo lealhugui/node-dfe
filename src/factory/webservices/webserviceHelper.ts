@@ -2,14 +2,7 @@ import axios from 'axios';
 import * as https from 'https';
 import { XmlHelper } from '../xmlHelper';
 
-export interface iResult {
-    xml_enviado: string,
-    xml_recebido: string,
-    status: number,
-    success: boolean,
-    data: Object,
-    error: string
-};
+import { RetornoProcessamento } from '../interface/nfe'
 
 export abstract class WebServiceHelper {
 
@@ -43,7 +36,7 @@ export abstract class WebServiceHelper {
 
 
     public static async makeSoapRequest(xml: string, cert: any, soap: any) {
-        let result = <iResult>{ xml_enviado: xml };
+        let result = <RetornoProcessamento>{ xml_enviado: xml };
         try {
             let res = await axios({
                 url: soap.url,

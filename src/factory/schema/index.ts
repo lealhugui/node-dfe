@@ -1261,7 +1261,7 @@ export enum TNFeInfNFeDetImpostoICMSICMSPartModBCST {
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSSN101 {
     orig: Torig;
-    cSOSN: TNFeInfNFeDetImpostoICMSICMSSN101CSOSN;
+    CSOSN: TNFeInfNFeDetImpostoICMSICMSSN101CSOSN;
     pCredSN: string;
     vCredICMSSN: string;
 }
@@ -1274,7 +1274,7 @@ export enum TNFeInfNFeDetImpostoICMSICMSSN101CSOSN {
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSSN102 {
     orig: Torig;
-    cSOSN: TNFeInfNFeDetImpostoICMSICMSSN102CSOSN;
+    CSOSN: TNFeInfNFeDetImpostoICMSICMSSN102CSOSN;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -1290,7 +1290,7 @@ export interface TNFeInfNFeDetImpostoICMSICMSSN201 {
 
     orig: Torig;
 
-    cSOSN: TNFeInfNFeDetImpostoICMSICMSSN201CSOSN;
+    CSOSN: TNFeInfNFeDetImpostoICMSICMSSN201CSOSN;
 
     modBCST: TNFeInfNFeDetImpostoICMSICMSSN201ModBCST;
 
@@ -1333,7 +1333,7 @@ export enum TNFeInfNFeDetImpostoICMSICMSSN201ModBCST {
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSSN202 {
     orig: Torig;
-    cSOSN: TNFeInfNFeDetImpostoICMSICMSSN202CSOSN;
+    CSOSN: TNFeInfNFeDetImpostoICMSICMSSN202CSOSN;
     modBCST: TNFeInfNFeDetImpostoICMSICMSSN202ModBCST;
     pMVAST: string;
     pRedBCST: string;
@@ -1364,7 +1364,7 @@ export enum TNFeInfNFeDetImpostoICMSICMSSN202ModBCST {
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSSN500 {
     orig: Torig;
-    cSOSN: TNFeInfNFeDetImpostoICMSICMSSN500CSOSN;
+    CSOSN: TNFeInfNFeDetImpostoICMSICMSSN500CSOSN;
     vBCSTRet: string;
     pST: string;
     vICMSSubstituto: string;
@@ -1386,7 +1386,7 @@ export enum TNFeInfNFeDetImpostoICMSICMSSN500CSOSN {
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSSN900 {
     orig: Torig;
-    cSOSN: TNFeInfNFeDetImpostoICMSICMSSN900CSOSN;
+    CSOSN: TNFeInfNFeDetImpostoICMSICMSSN900CSOSN;
     modBC: TNFeInfNFeDetImpostoICMSICMSSN900ModBC;
     vBC: string;
     pRedBC: string;

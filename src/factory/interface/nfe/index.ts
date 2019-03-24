@@ -1,4 +1,20 @@
 
+export interface RetornoProcessamentoNF {
+    success: boolean,
+    error: string,
+    envioNF: RetornoProcessamento,
+    consultaProc: RetornoProcessamento
+}
+
+export interface RetornoProcessamento {
+    xml_enviado: string,
+    xml_recebido: string,
+    status: number,
+    success: boolean,
+    data: Object,
+    error: string
+}
+
 export interface NFeDocumento {
     docFiscal: DocumentoFiscal;
     destinatario: Destinatario;
@@ -94,17 +110,43 @@ export interface Imposto {
 }
 
 export interface Icms {
-    cst: string;
-    origem: string;
-    modalidadeBaseCalc: string;
-    baseCalc: string;
-    aliquota: string;
-    valor: string;
-    modalidadeBaseCalcST: string;
-    baseCalcST: string;
-    valorST: string;
-    aliquotaST: string;
-    percentualReducaoBaseCalc: string;
+    orig: string;
+    CST: string;
+    modBC: string;
+    pRedBC: string;
+    vBC: string;
+    pICMS: string;
+    vICMS: string;
+    modBCST: string;
+    pMVAST: string;
+    pRedBCST: string;
+    vBCST: string;
+    pICMSST: string;
+    vICMSST: string;
+    vBCSTRet: string;
+    vICMSSTRet: string;
+    vBCSTDest: string;
+    vICMSSTDest: string;
+    motDesICMS: string;
+    pBCOp: string;
+    UFST: string;
+    CSOSN: string;
+    pCredSN: string;
+    vCredICMSSN: string;
+    vICMSDeson: string;
+    vICMSOp: string;
+    pDif: string;
+    vICMSDif: string;
+    vBCFCP: string;
+    pFCP: string;
+    vFCP: string;
+    vBCFCPST: string;
+    pFCPST: string;
+    vFCPST: string;
+    vBCFCPSTRet: string;
+    pFCPSTRet: string;
+    vFCPSTRet: string;
+    pST: string;
 }
 
 export interface Pis {
