@@ -1,5 +1,5 @@
 import { RetornoProcessamentoNF, Empresa, Endereco, NFCeDocumento, NFeDocumento, DocumentoFiscal, Destinatario, Transporte, Pagamento, Produto, Total, 
-    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao
+    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline
 } from '../interface/nfe';
 
 import { WebServiceHelper } from "../webservices/webserviceHelper";
@@ -49,9 +49,17 @@ export class NFeProcessor {
     
             let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
             let xmlLote = this.gerarXmlLote(xmlAssinado);
-    
-            result = await this.transmitirXml(xmlLote, documento.docFiscal.ambiente);
 
+            if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline) {
+                result.retornoContingenciaOffline = <RetornoContingenciaOffline>{};
+                
+                result.success = true;
+                result.retornoContingenciaOffline.documento_enviado = documento;
+                result.retornoContingenciaOffline.xml_gerado = xmlLote;
+            } else {
+                result = await this.transmitirXml(xmlLote, documento.docFiscal.ambiente);
+            }
+            
         } catch (ex) {
             result.success = false;
             result.error = ex;
@@ -158,13 +166,11 @@ export class NFeProcessor {
     gerarChaveNF(empresa: Empresa, docFiscal: DocumentoFiscal){
         let chave = '';
 
-        //TODO: ajustar para receber dhEmissao e formatar em ano/mes
-        let dataEmissao = new Date();
-        let ano = dataEmissao.getFullYear().toString().substring(2,4);
-        let mes = dataEmissao.getMonth() + 1;
+        let ano = docFiscal.dhEmissao.substring(2,4);
+        let mes = docFiscal.dhEmissao.substring(5,7);
 
         chave += (docFiscal.codUF.padStart(2,'0'));
-        chave += (ano + (mes.toString().length == 1 ? '0' + mes : mes));
+        chave += (ano + mes);
         chave += (empresa.cnpj.padStart(14,'0'));
         chave += (docFiscal.modelo.padStart(2,'0'));
         chave += (docFiscal.serie.padStart(3,'0'));
@@ -257,7 +263,7 @@ export class NFeProcessor {
     }
 
     getIde(documento: DocumentoFiscal, dadosChave: any) {
-        return <schema.TNFeInfNFeIde>{
+        let ide = <schema.TNFeInfNFeIde> {
             cUF: Utils.getEnumByValue(schema.TCodUfIBGE, documento.codUF),
             cNF: dadosChave.cnf,
             natOp: documento.naturezaOperacao,
@@ -277,12 +283,20 @@ export class NFeProcessor {
             indPres: Utils.getEnumByValue(schema.TNFeInfNFeIdeIndPres, documento.indPresenca),
             procEmi: Utils.getEnumByValue(schema.TProcEmi, documento.processoEmissao),
             verProc: documento.versaoAplicativoEmissao,
-            
             dhSaiEnt: documento.dhSaiEnt,
             dhCont: documento.dhContingencia,
             xJust: documento.justificativaContingencia,
             //nFref: schema.TNFeInfNFeIdeNFref[],
+        };
+
+        if (documento.isContingenciaOffline && documento.modelo == '65') {
+            if (ide.dhCont == '' || ide.xJust == '')
+                throw new Error('Deve ser informada a data/hora de contingência e justificativa.');
+                
+            ide.tpEmis = Utils.getEnumByValue(schema.TNFeInfNFeIdeTpEmis, '9');
         }
+
+        return ide;
     }
 
     getEmit(empresa: Empresa) {

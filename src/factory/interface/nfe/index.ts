@@ -3,7 +3,13 @@ export interface RetornoProcessamentoNF {
     success: boolean,
     error: string,
     envioNF: RetornoProcessamento,
-    consultaProc: RetornoProcessamento
+    consultaProc: RetornoProcessamento,
+    retornoContingenciaOffline: RetornoContingenciaOffline
+}
+
+export interface RetornoContingenciaOffline {
+    documento_enviado: NFCeDocumento,
+    xml_gerado: string
 }
 
 export interface RetornoProcessamento {
@@ -56,6 +62,7 @@ export interface DocumentoFiscal {
     versaoAplicativoEmissao: string;
     dhContingencia: string;
     justificativaContingencia: string;
+    isContingenciaOffline: boolean;
 }
 
 export interface Produto {

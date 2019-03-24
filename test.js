@@ -1,9 +1,8 @@
 
 const fs = require('fs');
 const lib = require('./lib');
-const libFactory = require('./lib/factory');
-const signUtils = new libFactory.Signature();
-const XmlHelper = new libFactory.XmlHelper();
+const signUtils = require('./lib/factory/signature');
+const XmlHelper = require('./lib/factory/xmlHelper');
 
 let cert = {
     key: fs.readFileSync('C:\\cert\\newKey.key'),
@@ -197,10 +196,31 @@ async function testeEmissaoNFCe(empresa) {
     console.log('Resultado Emissão NFC-e: \n\n' + result);
 }
 
+async function testeEmissaoNFCeContingenciaOffline(empresa) {
+    const nfeProc = new lib.NFeProcessor(empresa);
+
+    nfce.docFiscal.isContingenciaOffline = true;
+    nfce.docFiscal.dhContingencia = moment().format();
+    nfce.docFiscal.justificativaContingencia = 'TESTE CONTINGENCIA';
+
+    let result = await nfeProc.processarDocumento(nfce);
+    console.log('Resultado Geração XML NFC-e Contingencia: \n\n' + require('util').inspect(result, false, null) + '\n\n');
+
+    let nfce_apos_contingencia = Object(result.retornoContingenciaOffline).documento_enviado;
+
+    nfce_apos_contingencia.docFiscal.isContingenciaOffline = false;
+    nfce_apos_contingencia.docFiscal.tipoEmissao = '1';
+    nfce_apos_contingencia.docFiscal.dhContingencia = '';
+    nfce_apos_contingencia.docFiscal.justificativaContingencia = '';
+
+    let result_emissao = await nfeProc.processarDocumento(nfce_apos_contingencia);
+    console.log('Resultado Transmição XML Contingencia: \n\n' + require('util').inspect(result_emissao, false, null));
+}
+
 function testeAssinaturaXML() {
     //Test assinatura
     let xml_test = '<consStatServ id="test" versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>2</tpAmb><cUF>43</cUF><xServ>STATUS</xServ></consStatServ>';
-    let xmlAssinado = signUtils.signXmlX509(xml_test, 'consStatServ', cert);
+    let xmlAssinado = signUtils.Signature.signXmlX509(xml_test, 'consStatServ', cert);
     console.log(xmlAssinado)
 }
 
@@ -223,13 +243,14 @@ function testeDesereliaze() {
     let xml = `<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><nfeResultMsg xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4"><retConsStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>2</tpAmb><verAplic>RSnfce201805211008</verAplic><cStat>107</cStat><xMotivo>Servico em Operacao</xMotivo><cUF>43</cUF><dhRecbto>2019-03-21T22:37:44-03:00</dhRecbto><tMed>1</tMed></retConsStatServ></nfeResultMsg></soap:Body></soap:Envelope>
     <consStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>2</tpAmb><cUF>43</cUF><xServ>STATUS</xServ></consStatServ>`; 
 
-    let obj = XmlHelper.deserializeXml(xml);
+    let obj = XmlHelper.XmlHelper.deserializeXml(xml);
     console.log(require('util').inspect(obj, false, null))
 }
 
 //testeAssinaturaXML();
 //testeConsultaStatusServico(empresa);
 //testeDesereliaze();
-testeEmissaoNFCe(empresa);
+//testeEmissaoNFCe(empresa);
+testeEmissaoNFCeContingenciaOffline(empresa);
 //testeQRcodeNFCe();
 
