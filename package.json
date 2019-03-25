@@ -1,5 +1,5 @@
 {
-  "name": "node-nfe",
+  "name": "node-dfe",
   "version": "0.0.1",
   "description": "Geração e integração de NF-e/NFC-e para node.js",
   "main": "lib/index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lealhugui/node-nfe.git"
+    "url": "git+https://github.com/lealhugui/node-dfe.git"
   },
   "keywords": [
     "nfe",
