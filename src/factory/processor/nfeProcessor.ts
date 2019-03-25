@@ -52,8 +52,6 @@ export class NFeProcessor {
             let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
             let xmlLote = this.gerarXmlLote(xmlAssinado);
 
-            result.nfe = doc.nfe;
-
             if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline) {
                 result.retornoContingenciaOffline = <RetornoContingenciaOffline>{};
 
@@ -61,7 +59,7 @@ export class NFeProcessor {
                 result.retornoContingenciaOffline.documento_enviado = documento;
                 result.retornoContingenciaOffline.xml_gerado = xmlLote;
             } else {
-                result = await this.transmitirXml(xmlLote, documento.docFiscal.ambiente);
+                result = await this.transmitirXml(xmlLote, documento.docFiscal.ambiente, doc.nfe);
             }
             
         } catch (ex) {
@@ -72,9 +70,10 @@ export class NFeProcessor {
         return result;
     }
 
-    async transmitirXml(xmlLote: string, ambiente: string){
+    async transmitirXml(xmlLote: string, ambiente: string, nfeObj: Object){
         let result = <RetornoProcessamentoNF>{
-            success: false
+            success: false,
+            nfe: nfeObj
         };
 
         try {
