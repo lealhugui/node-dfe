@@ -29,9 +29,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lealhugui/node-nfe/issues"
+    "url": "https://github.com/lealhugui/node-dfe/issues"
   },
-  "homepage": "https://github.com/lealhugui/node-nfe#readme",
+  "homepage": "https://github.com/lealhugui/node-dfe#readme",
   "dependencies": {
     "axios": "^0.18.0",
     "cxsd": "^0.1.1",
