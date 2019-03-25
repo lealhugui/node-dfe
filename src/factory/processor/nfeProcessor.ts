@@ -52,10 +52,11 @@ export class NFeProcessor {
             let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
             let xmlLote = this.gerarXmlLote(xmlAssinado);
 
+            result.nfe = doc.nfe;
+
             if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline) {
                 result.retornoContingenciaOffline = <RetornoContingenciaOffline>{};
 
-                result.nfe = doc.nfe;
                 result.success = true;
                 result.retornoContingenciaOffline.documento_enviado = documento;
                 result.retornoContingenciaOffline.xml_gerado = xmlLote;
