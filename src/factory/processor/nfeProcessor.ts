@@ -41,18 +41,21 @@ export class NFeProcessor {
      */
     async processarDocumento(documento: NFeDocumento | NFCeDocumento) {
 
-        let result = <RetornoProcessamentoNF>{};
+        let result = <RetornoProcessamentoNF>{
+            success: false
+        };
 
         try {
-            let xml = this.gerarXml(documento);
-            xml = xml.replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[')
+            let doc = this.gerarXml(documento);
+            let xml = doc.xml.replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[')
     
             let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
             let xmlLote = this.gerarXmlLote(xmlAssinado);
 
             if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline) {
                 result.retornoContingenciaOffline = <RetornoContingenciaOffline>{};
-                
+
+                result.nfe = doc.nfe;
                 result.success = true;
                 result.retornoContingenciaOffline.documento_enviado = documento;
                 result.retornoContingenciaOffline.xml_gerado = xmlLote;
@@ -69,7 +72,9 @@ export class NFeProcessor {
     }
 
     async transmitirXml(xmlLote: string, ambiente: string){
-        let result = <RetornoProcessamentoNF>{};
+        let result = <RetornoProcessamentoNF>{
+            success: false
+        };
 
         try {
             let retornoEnvio = await this.enviarNF(xmlLote, this.empresa.certificado);
@@ -121,7 +126,7 @@ export class NFeProcessor {
             $: {versao: '4.00', xmlns: 'http://www.portalfiscal.inf.br/nfe'},
             tpAmb: ambiente,
             nRec: recibo
-        }
+        };
         return XmlHelper.serializeXml(consulta, 'consReciNFe');
     }
 
@@ -160,7 +165,10 @@ export class NFeProcessor {
 
         Utils.removeSelfClosedFields(NFe);
 
-        return XmlHelper.serializeXml(NFe, 'NFe');
+        return {
+            nfe: NFe,
+            xml: XmlHelper.serializeXml(NFe, 'NFe')
+        };
     }
 
     gerarChaveNF(empresa: Empresa, docFiscal: DocumentoFiscal){

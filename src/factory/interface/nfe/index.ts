@@ -2,6 +2,7 @@
 export interface RetornoProcessamentoNF {
     success: boolean,
     error: string,
+    nfe: Object,
     envioNF: RetornoProcessamento,
     consultaProc: RetornoProcessamento,
     retornoContingenciaOffline: RetornoContingenciaOffline
