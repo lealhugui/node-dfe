@@ -36,10 +36,10 @@ export class NFeProcessor {
     }
 
     /**
-     * Metodo para realizar o processamento de documento(s) do tipo 55 ou 65
+     * Metodo para realizar o processamento de documento(s) do tipo 55 ou 65 de forma sincrona
      * @param documento Array de documentos modelo 55 ou 1 documento modelo 65
      */
-    async processarDocumento(documento: NFeDocumento | NFCeDocumento) {
+    public async processarDocumento(documento: NFeDocumento | NFCeDocumento) {
 
         let result = <RetornoProcessamentoNF>{
             success: false
@@ -47,10 +47,10 @@ export class NFeProcessor {
 
         try {
             let doc = this.gerarXml(documento);
-            let xml = doc.xml.replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[')
+            let xml = doc.xml.replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[');
     
             let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
-            let xmlLote = this.gerarXmlLote(xmlAssinado);
+            let xmlLote = this.gerarXmlLote(xmlAssinado, false);
 
             if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline) {
                 result.retornoContingenciaOffline = <RetornoContingenciaOffline>{};
@@ -70,7 +70,42 @@ export class NFeProcessor {
         return result;
     }
 
-    async transmitirXml(xmlLote: string, ambiente: string, nfeObj: Object){
+    /**
+     * Metodo para realizar o processamento de documento(s) do tipo 55 ou 65 de forma assincrona
+     * @param documento Array de documentos modelo 55 ou 1 documento modelo 65
+     */
+    public async processarDocumentoAsync(documento: NFeDocumento | NFCeDocumento) {
+
+        let result = <RetornoProcessamentoNF>{
+            success: false
+        };
+
+        try {
+            let doc = this.gerarXml(documento);
+            let xml = doc.xml.replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[');
+
+            let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
+            let xmlLote = this.gerarXmlLote(xmlAssinado, true);
+
+            if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline) {
+                result.retornoContingenciaOffline = <RetornoContingenciaOffline>{};
+
+                result.success = true;
+                result.retornoContingenciaOffline.documento_enviado = documento;
+                result.retornoContingenciaOffline.xml_gerado = xmlLote;
+            } else {
+                result = await this.transmitirXml(xmlLote, documento.docFiscal.ambiente, doc.nfe);
+            }
+
+        } catch (ex) {
+            result.success = false;
+            result.error = ex;
+        }
+
+        return result;
+    }
+
+    private async transmitirXml(xmlLote: string, ambiente: string, nfeObj: Object){
         let result = <RetornoProcessamentoNF>{
             success: false,
             nfe: nfeObj
@@ -81,7 +116,12 @@ export class NFeProcessor {
             result.envioNF = retornoEnvio;
     
             let retEnviNFe = Object(retornoEnvio.data).retEnviNFe;
-            if (retEnviNFe.cStat == '103') {
+
+            if (retEnviNFe.cStat == '104' && retEnviNFe.protNFe.infProt.cStat == '100') {
+                // retorno síncrono
+                result.success = true;
+
+            } else if (retEnviNFe.cStat == '103') {
                 let recibo = retEnviNFe.infRec.nRec;
                 let xmlConRecNFe = this.gerarXmlConsultaProc(ambiente, recibo);
 
@@ -113,15 +153,15 @@ export class NFeProcessor {
         return result;
     }
 
-    async consultarProc(xml:string, cert: any) {
+    private async consultarProc(xml:string, cert: any) {
         return await WebServiceHelper.makeSoapRequest(xml, cert, soapConsulta);
     }
 
-    async enviarNF(xml: string, cert: any) {
+    private async enviarNF(xml: string, cert: any) {
         return await WebServiceHelper.makeSoapRequest(xml, cert, soapEnvio);
     }
 
-    gerarXmlConsultaProc(ambiente: string, recibo: string){
+    private gerarXmlConsultaProc(ambiente: string, recibo: string){
         let consulta = <schema.TConsReciNFe> {
             $: {versao: '4.00', xmlns: 'http://www.portalfiscal.inf.br/nfe'},
             tpAmb: ambiente,
@@ -130,7 +170,7 @@ export class NFeProcessor {
         return XmlHelper.serializeXml(consulta, 'consReciNFe');
     }
 
-    gerarXmlLote(xml: string){
+    private gerarXmlLote(xml: string, isAsync: boolean){
         //TODO: ajustar para receber uma lista de xmls...
 
         let loteId = Utils.randomInt(1,999999999999999).toString();
@@ -138,7 +178,7 @@ export class NFeProcessor {
         let enviNFe = <schema.TEnviNFe>{
             $: { versao: '4.00', xmlns: 'http://www.portalfiscal.inf.br/nfe'},
             idLote: loteId,
-            indSinc: schema.TEnviNFeIndSinc.Item0,
+            indSinc: isAsync ? schema.TEnviNFeIndSinc.Item0 : schema.TEnviNFeIndSinc.Item1,
             _: '[XMLS]'
         };
 
@@ -146,7 +186,7 @@ export class NFeProcessor {
         return xmlLote.replace('[XMLS]', xml);
     }
 
-    gerarXml(documento: NFeDocumento | NFCeDocumento) {
+    private gerarXml(documento: NFeDocumento | NFCeDocumento) {
         let dadosChave = this.gerarChaveNF(this.empresa, documento.docFiscal);
         let NFe = <schema.TNFe> {
             $: {
@@ -171,7 +211,7 @@ export class NFeProcessor {
         };
     }
 
-    gerarChaveNF(empresa: Empresa, docFiscal: DocumentoFiscal){
+    private gerarChaveNF(empresa: Empresa, docFiscal: DocumentoFiscal){
         let chave = '';
 
         let ano = docFiscal.dhEmissao.substring(2,4);
@@ -198,7 +238,7 @@ export class NFeProcessor {
         };
     }
 
-    obterDigitoVerificador(chave: any) {
+    private obterDigitoVerificador(chave: any) {
         let soma = 0;
         let mod = -1;
         let dv = -1;
@@ -226,7 +266,7 @@ export class NFeProcessor {
         return dv.toString();
     }
 
-    gerarQRCodeNFCeOnline(urlConsultaNFCe: string, chave: string, versaoQRCode: string, ambiente: string, idCSC: string, CSC: string) {
+    private gerarQRCodeNFCeOnline(urlConsultaNFCe: string, chave: string, versaoQRCode: string, ambiente: string, idCSC: string, CSC: string) {
         let s = '|';
         let concat = [chave, versaoQRCode, ambiente, idCSC].join(s);
         let hash = sha1(concat + CSC).toUpperCase();
@@ -234,7 +274,7 @@ export class NFeProcessor {
         return urlConsultaNFCe + concat + s + hash;
     }
 
-    gerarQRCodeNFCeOffline(urlConsultaNFCe: string, chave: string, versaoQRCode: string, ambiente: string, diaEmissao: string, valorTotal:string, digestValue: string, idCSC: string, CSC: string) {
+    private gerarQRCodeNFCeOffline(urlConsultaNFCe: string, chave: string, versaoQRCode: string, ambiente: string, diaEmissao: string, valorTotal:string, digestValue: string, idCSC: string, CSC: string) {
         let s = '|';
         let concat = [chave, versaoQRCode, ambiente, diaEmissao, valorTotal, digestValue, idCSC].join(s);
         let hash = sha1(concat + CSC).toUpperCase();
@@ -242,7 +282,7 @@ export class NFeProcessor {
         return urlConsultaNFCe + concat + s + hash;
     }
 
-    gerarNFe(documento: NFeDocumento, dadosChave: any) {
+    private gerarNFe(documento: NFeDocumento, dadosChave: any) {
         let nfe = <schema.TNFeInfNFe> {
             $: { versao: '4.00', Id: 'NFe' + dadosChave.chave }
         };
@@ -250,7 +290,7 @@ export class NFeProcessor {
         return nfe;
     }
 
-    gerarNFCe(documento: NFCeDocumento, dadosChave: any) {
+    private gerarNFCe(documento: NFCeDocumento, dadosChave: any) {
         let nfce = <schema.TNFeInfNFe> {
             $: { versao: '4.00', Id: 'NFe' + dadosChave.chave }
         };
@@ -270,7 +310,7 @@ export class NFeProcessor {
         return nfce;
     }
 
-    getIde(documento: DocumentoFiscal, dadosChave: any) {
+    private getIde(documento: DocumentoFiscal, dadosChave: any) {
         let ide = <schema.TNFeInfNFeIde> {
             cUF: Utils.getEnumByValue(schema.TCodUfIBGE, documento.codUF),
             cNF: dadosChave.cnf,
@@ -307,7 +347,7 @@ export class NFeProcessor {
         return ide;
     }
 
-    getEmit(empresa: Empresa) {
+    private getEmit(empresa: Empresa) {
         return <schema.TNFeInfNFeEmit>{
             CNPJ: empresa.cnpj,
             xNome: empresa.razaoSocial,
@@ -321,7 +361,7 @@ export class NFeProcessor {
         }
     }
 
-    getEnderEmit(endereco: Endereco){
+    private getEnderEmit(endereco: Endereco){
         return <schema.TEnderEmi>{
             xLgr: endereco.logradouro,
             nro: endereco.numero,
@@ -337,7 +377,7 @@ export class NFeProcessor {
         }
     }
 
-    getEnderDest(endereco: Endereco){
+    private getEnderDest(endereco: Endereco){
         return <schema.TEndereco>{
             xLgr: endereco.logradouro,
             nro: endereco.numero,
@@ -353,7 +393,7 @@ export class NFeProcessor {
         }
     }
 
-    getDest(destinatario: Destinatario, ambiente: string) {
+    private getDest(destinatario: Destinatario, ambiente: string) {
         let dest = <schema.TNFeInfNFeDest>{};
 
         if (destinatario.isEstrangeiro)
@@ -377,7 +417,7 @@ export class NFeProcessor {
         return dest;
     }
 
-    getDet(produtos: Produto[], ambiente: string) {
+    private getDet(produtos: Produto[], ambiente: string) {
         let det_list = [];
 
         for (let i = 0; i < produtos.length; i++){
@@ -392,7 +432,7 @@ export class NFeProcessor {
         return det_list;
     }
 
-    getDetProd(produto: DetalhesProduto, ambiente: string, isPrimeiroProduto: boolean) {
+    private getDetProd(produto: DetalhesProduto, ambiente: string, isPrimeiroProduto: boolean) {
         return <schema.TNFeInfNFeDetProd>{
             cProd: produto.codigo,
             cEAN: produto.cEAN,
@@ -432,7 +472,7 @@ export class NFeProcessor {
         }
     }
 
-    getDetImposto(imposto: Imposto) {
+    private getDetImposto(imposto: Imposto) {
         let test = <schema.TNFeInfNFeDetImposto>{
             vTotTrib: '0.00',
             ICMS: [this.getImpostoIcms(imposto.icms)]
@@ -442,7 +482,7 @@ export class NFeProcessor {
         return test;
     }
 
-    getImpostoIcms(icms: Icms) {
+    private getImpostoIcms(icms: Icms) {
         let result;
         if (icms.CST && icms.CST !== '') {
             switch (icms.CST) {
@@ -809,18 +849,18 @@ export class NFeProcessor {
         return result;
     }
 
-    getTotal(total: Total) {
+    private getTotal(total: Total) {
         return <schema.TNFeInfNFeTotal>{
             ICMSTot: total.icmsTot
         }
     }
 
-    getIcmsTot(icmsTot: IcmsTot) {
+    private getIcmsTot(icmsTot: IcmsTot) {
         return icmsTot;
         
     }
 
-    getTransp(transp: Transporte) {
+    private getTransp(transp: Transporte) {
         return <schema.TNFeInfNFeTransp>{
             modFrete: transp.modalidateFrete
             /**
@@ -837,7 +877,7 @@ export class NFeProcessor {
         }
     }
 
-    getPag(pagamento: Pagamento) {
+    private getPag(pagamento: Pagamento) {
         let pag = <schema.TNFeInfNFePag>{};
         pag.detPag = this.getDetalhamentoPagamentos(pagamento.pagamentos);
         pag.vTroco = pagamento.valorTroco;
@@ -845,7 +885,7 @@ export class NFeProcessor {
         return pag;
     }
 
-    getDetalhamentoPagamentos(pagamentos: DetalhePagamento[]){
+    private getDetalhamentoPagamentos(pagamentos: DetalhePagamento[]){
         let listPagamentos = [];
         let detPag;
 
@@ -865,7 +905,7 @@ export class NFeProcessor {
         return listPagamentos;
     }
 
-    getDetalhamentoCartao(dadosCartao: DetalhePgtoCartao) {
+    private getDetalhamentoCartao(dadosCartao: DetalhePgtoCartao) {
         return <schema.TNFeInfNFePagDetPagCard>{
             tpIntegra: Utils.getEnumByValue(schema.TNFeInfNFePagDetPagCardTpIntegra, dadosCartao.tipoIntegracao),
             CNPJ: dadosCartao.cnpj,
@@ -874,7 +914,7 @@ export class NFeProcessor {
         }
     }
 
-    getInfoAdic(info: InfoAdicional) {
+    private getInfoAdic(info: InfoAdicional) {
         return <schema.TNFeInfNFeInfAdic>{
             infCpl: info.infoComplementar,
             infAdFisco: info.infoFisco

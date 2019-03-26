@@ -30,8 +30,8 @@ let empresa = {
         telefone: '999999999'
     },
     certificado: cert,
-    idCSC: '',
-    CSC: ''
+    idCSC: '1',
+    CSC: '123456'
 };
 
 let moment = require('moment');
@@ -191,9 +191,26 @@ let nfce = {
 
 async function testeEmissaoNFCe(empresa) {
     const nfeProc = new lib.NFeProcessor(empresa);
+
+    const ini = new Date();
     let result = await nfeProc.processarDocumento(nfce);
-    result = require('util').inspect(result, false, null);
-    console.log('Resultado Emissão NFC-e: \n\n' + result);
+    const fin = new Date();
+    console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
+
+    //result = require('util').inspect(result, false, null);
+    //console.log('Resultado Emissão NFC-e: \n\n' + result);
+}
+
+async function testeEmissaoNFCeAsync(empresa) {
+    const nfeProc = new lib.NFeProcessor(empresa);
+
+    const ini = new Date();
+    let result = await nfeProc.processarDocumentoAsync(nfce);
+    const fin = new Date();
+    console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
+
+    //result = require('util').inspect(result, false, null);
+    //console.log('Resultado Emissão NFC-e: \n\n' + result);
 }
 
 async function testeEmissaoNFCeContingenciaOffline(empresa) {
@@ -250,7 +267,7 @@ function testeDesereliaze() {
 //testeAssinaturaXML();
 //testeConsultaStatusServico(empresa);
 //testeDesereliaze();
-//testeEmissaoNFCe(empresa);
-testeEmissaoNFCeContingenciaOffline(empresa);
+testeEmissaoNFCe(empresa);
+//testeEmissaoNFCeContingenciaOffline(empresa);
 //testeQRcodeNFCe();
 
