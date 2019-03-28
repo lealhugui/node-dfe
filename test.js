@@ -24,7 +24,7 @@ let empresa = {
         complemento: '',
         bairro: 'Bairro Teste',
         municipio: 'Cachoeirinha',
-        codMunicipio: '4303103',
+        codMunicipio: '4303004',
         uf: 'RS',
         cep: '99999999',
         telefone: '999999999'
@@ -32,6 +32,15 @@ let empresa = {
     certificado: cert,
     idCSC: '1',
     CSC: '123456'
+};
+
+let responsavelTecnico = {
+    cnpj: 'empresa teste',
+    contato: 'teste',
+    email: 'teste@teste.com',
+    fone: '999999999',
+    idCSRT: '01',
+    CSRT: 'G8063VRTNDMO886SFNK5LDUDEI24XJ22YIPO'
 };
 
 let moment = require('moment');
@@ -189,16 +198,16 @@ let nfce = {
     infoAdicional: infoAdic
 };
 
-async function testeEmissaoNFCe(empresa) {
-    const nfeProc = new lib.NFeProcessor(empresa);
+async function testeEmissaoNFCe() {
+    const nfeProc = new lib.NFeProcessor(empresa, null);
 
     const ini = new Date();
     let result = await nfeProc.processarDocumento(nfce);
     const fin = new Date();
     console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
 
-    //result = require('util').inspect(result, false, null);
-    //console.log('Resultado Emissão NFC-e: \n\n' + result);
+    result = require('util').inspect(result, false, null);
+    console.log('Resultado Emissão NFC-e: \n\n' + result);
 }
 
 async function testeEmissaoNFCeAsync(empresa) {
@@ -264,10 +273,15 @@ function testeDesereliaze() {
     console.log(require('util').inspect(obj, false, null))
 }
 
+function testHashRespTec(){
+    const nfeProc = new lib.NFeProcessor(empresa);
+    console.log(nfeProc.gerarHashCSRT('41180678393592000146558900000006041028190697', 'G8063VRTNDMO886SFNK5LDUDEI24XJ22YIPO'));
+}
+
 //testeAssinaturaXML();
 //testeConsultaStatusServico(empresa);
 //testeDesereliaze();
-testeEmissaoNFCe(empresa);
+testeEmissaoNFCe();
 //testeEmissaoNFCeContingenciaOffline(empresa);
 //testeQRcodeNFCe();
-
+//testHashRespTec();

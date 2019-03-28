@@ -2368,13 +2368,13 @@ export interface TNFeInfNFeCanaDeduc {
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TInfRespTec {
-    cNPJ: string;
+    CNPJ: string;
     xContato: string;
     email: string;
     fone: string;
     idCSRT: string;
     //base64Binary
-    hashCSRT: number[];
+    hashCSRT: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]

@@ -15,13 +15,18 @@ export abstract class XmlHelper {
         return builder.buildObject(obj);
     }
 
-    public static deserializeXml(xml: string) {
+    public static deserializeXml(xml: string, options?: xml2js.OptionsV2) {
         let resultObj;
-        let parser = new xml2js.Parser({
-            mergeAttrs: true, 
-            ignoreAttrs: true,
-            explicitArray: false
-        });
+        
+        if (!options) {
+            options = {
+                mergeAttrs: true, 
+                ignoreAttrs: true,
+                explicitArray: false
+            };
+        }
+         
+        let parser = new xml2js.Parser(options);
 
         parser.parseString(xml, function(err: any, result: any){
             if (err) {

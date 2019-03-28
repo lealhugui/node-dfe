@@ -245,6 +245,15 @@ export interface Empresa {
     CSC: string;
 }
 
+export interface ResponsavelTecnico {
+    cnpj: string;
+    contato: string;
+    email: string;
+    fone: string;
+    idCSRT: string;
+    CSRT: string;
+}
+
 export interface Destinatario {
     documento: string;
     nome: string;

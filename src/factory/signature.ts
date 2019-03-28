@@ -33,9 +33,6 @@ export abstract class Signature {
     
     let sig = new SignedXml();
 
-    //if (uri.substring(0,1) == '#')
-    //  uri = "#" + uri;
-
     sig.addReference("//*[local-name(.)='"+tag+"']", transforms, "", "", "", "", false);
     sig.signingKey = certificado.key;
     sig.canonicalizationAlgorithm = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';

@@ -1,9 +1,9 @@
 import { RetornoProcessamentoNF, Empresa, Endereco, NFCeDocumento, NFeDocumento, DocumentoFiscal, Destinatario, Transporte, Pagamento, Produto, Total, 
-    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline
+    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline, ResponsavelTecnico
 } from '../interface/nfe';
 
 import { WebServiceHelper } from "../webservices/webserviceHelper";
-import * as schema from '../schema/index'
+import * as schema from '../schema/index';
 import { XmlHelper } from '../xmlHelper';
 import * as Utils from '../utils/utils';
 import { Signature } from '../signature';
@@ -31,7 +31,7 @@ const soapConsulta = {
  */
 export class NFeProcessor {
 
-    constructor(private empresa: Empresa) {
+    constructor(private empresa: Empresa, private responsavelTecnico?: ResponsavelTecnico) {
 
     }
 
@@ -306,6 +306,9 @@ export class NFeProcessor {
         nfce.transp = this.getTransp(documento.transporte);
         nfce.pag = this.getPag(documento.pagamento);
         nfce.infAdic = this.getInfoAdic(documento.infoAdicional);
+
+        if (this.responsavelTecnico)
+            nfce.infRespTec = this.getResponsavelTecnico(this.responsavelTecnico, dadosChave.chave);
         
         return nfce;
     }
@@ -919,6 +922,21 @@ export class NFeProcessor {
             infCpl: info.infoComplementar,
             infAdFisco: info.infoFisco
         }
+    }
+
+    private getResponsavelTecnico(respTec: ResponsavelTecnico, chave: string) {
+        return <schema.TInfRespTec> {
+            CNPJ: respTec.cnpj,
+            xContato: respTec.contato,
+            email: respTec.email,
+            fone: respTec.fone,
+            idCSRT: respTec.idCSRT,
+            hashCSRT: this.gerarHashCSRT(chave, respTec.CSRT)
+        }
+    }
+
+    private gerarHashCSRT(chave: string, CSRT: string) {
+        return Buffer.from(sha1(CSRT+chave), 'hex').toString('base64');
     }
 
 }
