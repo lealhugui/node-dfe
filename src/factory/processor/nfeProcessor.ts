@@ -477,7 +477,7 @@ export class NFeProcessor {
 
     private getDetImposto(imposto: Imposto) {
         let test = <schema.TNFeInfNFeDetImposto>{
-            vTotTrib: '0.00',
+            vTotTrib: imposto.valorAproximadoTributos,
             ICMS: [this.getImpostoIcms(imposto.icms)]
 
         };
