@@ -47,9 +47,36 @@ export class NFeProcessor {
 
         try {
             let doc = this.gerarXml(documento);
-            let xml = doc.xml.replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[');
     
-            let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
+            let xmlAssinado = Signature.signXmlX509(doc.xml, 'infNFe', this.empresa.certificado);
+
+            if (documento.docFiscal.modelo == '65') {
+                //append qrCode
+                let qrCode = null;
+                let chave = Object(doc).nfe.infNFe.$.Id.replace('NFe', '');
+
+                if (documento.docFiscal.isContingenciaOffline) {
+                    let xmlAssinadoObj = XmlHelper.deserializeXml(xmlAssinado);
+                    let diaEmissao = documento.docFiscal.dhEmissao.substring(8,10);
+                    let valorTotal = documento.total.icmsTot.vNF; 
+                    let digestValue = Object(xmlAssinadoObj).NFe.Signature.SignedInfo.Reference.DigestValue;
+
+                    qrCode = this.gerarQRCodeNFCeOffline(soapEnvio.urlQRCode, chave, '2', documento.docFiscal.ambiente, diaEmissao, valorTotal, digestValue, this.empresa.idCSC, this.empresa.CSC);
+                } else {
+                    qrCode = this.gerarQRCodeNFCeOnline(soapEnvio.urlQRCode, chave, '2', documento.docFiscal.ambiente, this.empresa.idCSC, this.empresa.CSC);
+                }
+
+                let qrCodeObj = <schema.TNFeInfNFeSupl>{
+                    qrCode: '<' + qrCode + '>',
+                    urlChave: soapEnvio.urlConsultaNFCe
+                };
+                doc.nfe.infNFeSupl = qrCodeObj;
+
+                let qrCodeXml = XmlHelper.serializeXml(qrCodeObj, 'infNFeSupl').replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[');
+
+                xmlAssinado = xmlAssinado.replace('</infNFe><Signature', '</infNFe>' + qrCodeXml + '<Signature');
+            }
+            
             let xmlLote = this.gerarXmlLote(xmlAssinado, false);
 
             if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline) {
@@ -194,14 +221,6 @@ export class NFeProcessor {
             },
             infNFe: documento.docFiscal.modelo == '65' ? this.gerarNFCe(documento, dadosChave) : this.gerarNFe(documento, dadosChave)
         };
- 
-        if (documento.docFiscal.modelo == '65') {
-            let qrCode = this.gerarQRCodeNFCeOnline(soapEnvio.urlQRCode, dadosChave.chave, '2', documento.docFiscal.ambiente, this.empresa.idCSC, this.empresa.CSC);
-            NFe.infNFeSupl = <schema.TNFeInfNFeSupl>{
-                qrCode: '<' + qrCode + '>',
-                urlChave: soapEnvio.urlConsultaNFCe
-            };
-        }
 
         Utils.removeSelfClosedFields(NFe);
 
@@ -276,7 +295,8 @@ export class NFeProcessor {
 
     private gerarQRCodeNFCeOffline(urlConsultaNFCe: string, chave: string, versaoQRCode: string, ambiente: string, diaEmissao: string, valorTotal:string, digestValue: string, idCSC: string, CSC: string) {
         let s = '|';
-        let concat = [chave, versaoQRCode, ambiente, diaEmissao, valorTotal, digestValue, idCSC].join(s);
+        let hexDigestValue = new Buffer(digestValue).toString('hex');
+        let concat = [chave, versaoQRCode, ambiente, diaEmissao, valorTotal, hexDigestValue, idCSC].join(s);
         let hash = sha1(concat + CSC).toUpperCase();
 
         return urlConsultaNFCe + concat + s + hash;
