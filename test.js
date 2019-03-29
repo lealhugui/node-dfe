@@ -31,7 +31,7 @@ let empresa = {
     },
     certificado: cert,
     idCSC: '1',
-    CSC: '123456'
+    CSC: ''
 };
 
 let responsavelTecnico = {
@@ -101,7 +101,7 @@ let infoAdic = {
 let produtos = [];
 let valorProduto = 31.80;
 let valorTotalProdutos = 0;
-for (let i = 1; i <= 2; i++) {
+for (let i = 1; i <= 1; i++) {
     valorTotalProdutos += valorProduto;
     produtos.push({
         prod: {
@@ -110,7 +110,7 @@ for (let i = 1; i <= 2; i++) {
             descricao: 'PRODUTO TESTE',
             cest: '2104400',
             NCM: '85164000',
-            CFOP: '5405',
+            CFOP: '5102',
             unidadeComercial: 'SAC',
             quantidadeComercial: '1.0000',
             valorUnitarioComercial: valorProduto.toFixed(2),
@@ -130,12 +130,15 @@ for (let i = 1; i <= 2; i++) {
         imposto: {
             valorAproximadoTributos: 0,
             icms: {
-                CST: '60',
-                orig: '2',
-                baseCalc: '31.80',
+                CST: '00',
+                orig: '0',
+                modBC: '3',
+                vBC: '629.90',
+                vICMS: '113.40',
+                pICMS: '18.00',
                 aliquota: '0.00',
                 valor: '0.00',
-                baseCalcST: '31.80',
+                vBCST: '0.00',
                 valorST: '0.00',
                 aliquotaST: '0.00',
                 percentualReducaoBaseCalc: '0.00',
@@ -163,8 +166,8 @@ let pagamento = {
 };
 
 let icmsTot = {
-    vBC: '0.00',
-    vICMS: '0.00',
+    vBC: '629.90',
+    vICMS: '113.40',
     vICMSDeson: '0.00',
     //vFCPUFDest: '0.00',
     //vICMSUFDest:'0.00',

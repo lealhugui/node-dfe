@@ -509,14 +509,15 @@ export class NFeProcessor {
         let result;
         if (icms.CST && icms.CST !== '') {
             switch (icms.CST) {
+                case '0':
                 case '00':
                     result = {
                         ICMS00: <schema.TNFeInfNFeDetImpostoICMSICMS00> {
                             orig: icms.orig,
                             CST: icms.CST,
                             modBC: Utils.getEnumByValue(schema.TNFeInfNFeDetImpostoICMSICMS00ModBC, icms.modBC),
-                            pICMS: icms.pICMS,
                             vBC: icms.vBC,
+                            pICMS: icms.pICMS,
                             vICMS: icms.vICMS,
                             pFCP: icms.pFCP,
                             vFCP: icms.vFCP
