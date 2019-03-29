@@ -1,6 +1,6 @@
 {
   "name": "node-dfe",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Geração e integração de NF-e/NFC-e para node.js",
   "main": "lib/index.js",
   "scripts": {
