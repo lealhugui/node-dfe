@@ -51,30 +51,9 @@ export class NFeProcessor {
             let xmlAssinado = Signature.signXmlX509(doc.xml, 'infNFe', this.empresa.certificado);
 
             if (documento.docFiscal.modelo == '65') {
-                //append qrCode
-                let qrCode = null;
-                let chave = Object(doc).nfe.infNFe.$.Id.replace('NFe', '');
-
-                if (documento.docFiscal.isContingenciaOffline) {
-                    let xmlAssinadoObj = XmlHelper.deserializeXml(xmlAssinado);
-                    let diaEmissao = documento.docFiscal.dhEmissao.substring(8,10);
-                    let valorTotal = documento.total.icmsTot.vNF; 
-                    let digestValue = Object(xmlAssinadoObj).NFe.Signature.SignedInfo.Reference.DigestValue;
-
-                    qrCode = this.gerarQRCodeNFCeOffline(soapEnvio.urlQRCode, chave, '2', documento.docFiscal.ambiente, diaEmissao, valorTotal, digestValue, this.empresa.idCSC, this.empresa.CSC);
-                } else {
-                    qrCode = this.gerarQRCodeNFCeOnline(soapEnvio.urlQRCode, chave, '2', documento.docFiscal.ambiente, this.empresa.idCSC, this.empresa.CSC);
-                }
-
-                let qrCodeObj = <schema.TNFeInfNFeSupl>{
-                    qrCode: '<' + qrCode + '>',
-                    urlChave: soapEnvio.urlConsultaNFCe
-                };
-                doc.nfe.infNFeSupl = qrCodeObj;
-
-                let qrCodeXml = XmlHelper.serializeXml(qrCodeObj, 'infNFeSupl').replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[');
-
-                xmlAssinado = xmlAssinado.replace('</infNFe><Signature', '</infNFe>' + qrCodeXml + '<Signature');
+                let appendQRCode = this.appendQRCodeXML(documento, xmlAssinado);
+                xmlAssinado = appendQRCode.xml;
+                doc.nfe.infNFeSupl = appendQRCode.qrCode;
             }
             
             let xmlLote = this.gerarXmlLote(xmlAssinado, false);
@@ -109,9 +88,15 @@ export class NFeProcessor {
 
         try {
             let doc = this.gerarXml(documento);
-            let xml = doc.xml.replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[');
 
-            let xmlAssinado = Signature.signXmlX509(xml, 'infNFe', this.empresa.certificado);
+            let xmlAssinado = Signature.signXmlX509(doc.xml, 'infNFe', this.empresa.certificado);
+
+            if (documento.docFiscal.modelo == '65') {
+                let appendQRCode = this.appendQRCodeXML(documento, xmlAssinado);
+                xmlAssinado = appendQRCode.xml;
+                doc.nfe.infNFeSupl = appendQRCode.qrCode;
+            }
+            
             let xmlLote = this.gerarXmlLote(xmlAssinado, true);
 
             if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline) {
@@ -130,6 +115,35 @@ export class NFeProcessor {
         }
 
         return result;
+    }
+
+    private appendQRCodeXML(documento: NFCeDocumento, xmlAssinado: string){
+        let qrCode = null;
+        let xmlAssinadoObj = XmlHelper.deserializeXml(xmlAssinado);
+        let chave = Object(xmlAssinadoObj).NFe.infNFe.$.Id.replace('NFe', '');
+
+        if (documento.docFiscal.isContingenciaOffline) {
+            
+            let diaEmissao = documento.docFiscal.dhEmissao.substring(8,10);
+            let valorTotal = documento.total.icmsTot.vNF; 
+            let digestValue = Object(xmlAssinadoObj).NFe.Signature.SignedInfo.Reference.DigestValue;
+
+            qrCode = this.gerarQRCodeNFCeOffline(soapEnvio.urlQRCode, chave, '2', documento.docFiscal.ambiente, diaEmissao, valorTotal, digestValue, this.empresa.idCSC, this.empresa.CSC);
+        } else {
+            qrCode = this.gerarQRCodeNFCeOnline(soapEnvio.urlQRCode, chave, '2', documento.docFiscal.ambiente, this.empresa.idCSC, this.empresa.CSC);
+        }
+
+        let qrCodeObj = <schema.TNFeInfNFeSupl>{
+            qrCode: '<' + qrCode + '>',
+            urlChave: soapEnvio.urlConsultaNFCe
+        };
+
+        let qrCodeXml = XmlHelper.serializeXml(qrCodeObj, 'infNFeSupl').replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[');
+
+        return {
+            qrCode: qrCodeObj,
+            xml: xmlAssinado.replace('</infNFe><Signature', '</infNFe>' + qrCodeXml + '<Signature')
+        };
     }
 
     private async transmitirXml(xmlLote: string, ambiente: string, nfeObj: Object){
@@ -306,7 +320,27 @@ export class NFeProcessor {
         let nfe = <schema.TNFeInfNFe> {
             $: { versao: '4.00', Id: 'NFe' + dadosChave.chave }
         };
+
+        nfe.ide = this.getIde(documento.docFiscal, dadosChave);
+        nfe.emit = this.getEmit(this.empresa);
+        //nfe.avulsa = ;
+        nfe.dest = this.getDest(documento.destinatario, documento.docFiscal.ambiente);
+        //nfe.retirada = ;
+        //nfe.entrega = ;
+        //nfe.autXML = ;
+        nfe.det = this.getDet(documento.produtos, documento.docFiscal.ambiente);
+        nfe.total = this.getTotal(documento.total);
+        nfe.transp = this.getTransp(documento.transporte);
+        //nfe.cobr =
+        nfe.pag = this.getPag(documento.pagamento);
+        nfe.infAdic = this.getInfoAdic(documento.infoAdicional);
+        //nfe.exporta = ;
+        //nfe.compra = ;
+        //nfe.cana = ;
         
+        if (this.responsavelTecnico)
+            nfe.infRespTec = this.getResponsavelTecnico(this.responsavelTecnico, dadosChave.chave);
+
         return nfe;
     }
 
@@ -496,20 +530,18 @@ export class NFeProcessor {
     }
 
     private getDetImposto(imposto: Imposto) {
-        let test = <schema.TNFeInfNFeDetImposto>{
+        let detImposto = <schema.TNFeInfNFeDetImposto>{
             vTotTrib: imposto.valorAproximadoTributos,
             ICMS: [this.getImpostoIcms(imposto.icms)]
-
         };
 
-        return test;
+        return detImposto;
     }
 
     private getImpostoIcms(icms: Icms) {
         let result;
         if (icms.CST && icms.CST !== '') {
             switch (icms.CST) {
-                case '0':
                 case '00':
                     result = {
                         ICMS00: <schema.TNFeInfNFeDetImpostoICMSICMS00> {
