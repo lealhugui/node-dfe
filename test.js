@@ -26,6 +26,7 @@ let empresa = {
         municipio: 'Cachoeirinha',
         codMunicipio: '4303004',
         uf: 'RS',
+        cUf: '43',
         cep: '99999999',
         telefone: '999999999'
     },

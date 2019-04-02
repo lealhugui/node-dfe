@@ -1,5 +1,5 @@
 import { RetornoProcessamentoNF, Empresa, Endereco, NFCeDocumento, NFeDocumento, DocumentoFiscal, Destinatario, Transporte, Pagamento, Produto, Total, 
-    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline, ResponsavelTecnico
+    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline, ResponsavelTecnico, ServicosSefaz
 } from '../interface/nfe';
 
 import { WebServiceHelper } from "../webservices/webserviceHelper";
@@ -7,24 +7,12 @@ import * as schema from '../schema/index';
 import { XmlHelper } from '../xmlHelper';
 import * as Utils from '../utils/utils';
 import { Signature } from '../signature';
+import { SefazNFCe } from "../webservices/sefazNfce";
 const sha1 = require('sha1');
 
 
-const soapEnvio = {
-    //TODO: buscar URL conforme UF e Ambiente
-    url: 'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx?wsdl',
-    method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4',
-    action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote',
-    urlQRCode: 'https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?p=',
-    urlConsultaNFCe: 'http://www.sefaz.rs.gov.br/nfce/consulta'
-};
-
-const soapConsulta = {
-    //TODO: buscar URL conforme UF e Ambiente
-    url: 'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao4.asmx?wsdl',
-    method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4',
-    action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4/nfeRetAutorizacaoLote'
-};
+let soapAutorizacao: any = {};
+let soapRetAutorizacao: any = {};
 
 /**
  * Classe para processamento de NFe/NFCe
@@ -46,6 +34,9 @@ export class NFeProcessor {
         };
 
         try {
+            soapAutorizacao = SefazNFCe.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.autorizacao);
+            soapRetAutorizacao = SefazNFCe.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.retAutorizacao);
+  
             let doc = this.gerarXml(documento);
     
             let xmlAssinado = Signature.signXmlX509(doc.xml, 'infNFe', this.empresa.certificado);
@@ -87,6 +78,9 @@ export class NFeProcessor {
         };
 
         try {
+            soapAutorizacao = SefazNFCe.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.autorizacao);
+            soapRetAutorizacao = SefazNFCe.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.retAutorizacao);
+  
             let doc = this.gerarXml(documento);
 
             let xmlAssinado = Signature.signXmlX509(doc.xml, 'infNFe', this.empresa.certificado);
@@ -119,7 +113,8 @@ export class NFeProcessor {
 
     private appendQRCodeXML(documento: NFCeDocumento, xmlAssinado: string){
         let qrCode = null;
-        let xmlAssinadoObj = XmlHelper.deserializeXml(xmlAssinado);
+        let xmlAssinadoObj = XmlHelper.deserializeXml(xmlAssinado, { explicitArray: false });
+ 
         let chave = Object(xmlAssinadoObj).NFe.infNFe.$.Id.replace('NFe', '');
 
         if (documento.docFiscal.isContingenciaOffline) {
@@ -128,14 +123,14 @@ export class NFeProcessor {
             let valorTotal = documento.total.icmsTot.vNF; 
             let digestValue = Object(xmlAssinadoObj).NFe.Signature.SignedInfo.Reference.DigestValue;
 
-            qrCode = this.gerarQRCodeNFCeOffline(soapEnvio.urlQRCode, chave, '2', documento.docFiscal.ambiente, diaEmissao, valorTotal, digestValue, this.empresa.idCSC, this.empresa.CSC);
+            qrCode = this.gerarQRCodeNFCeOffline(soapAutorizacao.urlQRCode, chave, '2', documento.docFiscal.ambiente, diaEmissao, valorTotal, digestValue, this.empresa.idCSC, this.empresa.CSC);
         } else {
-            qrCode = this.gerarQRCodeNFCeOnline(soapEnvio.urlQRCode, chave, '2', documento.docFiscal.ambiente, this.empresa.idCSC, this.empresa.CSC);
+            qrCode = this.gerarQRCodeNFCeOnline(soapAutorizacao.urlQRCode, chave, '2', documento.docFiscal.ambiente, this.empresa.idCSC, this.empresa.CSC);
         }
 
         let qrCodeObj = <schema.TNFeInfNFeSupl>{
             qrCode: '<' + qrCode + '>',
-            urlChave: soapEnvio.urlConsultaNFCe
+            urlChave: soapAutorizacao.urlQRCode
         };
 
         let qrCodeXml = XmlHelper.serializeXml(qrCodeObj, 'infNFeSupl').replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[');
@@ -195,11 +190,11 @@ export class NFeProcessor {
     }
 
     private async consultarProc(xml:string, cert: any) {
-        return await WebServiceHelper.makeSoapRequest(xml, cert, soapConsulta);
+        return await WebServiceHelper.makeSoapRequest(xml, cert, soapRetAutorizacao);
     }
 
     private async enviarNF(xml: string, cert: any) {
-        return await WebServiceHelper.makeSoapRequest(xml, cert, soapEnvio);
+        return await WebServiceHelper.makeSoapRequest(xml, cert, soapAutorizacao);
     }
 
     private gerarXmlConsultaProc(ambiente: string, recibo: string){

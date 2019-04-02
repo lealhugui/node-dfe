@@ -1,3 +1,8 @@
+export enum ServicosSefaz {
+    autorizacao = 'autorizacao',
+    retAutorizacao = 'retAutorizacao',
+    consultarStatusServico = 'consultarStatusServico'
+}
 
 export interface RetornoProcessamentoNF {
     success: boolean,

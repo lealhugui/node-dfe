@@ -1,16 +1,9 @@
-
 import * as schema from '../schema/index'
 import { XmlHelper } from "../xmlHelper";
 import { WebServiceHelper } from "../webservices/webserviceHelper";
-import {Empresa} from "../interface/nfe";
+import {Empresa, ServicosSefaz} from "../interface/nfe";
 import * as Utils from "../utils/utils";
-
-const soap = {
-    //TODO: buscar URL conforme UF e Ambiente
-    url: 'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx?wsdl',
-    method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4',
-    action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF'
-};
+import { SefazNFCe } from "../webservices/sefazNfce";
 
 /**
  * Classe para processamento do Status Servico
@@ -27,6 +20,7 @@ export class StatusServicoProcessor {
     }
 
     async consultarStatusServico(xml: string, cert: any) {
+        let soap = SefazNFCe.getSoapInfo(this.empresa.endereco.uf, '2', ServicosSefaz.consultarStatusServico);
         return await WebServiceHelper.makeSoapRequest(xml, cert, soap);
     }
 
