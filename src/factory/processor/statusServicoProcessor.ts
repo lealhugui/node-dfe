@@ -4,27 +4,27 @@ import { WebServiceHelper } from "../webservices/webserviceHelper";
 import {Empresa, ServicosSefaz} from "../interface/nfe";
 import * as Utils from "../utils/utils";
 import { SefazNFCe } from "../webservices/sefazNfce";
+import { SefazNFe } from "../webservices/sefazNfe";
 
 /**
  * Classe para processamento do Status Servico
  */
 export class StatusServicoProcessor {
 
-    constructor(private empresa: Empresa){
+    constructor(private empresa: Empresa, private ambiente: string, private modelo: string) { }
 
-    }
-
-    async processarDocumento(){
-        let xml = this.gerarXmlStatusServico('4.00', 2, this.empresa.endereco.cUf); //TODO: ambiente
+    async processarDocumento() {
+        let xml = this.gerarXmlStatusServico('4.00', this.ambiente, this.empresa.endereco.cUf);
         return await this.consultarStatusServico(xml, this.empresa.certificado);
     }
 
     async consultarStatusServico(xml: string, cert: any) {
-        let soap = SefazNFCe.getSoapInfo(this.empresa.endereco.uf, '2', ServicosSefaz.consultarStatusServico);
+        let Sefaz = this.modelo == '65' ? SefazNFCe : SefazNFe;
+        let soap = Sefaz.getSoapInfo(this.empresa.endereco.uf, this.ambiente, ServicosSefaz.consultarStatusServico);
         return await WebServiceHelper.makeSoapRequest(xml, cert, soap);
     }
 
-    gerarXmlStatusServico(versao: string, ambiente: number, cUf: string) {
+    gerarXmlStatusServico(versao: string, ambiente: string, cUf: string) {
         let status = <schema.TConsStatServ>{
             $: {
                 versao: versao,

@@ -7,7 +7,8 @@ import * as schema from '../schema/index';
 import { XmlHelper } from '../xmlHelper';
 import * as Utils from '../utils/utils';
 import { Signature } from '../signature';
-import { SefazNFCe } from "../webservices/sefazNfce";
+import { SefazNFCe } from '../webservices/sefazNfce';
+import { SefazNFe } from '../webservices/sefazNfe';
 const sha1 = require('sha1');
 
 
@@ -19,9 +20,7 @@ let soapRetAutorizacao: any = {};
  */
 export class NFeProcessor {
 
-    constructor(private empresa: Empresa, private responsavelTecnico?: ResponsavelTecnico) {
-
-    }
+    constructor(private empresa: Empresa, private responsavelTecnico?: ResponsavelTecnico) { }
 
     /**
      * Metodo para realizar o processamento de documento(s) do tipo 55 ou 65 de forma sincrona
@@ -34,8 +33,10 @@ export class NFeProcessor {
         };
 
         try {
-            soapAutorizacao = SefazNFCe.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.autorizacao);
-            soapRetAutorizacao = SefazNFCe.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.retAutorizacao);
+            let Sefaz = documento.docFiscal.modelo == '65' ? SefazNFCe : SefazNFe;
+
+            soapAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.autorizacao);
+            soapRetAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.retAutorizacao);
   
             let doc = this.gerarXml(documento);
     

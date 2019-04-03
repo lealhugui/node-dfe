@@ -261,8 +261,8 @@ function testeQRcodeNFCe(){
 }
 
 // TESTES STATUS SERVICO:
-async function testeConsultaStatusServico(empresa) {
-    const statusProc = new lib.StatusServicoProcessor(empresa);
+async function testeConsultaStatusServico(empresa, ambiente, modelo) {
+    const statusProc = new lib.StatusServicoProcessor(empresa, ambiente, modelo);
     let result = await statusProc.processarDocumento();
     console.log(result.data);
     
@@ -283,9 +283,9 @@ function testHashRespTec(){
 }
 
 //testeAssinaturaXML();
-//testeConsultaStatusServico(empresa);
+testeConsultaStatusServico(empresa, '2', '65');
 //testeDesereliaze();
-testeEmissaoNFCe();
+//testeEmissaoNFCe();
 //testeEmissaoNFCeContingenciaOffline(empresa);
 //testeQRcodeNFCe();
 //testHashRespTec();

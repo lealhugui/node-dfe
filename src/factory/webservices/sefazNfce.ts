@@ -1,4 +1,5 @@
 import { ServicosSefaz } from '../interface/nfe';
+import * as Utils from '../utils/utils';
 
 const servicos: any = {
     'autorizacao': {
@@ -182,10 +183,10 @@ const autorizadores = {
             },
             consultarStatusServico: {
                 url_producao: 'https://nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx',
-                url_homologacao: ' 	https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx'
+                url_homologacao: 'https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx'
             }
         }
-    }, 
+    },
 };
 
 export abstract class SefazNFCe {
@@ -215,7 +216,7 @@ export abstract class SefazNFCe {
             case 'AP':
             case 'BA':
             case 'DF':
-            case 'EF':
+            case 'ES':
             case 'MA':
             case 'PA':
             case 'PB':
@@ -312,9 +313,9 @@ export abstract class SefazNFCe {
         let autorizador = this.getAutorizadorByUF(uf);
 
         if (amb == '1')
-            soap.url = autorizador.servicos[servico].url_producao
+            soap.url = Utils.validaUrl(autorizador.servicos[servico].url_producao);
         else
-            soap.url = autorizador.servicos[servico].url_homologacao
+            soap.url = Utils.validaUrl(autorizador.servicos[servico].url_homologacao);
 
         if (servico == ServicosSefaz.autorizacao) {
             soap.urlQRCode = this.getUrlQRCodeByUF(uf, amb); 

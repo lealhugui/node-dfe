@@ -27,3 +27,10 @@ export function removeSelfClosedFields(o: Object | any): void{
         }
     });
 }
+
+export function validaUrl(url: string) {
+    if (!url.includes('?wsdl'))
+        url += '?wsdl';
+        
+    return url;
+}
