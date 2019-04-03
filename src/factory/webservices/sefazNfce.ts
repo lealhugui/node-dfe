@@ -313,9 +313,9 @@ export abstract class SefazNFCe {
         let autorizador = this.getAutorizadorByUF(uf);
 
         if (amb == '1')
-            soap.url = Utils.validaUrl(autorizador.servicos[servico].url_producao);
+            soap.url = Utils.validaUrlWsdl(autorizador.servicos[servico].url_producao);
         else
-            soap.url = Utils.validaUrl(autorizador.servicos[servico].url_homologacao);
+            soap.url = Utils.validaUrlWsdl(autorizador.servicos[servico].url_homologacao);
 
         if (servico == ServicosSefaz.autorizacao) {
             soap.urlQRCode = this.getUrlQRCodeByUF(uf, amb); 

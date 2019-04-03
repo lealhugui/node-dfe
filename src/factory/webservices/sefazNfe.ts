@@ -363,9 +363,9 @@ export abstract class SefazNFe {
         let autorizador = isContingencia ? this.getAutorizadorContingenciaByUF(uf) : this.getAutorizadorByUF(uf);
 
         if (amb == '1')
-            soap.url = Utils.validaUrl(autorizador.servicos[servico].url_producao);
+            soap.url = Utils.validaUrlWsdl(autorizador.servicos[servico].url_producao);
         else
-            soap.url = Utils.validaUrl(autorizador.servicos[servico].url_homologacao);
+            soap.url = Utils.validaUrlWsdl(autorizador.servicos[servico].url_homologacao);
 
         soap.method = servicos[servico].method;
         soap.action = servicos[servico].action;

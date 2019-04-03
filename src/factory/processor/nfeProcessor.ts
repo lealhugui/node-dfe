@@ -401,7 +401,7 @@ export class NFeProcessor {
     }
 
     private getEmit(empresa: Empresa) {
-        return <schema.TNFeInfNFeEmit>{
+        return <schema.TNFeInfNFeEmit> {
             CNPJ: empresa.cnpj,
             xNome: empresa.razaoSocial,
             xFant: empresa.nomeFantasia,
@@ -528,7 +528,10 @@ export class NFeProcessor {
     private getDetImposto(imposto: Imposto) {
         let detImposto = <schema.TNFeInfNFeDetImposto>{
             vTotTrib: imposto.valorAproximadoTributos,
-            ICMS: [this.getImpostoIcms(imposto.icms)]
+            ICMS: [this.getImpostoIcms(imposto.icms)],
+            IPI: '',
+            II: '',
+            ISSQN: ''
         };
 
         return detImposto;
@@ -899,6 +902,26 @@ export class NFeProcessor {
         }
         
         return result;
+    }
+
+    private getImpostoIPI() {
+
+    }
+
+    private getImpostoII() {
+
+    }
+
+    private getImpostoISSQN() {
+
+    }
+
+    private getImpostoPIS() {
+
+    }
+
+    private getImpostoCOFINS() {
+        
     }
 
     private getTotal(total: Total) {

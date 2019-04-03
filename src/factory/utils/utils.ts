@@ -28,7 +28,7 @@ export function removeSelfClosedFields(o: Object | any): void{
     });
 }
 
-export function validaUrl(url: string) {
+export function validaUrlWsdl(url: string) {
     if (!url.includes('?wsdl'))
         url += '?wsdl';
         

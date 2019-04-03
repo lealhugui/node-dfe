@@ -283,9 +283,9 @@ function testHashRespTec(){
 }
 
 //testeAssinaturaXML();
-testeConsultaStatusServico(empresa, '2', '65');
+//testeConsultaStatusServico(empresa, '2', '65');
 //testeDesereliaze();
-//testeEmissaoNFCe();
+testeEmissaoNFCe();
 //testeEmissaoNFCeContingenciaOffline(empresa);
 //testeQRcodeNFCe();
 //testHashRespTec();
