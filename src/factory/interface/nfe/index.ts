@@ -1,3 +1,4 @@
+
 export enum ServicosSefaz {
     autorizacao = 'autorizacao',
     retAutorizacao = 'retAutorizacao',
@@ -120,6 +121,9 @@ export interface Imposto {
     icms: Icms;
     pis: Pis;
     cofins: Cofins;
+    ipi: Ipi;
+    ii: II;
+    issqn: Issqn;
 }
 
 export interface Icms {
@@ -170,9 +174,40 @@ export interface Cofins {
     cst: string;
 }
 
+export interface Ipi {
+
+}
+
+export interface II {
+    vBC: string,
+    vDespAdu: string,
+    vII: string,
+    vIOF: string
+}
+
+export interface Issqn {
+    vBC: string,
+    vAliq: string,
+    vISSQN: string,
+    cMunFG: string,
+    cListServ: string,
+    vDeducao: string,
+    vOutro: string,
+    vDescIncond: string,
+    vDescCond: string,
+    vISSRet: string,
+    indISS: string,
+    cServico: string,
+    cMun: string,
+    cPais: string,
+    nProcesso: string,
+    indIncentivo: string
+}
+
 export interface Total {
     icmsTot: IcmsTot;
     issqnTot: IssqnTot;
+    retTrib: RetTrib;
 }
 
 export interface IcmsTot {
@@ -202,7 +237,28 @@ export interface IcmsTot {
 }
 
 export interface IssqnTot {
+    vServ: string;
+    vBC: string;
+    vISS: string;
+    vPIS: string;
+    vCOFINS: string;
+    dCompet: string;
+    vDeducao: string;
+    vOutro: string;
+    vDescIncond: string;
+    vDescCond: string;
+    vISSRet: string;
+    cRegTrib: string;
+}
 
+export interface RetTrib {
+    vRetPIS: string;
+    vRetCOFINS: string;
+    vRetCSLL: string;
+    vBCIRRF: string;
+    vIRRF: string;
+    vBCRetPrev: string;
+    vRetPrev: string;
 }
 
 export interface Transporte {

@@ -9,6 +9,7 @@ import * as Utils from '../utils/utils';
 import { Signature } from '../signature';
 import { SefazNFCe } from '../webservices/sefazNfce';
 import { SefazNFe } from '../webservices/sefazNfe';
+
 const sha1 = require('sha1');
 
 
@@ -531,7 +532,8 @@ export class NFeProcessor {
             ICMS: [this.getImpostoIcms(imposto.icms)],
             IPI: '',
             II: '',
-            ISSQN: ''
+            ISSQN: '',
+            //pis / cofins
         };
 
         return detImposto;
@@ -909,11 +911,33 @@ export class NFeProcessor {
     }
 
     private getImpostoII() {
-
+        return <schema.TNFeInfNFeDetImpostoII> {
+            vBC: '',
+            vDespAdu: '',
+            vII: '',
+            vIOF: ''
+        }
     }
 
     private getImpostoISSQN() {
-
+        return <schema.TNFeInfNFeDetImpostoISSQN> {
+            vBC: '',
+            vAliq: '',
+            vISSQN: '',
+            cMunFG: '',
+            cListServ: schema.TCListServ.Item0101,
+            vDeducao: '',
+            vOutro: '',
+            vDescIncond: '',
+            vDescCond: '',
+            vISSRet: '',
+            indISS: schema.TNFeInfNFeDetImpostoISSQNIndISS.Item1,
+            cServico: '',
+            cMun: '',
+            cPais: '',
+            nProcesso: '',
+            indIncentivo: schema.TNFeInfNFeDetImpostoISSQNIndIncentivo.Item1
+        }
     }
 
     private getImpostoPIS() {
