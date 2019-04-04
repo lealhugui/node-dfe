@@ -22,7 +22,7 @@ export function removeSelfClosedFields(o: Object | any): void{
             removeSelfClosedFields(o[key]);
             return;
         }
-        if (o[key] === undefined || o[key] === '') {
+        if (o[key] === undefined || o[key] === '' || o[key] === null) {
             delete o[key];
         }
     });
