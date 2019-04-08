@@ -15,7 +15,6 @@ export interface RetornoProcessamentoNF {
 }
 
 export interface RetornoContingenciaOffline {
-    documento_enviado: NFCeDocumento,
     xml_gerado: string
 }
 

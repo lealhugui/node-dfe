@@ -55,7 +55,6 @@ export class NFeProcessor {
                 result.retornoContingenciaOffline = <RetornoContingenciaOffline>{};
 
                 result.success = true;
-                result.retornoContingenciaOffline.documento_enviado = documento;
                 result.retornoContingenciaOffline.xml_gerado = xmlLote;
             } else {
                 result = await this.transmitirXml(xmlLote, documento.docFiscal.ambiente, doc.nfe);
@@ -80,8 +79,10 @@ export class NFeProcessor {
         };
 
         try {
-            soapAutorizacao = SefazNFCe.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.autorizacao);
-            soapRetAutorizacao = SefazNFCe.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.retAutorizacao);
+            let Sefaz = documento.docFiscal.modelo == '65' ? SefazNFCe : SefazNFe;
+
+            soapAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.autorizacao);
+            soapRetAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.retAutorizacao);
   
             let doc = this.gerarXml(documento);
 
@@ -99,7 +100,6 @@ export class NFeProcessor {
                 result.retornoContingenciaOffline = <RetornoContingenciaOffline>{};
 
                 result.success = true;
-                result.retornoContingenciaOffline.documento_enviado = documento;
                 result.retornoContingenciaOffline.xml_gerado = xmlLote;
             } else {
                 result = await this.transmitirXml(xmlLote, documento.docFiscal.ambiente, doc.nfe);
@@ -143,13 +143,19 @@ export class NFeProcessor {
         };
     }
 
-    private async transmitirXml(xmlLote: string, ambiente: string, nfeObj: Object){
+    public async transmitirXml(xmlLote: string, ambiente: string, nfeObj: Object){
         let result = <RetornoProcessamentoNF>{
             success: false,
             nfe: nfeObj
         };
 
         try {
+
+            if (!nfeObj) {
+                let xmlObj = XmlHelper.deserializeXml(xmlLote, { explicitArray: false });
+                result.nfe = Object(xmlObj).enviNFe.NFe;
+            }
+
             let retornoEnvio = await this.enviarNF(xmlLote, this.empresa.certificado);
             result.envioNF = retornoEnvio;
     
@@ -225,6 +231,9 @@ export class NFeProcessor {
     }
 
     private gerarXml(documento: NFeDocumento | NFCeDocumento) {
+        if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline)
+            documento.docFiscal.tipoEmissao = '9';
+        
         let dadosChave = this.gerarChaveNF(this.empresa, documento.docFiscal);
         let NFe = <schema.TNFe> {
             $: {
@@ -390,13 +399,6 @@ export class NFeProcessor {
             xJust: documento.justificativaContingencia,
             //nFref: schema.TNFeInfNFeIdeNFref[],
         };
-
-        if (documento.isContingenciaOffline && documento.modelo == '65') {
-            if (ide.dhCont == '' || ide.xJust == '')
-                throw new Error('Deve ser informada a data/hora de contingência e justificativa.');
-                
-            ide.tpEmis = Utils.getEnumByValue(schema.TNFeInfNFeIdeTpEmis, '9');
-        }
 
         return ide;
     }

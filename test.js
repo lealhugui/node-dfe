@@ -234,17 +234,11 @@ async function testeEmissaoNFCeContingenciaOffline(empresa) {
     nfce.docFiscal.justificativaContingencia = 'TESTE CONTINGENCIA';
 
     let result = await nfeProc.processarDocumento(nfce);
-    console.log('Resultado Geração XML NFC-e Contingencia: \n\n' + require('util').inspect(result, false, null) + '\n\n');
+    //console.log('Resultado Geração XML NFC-e Contingencia: \n\n' + require('util').inspect(result, false, null) + '\n\n');
 
-    let nfce_apos_contingencia = Object(result.retornoContingenciaOffline).documento_enviado;
-
-    nfce_apos_contingencia.docFiscal.isContingenciaOffline = false;
-    nfce_apos_contingencia.docFiscal.tipoEmissao = '1';
-    nfce_apos_contingencia.docFiscal.dhContingencia = '';
-    nfce_apos_contingencia.docFiscal.justificativaContingencia = '';
-
-    let result_emissao = await nfeProc.processarDocumento(nfce_apos_contingencia);
-    console.log('Resultado Transmição XML Contingencia: \n\n' + require('util').inspect(result_emissao, false, null));
+    let result_emissao = await nfeProc.transmitirXml(Object(result.retornoContingenciaOffline).xml_gerado,'2', null);
+    console.log('Resultado Transmissão XML Contingencia: \n\n' + require('util').inspect(result_emissao, false, null));
+    
 }
 
 function testeAssinaturaXML() {
@@ -285,7 +279,7 @@ function testHashRespTec(){
 //testeAssinaturaXML();
 //testeConsultaStatusServico(empresa, '2', '65');
 //testeDesereliaze();
-testeEmissaoNFCe();
-//testeEmissaoNFCeContingenciaOffline(empresa);
+//testeEmissaoNFCe();
+testeEmissaoNFCeContingenciaOffline(empresa);
 //testeQRcodeNFCe();
 //testHashRespTec();
