@@ -40,4 +40,4 @@ As releases do ```node-dfe``` seguem as liberações de versao/NT da SEFAZ, no f
 
 ## Estado Atual e Proximos Passos
 
-Atualmente a biblioteca suporta eventos de emissao de DF-es modelos 55 (NF-e) e 65 (NFC-e), para os estados do RS/PR, nos modelos sincrono e assincrono. As proximas versoes Fix devem contemplar diferentes eventos para estes modelos (inutilização e cancelamento por exemplo).
+Atualmente a biblioteca suporta eventos de emissao de DF-es modelo 65 (NFC-e) para todos os estados, nos modelos sincrono e assincrono. As proximas versoes Fix devem contemplar ajustes necessários para emissão de DF-e modelo 55 (NF-e) e também diferentes eventos para estes modelos (inutilização e cancelamento por exemplo).
