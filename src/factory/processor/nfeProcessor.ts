@@ -12,9 +12,8 @@ import { SefazNFe } from '../webservices/sefazNfe';
 
 const sha1 = require('sha1');
 
-
-let soapAutorizacao: any = {};
-let soapRetAutorizacao: any = {};
+let soapAutorizacao: any = null;
+let soapRetAutorizacao: any = null;
 
 /**
  * Classe para processamento de NFe/NFCe
@@ -34,11 +33,8 @@ export class NFeProcessor {
         };
 
         try {
-            let Sefaz = documento.docFiscal.modelo == '65' ? SefazNFCe : SefazNFe;
+            this.configuraUrlsSefaz(documento.docFiscal.modelo, documento.docFiscal.ambiente);
 
-            soapAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.autorizacao);
-            soapRetAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.retAutorizacao);
-  
             let doc = this.gerarXml(documento);
     
             let xmlAssinado = Signature.signXmlX509(doc.xml, 'infNFe', this.empresa.certificado);
@@ -57,7 +53,7 @@ export class NFeProcessor {
                 result.success = true;
                 result.retornoContingenciaOffline.xml_gerado = xmlLote;
             } else {
-                result = await this.transmitirXml(xmlLote, documento.docFiscal.ambiente, doc.nfe);
+                result = await this.transmitirXml(xmlLote, documento.docFiscal.modelo, documento.docFiscal.ambiente, doc.nfe);
             }
             
         } catch (ex) {
@@ -79,11 +75,8 @@ export class NFeProcessor {
         };
 
         try {
-            let Sefaz = documento.docFiscal.modelo == '65' ? SefazNFCe : SefazNFe;
+            this.configuraUrlsSefaz(documento.docFiscal.modelo, documento.docFiscal.ambiente);
 
-            soapAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.autorizacao);
-            soapRetAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, documento.docFiscal.ambiente, ServicosSefaz.retAutorizacao);
-  
             let doc = this.gerarXml(documento);
 
             let xmlAssinado = Signature.signXmlX509(doc.xml, 'infNFe', this.empresa.certificado);
@@ -102,7 +95,7 @@ export class NFeProcessor {
                 result.success = true;
                 result.retornoContingenciaOffline.xml_gerado = xmlLote;
             } else {
-                result = await this.transmitirXml(xmlLote, documento.docFiscal.ambiente, doc.nfe);
+                result = await this.transmitirXml(xmlLote, documento.docFiscal.modelo, documento.docFiscal.ambiente, doc.nfe);
             }
 
         } catch (ex) {
@@ -111,6 +104,15 @@ export class NFeProcessor {
         }
 
         return result;
+    }
+
+    private configuraUrlsSefaz(modelo: string, ambiente: string) {
+        if (!soapAutorizacao || !soapRetAutorizacao) {
+            let Sefaz = modelo == '65' ? SefazNFCe : SefazNFe;
+
+            soapAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, ambiente, ServicosSefaz.autorizacao);
+            soapRetAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, ambiente, ServicosSefaz.retAutorizacao);
+        }
     }
 
     private appendQRCodeXML(documento: NFCeDocumento, xmlAssinado: string){
@@ -143,7 +145,7 @@ export class NFeProcessor {
         };
     }
 
-    public async transmitirXml(xmlLote: string, ambiente: string, nfeObj: Object){
+    public async transmitirXml(xmlLote: string, modelo: string, ambiente: string, nfeObj: Object){
         let result = <RetornoProcessamentoNF>{
             success: false,
             nfe: nfeObj
@@ -155,6 +157,8 @@ export class NFeProcessor {
                 let xmlObj = XmlHelper.deserializeXml(xmlLote, { explicitArray: false });
                 result.nfe = Object(xmlObj).enviNFe.NFe;
             }
+
+            this.configuraUrlsSefaz(modelo, ambiente);
 
             let retornoEnvio = await this.enviarNF(xmlLote, this.empresa.certificado);
             result.envioNF = retornoEnvio;
