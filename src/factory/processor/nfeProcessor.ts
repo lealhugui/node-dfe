@@ -134,7 +134,7 @@ export class NFeProcessor {
 
         let qrCodeObj = <schema.TNFeInfNFeSupl>{
             qrCode: '<' + qrCode + '>',
-            urlChave: soapAutorizacao.urlQRCode
+            urlChave: soapAutorizacao.urlChave
         };
 
         let qrCodeXml = XmlHelper.serializeXml(qrCodeObj, 'infNFeSupl').replace('>]]>', ']]>').replace('<![CDATA[<', '<![CDATA[');
@@ -309,21 +309,21 @@ export class NFeProcessor {
         return dv.toString();
     }
 
-    private gerarQRCodeNFCeOnline(urlConsultaNFCe: string, chave: string, versaoQRCode: string, ambiente: string, idCSC: string, CSC: string) {
+    private gerarQRCodeNFCeOnline(urlQRCode: string, chave: string, versaoQRCode: string, ambiente: string, idCSC: string, CSC: string) {
         let s = '|';
         let concat = [chave, versaoQRCode, ambiente, idCSC].join(s);
         let hash = sha1(concat + CSC).toUpperCase();
         
-        return urlConsultaNFCe + concat + s + hash;
+        return urlQRCode + concat + s + hash;
     }
 
-    private gerarQRCodeNFCeOffline(urlConsultaNFCe: string, chave: string, versaoQRCode: string, ambiente: string, diaEmissao: string, valorTotal:string, digestValue: string, idCSC: string, CSC: string) {
+    private gerarQRCodeNFCeOffline(urlQRCode: string, chave: string, versaoQRCode: string, ambiente: string, diaEmissao: string, valorTotal:string, digestValue: string, idCSC: string, CSC: string) {
         let s = '|';
         let hexDigestValue = new Buffer(digestValue).toString('hex');
         let concat = [chave, versaoQRCode, ambiente, diaEmissao, valorTotal, hexDigestValue, idCSC].join(s);
         let hash = sha1(concat + CSC).toUpperCase();
 
-        return urlConsultaNFCe + concat + s + hash;
+        return urlQRCode + concat + s + hash;
     }
 
     private gerarNFe(documento: NFeDocumento, dadosChave: any) {
