@@ -163,6 +163,10 @@ export interface Icms {
     pFCPSTRet: string;
     vFCPSTRet: string;
     pST: string;
+    pICMSEfet: string;
+    pRedBCEfet: string;
+    vBCEfet: string;
+    vICMSEfet: string;
 }
 
 export interface Pis {

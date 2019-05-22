@@ -672,10 +672,10 @@ export class NFeProcessor {
                                 //pST: '',
                                 //vBCFCPSTRet: '',
                                 //vFCPSTRet: '',
-                                //pICMSEfet: '',
-                                //pRedBCEfet: '',
-                                //vBCEfet: '',
-                                //vICMSEfet: '',
+                                pRedBCEfet: icms.pRedBCEfet,
+                                vBCEfet: icms.vBCEfet,
+                                pICMSEfet: icms.pICMSEfet,
+                                vICMSEfet: icms.vICMSEfet,
                                 //vICMSSubstituto: '',
                             }
                         }
@@ -720,10 +720,10 @@ export class NFeProcessor {
                             vBCFCPSTRet: icms.vBCFCPSTRet,
                             pFCPSTRet: icms.pFCPSTRet,
                             vFCPSTRet: icms.vFCPSTRet,
-                            //pICMSEfet: '',
-                            //pRedBCEfet: '',
-                            //vBCEfet: '',
-                            //vICMSEfet: '',
+                            pRedBCEfet: icms.pRedBCEfet,
+                            vBCEfet: icms.vBCEfet,
+                            pICMSEfet: icms.pICMSEfet,
+                            vICMSEfet: icms.vICMSEfet,
                             //vICMSSubstituto: '',
                         }
                     }
@@ -878,7 +878,11 @@ export class NFeProcessor {
                             vICMSSTRet: icms.vICMSSTRet,
                             vBCFCPSTRet: icms.vBCFCPSTRet,
                             pFCPSTRet: icms.pFCPSTRet,
-                            vFCPSTRet: icms.vFCPSTRet
+                            vFCPSTRet: icms.vFCPSTRet,
+                            pRedBCEfet: icms.pRedBCEfet,
+                            vBCEfet: icms.vBCEfet,
+                            pICMSEfet: icms.pICMSEfet,
+                            vICMSEfet: icms.vICMSEfet,
                         }
                     } 
                     break;
