@@ -1031,6 +1031,19 @@ export class NFeProcessor {
     }
 
     private getResponsavelTecnico(respTec: ResponsavelTecnico, chave: string) {
+        const result: any = {
+            CNPJ: respTec.cnpj,
+            xContato: respTec.contato,
+            email: respTec.email,
+            fone: respTec.fone,
+        }
+        if (respTec.CSRT != null && respTec.CSRT != "") {
+            result.idCSRT = respTec.idCSRT;
+            result.hashCSRT = this.gerarHashCSRT(chave, respTec.CSRT);
+        }
+        return result;
+        
+        /*
         return <schema.TInfRespTec> {
             CNPJ: respTec.cnpj,
             xContato: respTec.contato,
@@ -1039,6 +1052,7 @@ export class NFeProcessor {
             idCSRT: respTec.idCSRT,
             hashCSRT: this.gerarHashCSRT(chave, respTec.CSRT)
         }
+        */
     }
 
     private gerarHashCSRT(chave: string, CSRT: string) {
