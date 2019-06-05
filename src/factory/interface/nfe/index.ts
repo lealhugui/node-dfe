@@ -314,8 +314,8 @@ export interface ResponsavelTecnico {
     contato: string;
     email: string;
     fone: string;
-    idCSRT: string;
-    CSRT: string;
+    idCSRT?: string;
+    CSRT?: string;
 }
 
 export interface Destinatario {
