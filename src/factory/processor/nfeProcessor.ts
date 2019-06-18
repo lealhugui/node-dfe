@@ -152,6 +152,7 @@ export class NFeProcessor {
         };
 
         try {
+            let retEnviNFe = null;
 
             if (!nfeObj) {
                 let xmlObj = XmlHelper.deserializeXml(xmlLote, { explicitArray: false });
@@ -161,15 +162,26 @@ export class NFeProcessor {
             this.configuraUrlsSefaz(modelo, ambiente);
 
             let retornoEnvio = await this.enviarNF(xmlLote, this.empresa.certificado);
-            result.envioNF = retornoEnvio;
-    
-            let retEnviNFe = Object(retornoEnvio.data).retEnviNFe;
+            if (retornoEnvio && retornoEnvio.data) {
+                const data = Object(retornoEnvio.data);                
+                if (data.retEnviNFe) {
+                    retEnviNFe = data.retEnviNFe;
+                }
+            } else {
+                throw new Error('Erro ao realizar requisição');
+            }
 
-            if (retEnviNFe.cStat == '104' && retEnviNFe.protNFe.infProt.cStat == '100') {
+            console.log('node-dfe------->: ', retEnviNFe.cStat);
+            console.log(retEnviNFe && retEnviNFe.cStat == '104' && retEnviNFe.protNFe.infProt.cStat == '100');
+            console.log(retEnviNFe && retEnviNFe.cStat == '103');
+            
+            result.envioNF = retornoEnvio;            
+            
+            if (retEnviNFe && retEnviNFe.cStat == '104' && retEnviNFe.protNFe.infProt.cStat == '100') {
                 // retorno síncrono
                 result.success = true;
 
-            } else if (retEnviNFe.cStat == '103') {
+            } else if (retEnviNFe && retEnviNFe.cStat == '103') {
                 let recibo = retEnviNFe.infRec.nRec;
                 let xmlConRecNFe = this.gerarXmlConsultaProc(ambiente, recibo);
 
