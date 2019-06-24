@@ -4,6 +4,16 @@ import { XmlHelper } from '../xmlHelper';
 
 import { RetornoProcessamento } from '../interface/nfe'
 
+
+export interface WebProxy {
+    host: string;
+    port: string;
+    auth?: {
+        username: string;
+        password: string;
+    }
+}
+
 export abstract class WebServiceHelper {
 
     public static buildSoapEnvelope(xml: string, soapMethod: string) {
@@ -35,12 +45,10 @@ export abstract class WebServiceHelper {
     }
 
 
-    public static async makeSoapRequest(xml: string, cert: any, soap: any) {
+    public static async makeSoapRequest(xml: string, cert: any, soap: any, proxy?: WebProxy) {
         let result = <RetornoProcessamento>{ xml_enviado: xml };
         try {
-            
-            console.log('----->', soap.url)
-            let res = await axios({
+            const reqOpt: any = {
                 url: soap.url,
                 method: "post",
                 httpsAgent: this.getHttpsAgent(cert),
@@ -49,7 +57,14 @@ export abstract class WebServiceHelper {
                     "Content-Type": "text/xml;charset=utf-8",
                     "SOAPAction": soap.action
                 }
-            });
+            }
+
+            if (proxy) {
+                reqOpt.proxy = proxy
+            }
+
+            console.log('----->', soap.url)
+            let res = await axios(reqOpt);
             console.log('----->', res.status)
             result.status = res.status;
             result.xml_recebido = res.data;

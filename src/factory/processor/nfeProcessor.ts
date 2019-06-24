@@ -2,7 +2,7 @@ import { RetornoProcessamentoNF, Empresa, Endereco, NFCeDocumento, NFeDocumento,
     InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline, ResponsavelTecnico, ServicosSefaz
 } from '../interface/nfe';
 
-import { WebServiceHelper } from "../webservices/webserviceHelper";
+import { WebServiceHelper, WebProxy } from "../webservices/webserviceHelper";
 import * as schema from '../schema/index';
 import { XmlHelper } from '../xmlHelper';
 import * as Utils from '../utils/utils';
@@ -40,7 +40,10 @@ function jsonOneLevel(obj: any): string {
  */
 export class NFeProcessor {
 
-    constructor(private empresa: Empresa, private responsavelTecnico?: ResponsavelTecnico) { }
+    constructor(
+        private empresa: Empresa,
+        private responsavelTecnico?: ResponsavelTecnico,
+        private webProxy?: WebProxy) { }
 
     /**
      * Metodo para realizar o processamento de documento(s) do tipo 55 ou 65 de forma sincrona
@@ -260,11 +263,15 @@ export class NFeProcessor {
     }
 
     private async consultarProc(xml:string, cert: any) {
-        return await WebServiceHelper.makeSoapRequest(xml, cert, soapRetAutorizacao);
+        return await WebServiceHelper.makeSoapRequest(
+            xml, cert, soapRetAutorizacao, this.webProxy
+        );
     }
 
     private async enviarNF(xml: string, cert: any) {
-        return await WebServiceHelper.makeSoapRequest(xml, cert, soapAutorizacao);
+        return await WebServiceHelper.makeSoapRequest(
+            xml, cert, soapAutorizacao, this.webProxy
+        );
     }
 
     private gerarXmlConsultaProc(ambiente: string, recibo: string){
