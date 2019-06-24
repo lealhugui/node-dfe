@@ -21,9 +21,15 @@ function log(msg: string, processo?: string) {
 }
 
 function jsonOneLevel(obj: any): string {
-    const result: any = null
+    const result: any = {}
+    
+
     for(const k of Object.keys(obj)) {
-        result[k] = obj[k].toString()
+        let logStr = obj[k].toString() || "null";
+        if(logStr.length > 500) {
+            logStr = logStr.substring(0, 499)
+        }
+        result[k] = logStr
     }
 
     return JSON.stringify(result)
@@ -179,13 +185,14 @@ export class NFeProcessor {
 
             try {
                 log(jsonOneLevel({
+                    success: !!retornoEnvio ? retornoEnvio.success : false,
                     retornoEnvio: !!retornoEnvio,
                     data: !retornoEnvio ? false : !!retornoEnvio.data
                 }), 'retornoEnvio.exists')
 
-                log(jsonOneLevel(retornoEnvio), 'retornoEnvio.data');
+                log(jsonOneLevel(retornoEnvio), 'retornoEnvio.full');
             } catch(e) {
-                log('ja deu erro pra logar.......', 'retornoEnvio')
+                log(`ja deu erro pra logar.......${e.toString()}`, 'retornoEnvio')
             }
 
 

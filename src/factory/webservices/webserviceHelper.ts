@@ -38,6 +38,8 @@ export abstract class WebServiceHelper {
     public static async makeSoapRequest(xml: string, cert: any, soap: any) {
         let result = <RetornoProcessamento>{ xml_enviado: xml };
         try {
+            
+            console.log('----->', soap.url)
             let res = await axios({
                 url: soap.url,
                 method: "post",
@@ -48,7 +50,7 @@ export abstract class WebServiceHelper {
                     "SOAPAction": soap.action
                 }
             });
-
+            console.log('----->', res.status)
             result.status = res.status;
             result.xml_recebido = res.data;
 
@@ -63,11 +65,13 @@ export abstract class WebServiceHelper {
                     //console.log(result.data)
                 }
             }
-
+            console.log('----->', result.success)
             return result;
+            
         } catch (err) {
             result.success = false;
             result.error = err;
+            console.log('----->', result.success)
             return result;
         }
     }
