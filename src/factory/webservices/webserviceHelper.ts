@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios-https-proxy-fix';
 import * as https from 'https';
 import { XmlHelper } from '../xmlHelper';
 
@@ -37,7 +37,7 @@ export abstract class WebServiceHelper {
 
     public static getHttpsAgent(cert: any) {
         return new https.Agent({
-            //rejectUnauthorized: false,
+            rejectUnauthorized: false,
             //strictSSL: false,
             pfx: cert.pfx,
             passphrase: cert.password

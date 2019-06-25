@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/lealhugui/node-dfe#readme",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios-https-proxy-fix": "^0.17.1",
     "cxsd": "^0.1.1",
     "debug": "^4.1.0",
     "lodash": "^4.17.11",
