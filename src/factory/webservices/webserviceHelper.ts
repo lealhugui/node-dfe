@@ -1,20 +1,53 @@
-import axios from 'axios-https-proxy-fix';
-import * as https from 'https';
-import { XmlHelper } from '../xmlHelper';
+import * as request from 'request'
+import { XmlHelper } from '../xmlHelper'
 
 import { RetornoProcessamento } from '../interface/nfe'
 
 
 export interface WebProxy {
-    host: string;
-    port: string;
+    host: string
+    port: string
+    isHttps?: boolean
     auth?: {
-        username: string;
-        password: string;
+        username: string
+        password: string
     }
 }
 
+function proxyToUrl(pr: WebProxy): string {
+    const server = `${pr.host}:${pr.port}`
+    let auth = null;
+    let final = pr.isHttps ? 'https://' : 'http://'
+    if(pr.auth) {
+        final = `${final}${pr.auth.username}:${pr.auth.password}@`
+    }
+
+    return `${final}${server}`
+}
+
+interface PostResponse {
+    response: request.Response
+    body: any
+}
+
 export abstract class WebServiceHelper {
+
+    private static httpPost(reqOpt: any) {
+        return new Promise((resolve, reject) => {
+            console.log(reqOpt)
+            request.post(reqOpt, function(err: any, resp: request.Response, body: any) {
+                console.error(err)
+                if(err) {
+                    reject(err)
+                }
+
+                resolve(<PostResponse>{
+                    response: resp,
+                    body: body
+                })
+            })
+        });
+    }
 
     public static buildSoapEnvelope(xml: string, soapMethod: string) {
         let soapEnvelopeObj = {
@@ -35,6 +68,7 @@ export abstract class WebServiceHelper {
         return soapEnvXml.replace('[XML]', xml);
     }
 
+    /*
     public static getHttpsAgent(cert: any) {
         return new https.Agent({
             rejectUnauthorized: false,
@@ -43,37 +77,54 @@ export abstract class WebServiceHelper {
             passphrase: cert.password
         });
     }
+    */
 
+
+    private static buildSoapRequestOpt(
+        cert: any, soapParams: any, xml: string, proxy?: WebProxy) {
+        const result: any = {
+            url: soapParams.url,
+            agentOptions: this.buildCertAgentOpt(cert),
+            headers: {
+                "Content-Type": "text/xml;charset=utf-8",
+                "SOAPAction": soapParams.action
+            },
+            body: this.buildSoapEnvelope(xml, soapParams.method),
+        }
+
+        if (proxy) {
+            result.proxy = proxyToUrl(proxy)
+        }
+        console.log(result)
+        return result
+    }
+
+    private static buildCertAgentOpt(cert: any) {
+        return {
+            pfx: cert.pfx,
+            passphrase: cert.password
+        }
+    }
 
     public static async makeSoapRequest(xml: string, cert: any, soap: any, proxy?: WebProxy) {
         let result = <RetornoProcessamento>{ xml_enviado: xml };
         try {
-            const reqOpt: any = {
-                url: soap.url,
-                method: "post",
-                httpsAgent: this.getHttpsAgent(cert),
-                data: this.buildSoapEnvelope(xml, soap.method),
-                headers: {
-                    "Content-Type": "text/xml;charset=utf-8",
-                    "SOAPAction": soap.action
-                }
-            }
+            const reqOpt: any = this.buildSoapRequestOpt(
+                cert, soap, xml, proxy
+            )
 
-            if (proxy) {
-                reqOpt.proxy = proxy
-            }
+            console.log('----->', reqOpt.url)
+            //let res = await axios(reqOpt);
+            const res = ((await this.httpPost(reqOpt)) as PostResponse);
+            console.log('----->', res.response.statusCode)
+            result.status = res.response.statusCode;
+            result.xml_recebido = res.response.body;
 
-            console.log('----->', soap.url)
-            let res = await axios(reqOpt);
-            console.log('----->', res.status)
-            result.status = res.status;
-            result.xml_recebido = res.data;
-
-            if (res.status == 200) {
+            if (result.status == 200) {
                 result.success = true;
-                
+
                 //let retorno = (require('util').inspect(XmlHelper.deserializeXml(res.data), false, null));
-                let retorno = XmlHelper.deserializeXml(res.data);
+                let retorno = XmlHelper.deserializeXml(result.xml_recebido);
                 if (retorno) {
                     //result.data = retorno;
                     result.data = Object(retorno)['soap:Envelope']['soap:Body']['nfeResultMsg'];
@@ -82,8 +133,9 @@ export abstract class WebServiceHelper {
             }
             console.log('----->', result.success)
             return result;
-            
+
         } catch (err) {
+            
             result.success = false;
             result.error = err;
             console.log('----->', result.success)
