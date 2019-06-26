@@ -90,6 +90,7 @@ export abstract class WebServiceHelper {
                 "SOAPAction": soapParams.action
             },
             body: this.buildSoapEnvelope(xml, soapParams.method),
+            family: 4 //workaround para erro de dns em versões antigas da glibc
         }
 
         if (proxy) {
