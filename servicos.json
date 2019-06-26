@@ -1,0 +1,14 @@
+{
+    "autorizacao": {
+        "method": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4",
+        "action": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote"
+    }, 
+    "retAutorizacao": {
+        "method": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4",
+        "action": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4/nfeRetAutorizacaoLote"
+    }, 
+    "consultarStatusServico": {
+        "method": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4",
+        "action": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF"
+    }
+}

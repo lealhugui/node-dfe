@@ -1,6 +1,9 @@
 import { ServicosSefaz } from '../interface/nfe';
 import * as Utils from '../utils/utils';
+const servicos = require('../../../servicos.json')
+const autorizadores = require('../../../autorizadores.json')
 
+/*
 const servicos: any = {
     'autorizacao': {
         method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4',
@@ -15,6 +18,7 @@ const servicos: any = {
         action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF'
     }
 };
+
 
 const autorizadores = {
     'AM': {
@@ -188,6 +192,7 @@ const autorizadores = {
         }
     },
 };
+*/
 
 export abstract class SefazNFCe {
 
