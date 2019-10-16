@@ -376,19 +376,19 @@ export class NFeProcessor {
 
     private gerarQRCodeNFCeOnline(urlQRCode: string, chave: string, versaoQRCode: string, ambiente: string, idCSC: string, CSC: string) {
         let s = '|';
-        let concat = [chave, versaoQRCode, ambiente, idCSC].join(s);
+        let concat = [chave, versaoQRCode, ambiente, Number(idCSC)].join(s);
         let hash = sha1(concat + CSC).toUpperCase();
 
-        return urlQRCode + concat + s + hash;
+        return urlQRCode + '?p=' + concat + s + hash;
     }
 
     private gerarQRCodeNFCeOffline(urlQRCode: string, chave: string, versaoQRCode: string, ambiente: string, diaEmissao: string, valorTotal:string, digestValue: string, idCSC: string, CSC: string) {
         let s = '|';
-        let hexDigestValue = new Buffer(digestValue).toString('hex');
-        let concat = [chave, versaoQRCode, ambiente, diaEmissao, valorTotal, hexDigestValue, idCSC].join(s);
+        let hexDigestValue = Buffer.from(digestValue).toString('hex');
+        let concat = [chave, versaoQRCode, ambiente, diaEmissao, valorTotal, hexDigestValue, Number(idCSC)].join(s);
         let hash = sha1(concat + CSC).toUpperCase();
 
-        return urlQRCode + concat + s + hash;
+        return urlQRCode + '?p=' + concat + s + hash;
     }
 
     private gerarNFe(documento: NFeDocumento, dadosChave: any) {
