@@ -8,11 +8,11 @@ const servicos: any = {
     'autorizacao': {
         method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4',
         action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote',
-    },
+    }, 
     'retAutorizacao': {
         method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4',
         action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4/nfeRetAutorizacaoLote'
-    },
+    }, 
     'consultarStatusServico': {
         method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4',
         action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF'
@@ -37,7 +37,7 @@ const autorizadores = {
                 url_homologacao: 'https://homnfce.sefaz.am.gov.br/nfce-services/services/NfeStatusServico4.asmx?wsdl'
             }
         }
-    },
+    }, 
     'CE': {
         nome: 'Ceará',
         servicos: {
@@ -139,7 +139,7 @@ const autorizadores = {
                 url_homologacao: 'https://homologacao.nfce.sefa.pr.gov.br/nfce/NFeStatusServico4'
             }
         }
-    },
+    }, 
     'RS': {
         nome: 'Rio Grande do Sul',
         servicos: {
@@ -156,7 +156,7 @@ const autorizadores = {
                 url_homologacao: 'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx?wsdl'
             }
         }
-    },
+    }, 
     'SVRS': {
         nome: 'SEFAZ Virtual – SVRS',
         servicos: {
