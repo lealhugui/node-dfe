@@ -6,7 +6,7 @@ export abstract class Signature {
   public static signXml(xml: string, tag: string, certificado: any) {
     let sig = new SignedXml();
     sig.addReference("//*[local-name(.)='"+tag+"']","","","","","", true);
-    sig.signingKey = certificado.key;
+    sig.signingKey = certificado.pem;
     sig.computeSignature(xml);
     return sig.getSignedXml();
   }
@@ -34,7 +34,7 @@ export abstract class Signature {
     let sig = new SignedXml();
 
     sig.addReference("//*[local-name(.)='"+tag+"']", transforms, "", "", "", "", false);
-    sig.signingKey = certificado.key;
+    sig.signingKey = certificado.pem;
     sig.canonicalizationAlgorithm = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
     sig.keyInfoProvider = infoProvider(certificado.pem);
     sig.computeSignature(xml);
