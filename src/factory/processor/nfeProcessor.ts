@@ -604,7 +604,8 @@ export class NFeProcessor {
             IPI: '',
             II: '',
             ISSQN: '',
-            //pis / cofins
+            PIS: [this.getImpostoPis(imposto.pis)],
+            COFINS: [this.getImpostoCofins(imposto.cofins)],
         };
 
         return detImposto;
@@ -1015,12 +1016,75 @@ export class NFeProcessor {
         }
     }
 
-    private getImpostoPIS() {
-
+    getImpostoPis(pis) {
+        let result;
+        if (pis.CST && pis.CST !== '') {
+            switch (pis.CST) {
+                case '04':
+                case '05':
+                case '06':
+                case '07':
+                case '08':
+                case '09':
+                    result = {
+                        PISPISNT: {
+                            CST: pis.CST,
+                        }
+                    };
+                    break;
+                case '49':
+                case '99':
+                        result = {
+                        PISOutr: {
+                            CST: pis.CST,
+                            vBC: pis.vBC,
+                            pPIS: pis.pPIS,
+                            vPIS: pis.vPIS,
+                            qBCProd: pis.qBCProd,
+                        }
+                    };
+                    break;
+                default:
+                    //throw exception?
+                    break;
+            }
+        }
+        return result;
     }
-
-    private getImpostoCOFINS() {
-
+    getImpostoCofins(cofins) {
+        let result;
+        if (cofins.CST && cofins.CST !== '') {
+            switch (cofins.CST) {
+                case '04':
+                case '05':
+                case '06':
+                case '07':
+                case '08':
+                case '09':
+                    result = {
+                        COFINSCOFINSNT: {
+                            CST: cofins.CST,
+                        }
+                    };
+                    break;
+                case '49':
+                case '99':
+                    result = {
+                        COFINSOutr: {
+                            CST: cofins.CST,
+                            vBC: cofins.vBC,
+                            pCOFINS: cofins.pCOFINS,
+                            vCOFINS: cofins.vCOFINS,
+                            qBCProd: cofins.qBCProd,
+                        }
+                    };
+                    break;
+                default:
+                    //throw exception?
+                    break;
+            }
+        }
+        return result;
     }
 
     private getTotal(total: Total) {
@@ -1036,7 +1100,8 @@ export class NFeProcessor {
 
     private getTransp(transp: Transporte) {
         return <schema.TNFeInfNFeTransp>{
-            modFrete: transp.modalidateFrete
+            modFrete: transp.modalidateFrete,
+            transportadora: transp.transportadora
             /**
              * transporta: TNFeInfNFeTranspTransporta;
                 retTransp: TNFeInfNFeTranspRetTransp;
