@@ -1039,7 +1039,7 @@ export class NFeProcessor {
                 case '08':
                 case '09':
                     result = {
-                        PISPISNT: {
+                        PISNT: {
                             CST: pis.CST,
                         }
                     };
@@ -1085,7 +1085,7 @@ export class NFeProcessor {
                 case '08':
                 case '09':
                     result = {
-                        COFINSCOFINSNT: {
+                        COFINSNT: {
                             CST: cofins.CST,
                         }
                     };
