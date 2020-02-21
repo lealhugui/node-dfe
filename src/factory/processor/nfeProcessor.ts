@@ -1020,6 +1020,17 @@ export class NFeProcessor {
         let result;
         if (pis.CST && pis.CST !== '') {
             switch (pis.CST) {
+                case '01':
+                case '02':
+                    result = {
+                        PISAliq: {
+                            CST: pis.CST,
+                            vBC: pis.vBC,
+                            pPIS: pis.pPIS,
+                            vPIS: pis.vPIS
+                        }
+                    };
+                    break;
                 case '04':
                 case '05':
                 case '06':
@@ -1034,7 +1045,7 @@ export class NFeProcessor {
                     break;
                 case '49':
                 case '99':
-                        result = {
+                    result = {
                         PISOutr: {
                             CST: pis.CST,
                             vBC: pis.vBC,
@@ -1055,6 +1066,17 @@ export class NFeProcessor {
         let result;
         if (cofins.CST && cofins.CST !== '') {
             switch (cofins.CST) {
+                case '01':
+                case '02':
+                    result = {
+                        COFINSAliq: {
+                            CST: cofins.CST,
+                            vBC: cofins.vBC,
+                            pCOFINS: cofins.pCOFINS,
+                            vCOFINS: cofins.vCOFINS
+                        }
+                    };
+                    break;
                 case '04':
                 case '05':
                 case '06':
