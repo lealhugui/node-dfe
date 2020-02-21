@@ -56,7 +56,8 @@ export class NFeProcessor {
         };
 
         try {
-            this.configuraUrlsSefaz(documento.docFiscal.modelo, documento.docFiscal.ambiente);
+            let isContingencia = (documento.docFiscal.tipoEmissao != '1');
+            this.configuraUrlsSefaz(documento.docFiscal.modelo, documento.docFiscal.ambiente, isContingencia);
 
             let doc = this.gerarXml(documento);
 
@@ -98,7 +99,8 @@ export class NFeProcessor {
         };
 
         try {
-            this.configuraUrlsSefaz(documento.docFiscal.modelo, documento.docFiscal.ambiente);
+            let isContingencia = (documento.docFiscal.tipoEmissao != '1');
+            this.configuraUrlsSefaz(documento.docFiscal.modelo, documento.docFiscal.ambiente, isContingencia);
 
             let doc = this.gerarXml(documento);
 
@@ -129,15 +131,14 @@ export class NFeProcessor {
         return result;
     }
 
-    private configuraUrlsSefaz(modelo: string, ambiente: string) {
+    configuraUrlsSefaz(modelo, ambiente, isContingencia) {
         if (!soapAutorizacao || !soapRetAutorizacao) {
-            let Sefaz = modelo == '65' ? SefazNFCe : SefazNFe;
-
-            soapAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, ambiente, ServicosSefaz.autorizacao);
-            soapRetAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, ambiente, ServicosSefaz.retAutorizacao);
+            let Sefaz = modelo == '65' ? sefazNfce_1.SefazNFCe : sefazNfe_1.SefazNFe;
+            soapAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, ambiente, nfe_1.ServicosSefaz.autorizacao, isContingencia);
+            soapRetAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, ambiente, nfe_1.ServicosSefaz.retAutorizacao, isContingencia);
         }
     }
-
+    
     private appendQRCodeXML(documento: NFCeDocumento, xmlAssinado: string){
         let qrCode = null;
         let xmlAssinadoObj = XmlHelper.deserializeXml(xmlAssinado, { explicitArray: false });
