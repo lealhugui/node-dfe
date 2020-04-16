@@ -103,6 +103,9 @@ export interface DetalhesProduto {
     cNPJFab: string;
     cBenef: string;
     eXTIPI: string;
+
+    percentualDevolucao: number;
+    valorIPIDevolucao: number;
     /*
     TODO: demais campos
     nVE: string[];
@@ -115,6 +118,11 @@ export interface DetalhesProduto {
     */
 }
 
+export interface impostoDevol {
+    pDevol: number;
+    vIPIDevol: number;
+}
+
 export interface Imposto {
     valorAproximadoTributos: string;
     icms: Icms;
@@ -123,6 +131,9 @@ export interface Imposto {
     ipi: Ipi;
     ii: II;
     issqn: Issqn;
+    pisst: PisST;
+    cofinsst: CofinsST;
+    icmsUfDest: IcmsUfDest
 }
 
 export interface Icms {
@@ -168,24 +179,71 @@ export interface Icms {
     vBCEfet: string;
     vICMSEfet: string;
 }
+export interface IcmsUfDest {
+    vBCUFDest: number;
+    vBCFCPUFDest: number;
+    pFCPUFDest: number;
+    pICMSUFDest: number;
+    pICMSInter: number;
+    pICMSInterPart: number;
+    vFCPUFDest: number;
+    vICMSUFDest: number;
+    vICMSUFRemet: number;
+}
 
 export interface Pis {
-    cst: string;
+    CST: string;
+    vBC: number;
+    pPIS: number;
+    vPIS: number;
+    vBCProd: number;
+    vAliqProd: number;
+    qBCProd: number;
+}
+
+export interface PisST {
+    vBC: number;
+    pPIS: number;
+    qBCProd: number;
+    vAliqProd: number;
+    vPIS: number;
+}
+
+export interface CofinsST {
+    vBC: number;
+    pCOFINS: number;
+    qBCProd: number;
+    vAliqProd: number;
+    vCOFINS: number;
 }
 
 export interface Cofins {
-    cst: string;
+    CST: string;
+    vBC: number;
+    pCOFINS: number;
+    vCOFINS: number;
+    qBCProd: number;
+    vAliqProd: number;
 }
 
 export interface Ipi {
-
+    cEnq: string;
+    CST: string;
+    vBC: number;
+    qUnid: number;
+    vUnid: number;
+    pIPI: number;
+    vIPI: number;
+    CNPJProd: string;
+    cSelo: string;
+    qSelo: string;
 }
 
 export interface II {
-    vBC: string,
-    vDespAdu: string,
-    vII: string,
-    vIOF: string
+    vBC: number,
+    vDespAdu: number,
+    vII: number,
+    vIOF: number
 }
 
 export interface Issqn {

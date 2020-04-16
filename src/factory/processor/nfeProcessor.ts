@@ -1,5 +1,5 @@
 import { RetornoProcessamentoNF, Empresa, Endereco, NFCeDocumento, NFeDocumento, DocumentoFiscal, Destinatario, Transporte, Pagamento, Produto, Total,
-    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline, ResponsavelTecnico, ServicosSefaz
+    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline, ResponsavelTecnico, ServicosSefaz, II, PisST, Ipi, CofinsST, IcmsUfDest, impostoDevol
 } from '../interface/nfe';
 
 import { WebServiceHelper, WebProxy } from "../webservices/webserviceHelper";
@@ -403,7 +403,7 @@ export class NFeProcessor {
         //nfe.retirada = ;
         //nfe.entrega = ;
         //nfe.autXML = ;
-        nfe.det = this.getDet(documento.produtos, documento.docFiscal.ambiente);
+        nfe.det = this.getDet(documento.produtos, documento.docFiscal.ambiente, documento.docFiscal.modelo, );
         nfe.total = this.getTotal(documento.total);
         nfe.transp = this.getTransp(documento.transporte);
         //nfe.cobr =
@@ -430,7 +430,7 @@ export class NFeProcessor {
         if (documento.destinatario)
             nfce.dest = this.getDest(documento.destinatario, documento.docFiscal.ambiente);
 
-        nfce.det = this.getDet(documento.produtos, documento.docFiscal.ambiente);
+        nfce.det = this.getDet(documento.produtos, documento.docFiscal.ambiente, documento.docFiscal.modelo);
         nfce.total = this.getTotal(documento.total);
         nfce.transp = this.getTransp(documento.transporte);
         nfce.pag = this.getPag(documento.pagamento);
@@ -542,15 +542,16 @@ export class NFeProcessor {
         return dest;
     }
 
-    private getDet(produtos: Produto[], ambiente: string) {
+    private getDet(produtos: Produto[], ambiente: string, modelo: string) {
         let det_list = [];
 
         for (let i = 0; i < produtos.length; i++){
             det_list.push(<schema.TNFeInfNFeDet>{
                 $: {nItem: produtos[i].numeroItem},
                 prod: this.getDetProd(produtos[i].prod, ambiente, i == 0),
-                imposto: this.getDetImposto(produtos[i].imposto),
-                infAdProd: produtos[i].infoAdicional
+                imposto: this.getDetImposto(produtos[i].imposto, modelo, produtos[i].prod.CFOP ),
+                infAdProd: produtos[i].infoAdicional,
+                impostoDevol: (produtos[i].prod.percentualDevolucao && (produtos[i].prod.percentualDevolucao > 0)) ? this.getImpostoDevolucao({ pDevol: produtos[i].prod.percentualDevolucao, vIPIDevol: produtos[i].prod.valorIPIDevolucao }) : undefined
             });
         }
 
@@ -597,14 +598,18 @@ export class NFeProcessor {
         }
     }
 
-    private getDetImposto(imposto: Imposto) {
+    private getDetImposto(imposto: Imposto, modelo: string, cfop: string) {
         let detImposto = <schema.TNFeInfNFeDetImposto>{
             vTotTrib: imposto.valorAproximadoTributos,
             ICMS: [this.getImpostoIcms(imposto.icms)],
-            IPI: '',
-            II: '',
+            PIS: [this.getImpostoPIS(imposto.pis, modelo)],
+            COFINS: [this.getImpostoCOFINS(imposto.cofins, modelo)],
+            PISST: [this.getImpostoPISST(imposto.pisst)],
+            COFINSST: [this.getImpostoCOFINSST(imposto.cofinsst)],
+            IPI: [this.getImpostoIPI(imposto.ipi, modelo)],
+            II: [this.getImpostoII(imposto.ii, cfop)],
+            ICMSUFDest: [this.getIcmsUfDest(imposto.icmsUfDest)],
             ISSQN: '',
-            //pis / cofins
         };
 
         return detImposto;
@@ -981,18 +986,14 @@ export class NFeProcessor {
         return result;
     }
 
-    private getImpostoIPI() {
-
-    }
-
-    private getImpostoII() {
-        return <schema.TNFeInfNFeDetImpostoII> {
-            vBC: '',
-            vDespAdu: '',
-            vII: '',
-            vIOF: ''
-        }
-    }
+    // private getImpostoII() {
+    //     return <schema.TNFeInfNFeDetImpostoII> {
+    //         vBC: '',
+    //         vDespAdu: '',
+    //         vII: '',
+    //         vIOF: ''
+    //     }
+    // }
 
     private getImpostoISSQN() {
         return <schema.TNFeInfNFeDetImpostoISSQN> {
@@ -1015,12 +1016,325 @@ export class NFeProcessor {
         }
     }
 
-    private getImpostoPIS() {
+    private getImpostoIPI(ipi: Ipi, modelo: string) {
+        let result;
+        if (modelo != '55' || !ipi) return;   //não deve gerar grupo IPI para NFCe
+        //   if (!GerarTagIPIparaNaoTributado) && (!['00', '49', '50', '99'].includes(ipi.CST)) return;
+        //se valores padrão de quando não foi preenchido a TAG IPI
+        
+        if ((ipi.cEnq = '') && (ipi.CST = '00') && (ipi.vBC = 0) && (ipi.qUnid = 0) && (ipi.vUnid = 0) && (ipi.pIPI = 0) && (ipi.vIPI = 0)) return;
+        if ((ipi.vBC + ipi.pIPI > 0) && (ipi.qUnid + ipi.vUnid > 0)) throw 'As TAG <vBC> e <pIPI> não podem ser informadas em conjunto com as TAG <qUnid> e <vUnid>';
 
+
+        result = {
+            IPI: <schema.TIpi> {
+                CNPJProd: ipi.CNPJProd,
+                cSelo: ipi.cSelo,
+                qSelo: ipi.qSelo,
+                cEnq: ipi.cEnq || '999',
+            }
+
+        }
+
+        if (ipi.qUnid + ipi.vUnid > 0) {
+            result.IPI.IPITrib = <schema.TIpiIPITrib> {
+                CST: ipi.CST,
+                qUnid: ipi.qUnid,
+                vUnid: ipi.vUnid,
+                vIPI: ipi.vIPI,
+            }
+        } else {
+            result.IPI.IPITrib = <schema.TIpiIPITrib> {
+                CST: ipi.CST,
+                vBC: ipi.vBC,
+                pIPI: ipi.pIPI,
+                vIPI: ipi.vIPI,
+            }
+        }
+
+        // result.IPI.IPINT = { CST: ipi.CST }
+        return result;
     }
+    private getImpostoII(ii: II, cfop: string) {
+        if (!ii) return;
+        if ((ii.vBC > 0) || (ii.vDespAdu > 0) || (ii.vII > 0) || (ii.vIOF > 0) || (cfop[0] === '3')) {
+            return {
+                vBC: ii.vBC,
+                vDespAdu: ii.vDespAdu,
+                vII: ii.vII,
+                vIOF: ii.vIOF
+            };
+        }
+        return ;
+    }
+    private getImpostoPIS(pis: Pis, modelo: string) {
+        let result;
 
-    private getImpostoCOFINS() {
+        if ((modelo != '55') &&
+            ((pis.vBC == 0) && (pis.pPIS = 0) && (pis.vPIS = 0) &&
+                (pis.qBCProd = 0) && (pis.vAliqProd = 0) &&
+                (!['04', '05', '06', '07', '08', '09', '49', '99'].includes(pis.CST)))) return undefined;
 
+        if (!pis && modelo == '55') throw 'NF-e sem grupo do PIS'
+        switch (pis.CST) {
+            case '01':
+            case '02':
+                result = {
+                    PISAliq: <schema.TNFeInfNFeDetImpostoPIS> {
+                        CST: pis.CST,
+                        vBC: pis.vBC,
+                        pPIS: pis.pPIS,
+                        vPIS: pis.vPIS,
+                    }
+                };
+                break;
+            case '03':
+                result = {
+                    PISQtde: <schema.TNFeInfNFeDetImpostoPIS> {
+                        CST: pis.CST,
+                        vBCProd: pis.vBCProd,
+                        vAliqProd: pis.vAliqProd,
+                        vPIS: pis.vPIS,
+                    }
+                }
+                break;
+            case '04':
+            case '05':
+            case '06':
+            case '07':
+            case '08':
+            case '09':
+                result = {
+                    PISNT: <schema.TNFeInfNFeDetImpostoPIS> {
+                        CST: pis.CST
+                    }
+                }
+            case '49':
+            case '50':
+            case '51':
+            case '52':
+            case '53':
+            case '54':
+            case '55':
+            case '56':
+            case '60':
+            case '61':
+            case '62':
+            case '63':
+            case '64':
+            case '65':
+            case '66':
+            case '67':
+            case '70':
+            case '71':
+            case '72':
+            case '73':
+            case '74':
+            case '75':
+            case '98':
+            case '99':
+                if ((pis.vBC + pis.pPIS > 0) && (pis.qBCProd + pis.vAliqProd > 0)) throw 'As TAG <vBC> e <pPIS> não podem ser informadas em conjunto com as TAG <qBCProd> e <vAliqProd>'
+                if (pis.qBCProd + pis.vAliqProd <= 0) return undefined;
+
+                result = {
+                    PISOutr: <schema.TNFeInfNFeDetImpostoPIS> {
+                        CST: pis.CST,
+                        qBCProd: pis.qBCProd,
+                        vAliqProd: pis.vAliqProd,
+                        vPIS: pis.vPIS
+                    }
+                }
+            default:
+                result = {
+                    PISOutr: <schema.TNFeInfNFeDetImpostoPIS> {
+                        CST: pis.CST,
+                        vBC: pis.vBC,
+                        pPIS: pis.pPIS,
+                        vPIS: pis.vPIS
+                    }
+                }
+                break;
+        }
+        return result;
+    }
+    private getImpostoCOFINS(cofins: Cofins, modelo: string) {
+        let result;
+
+        if ((modelo != '55') &&
+            ((cofins.vBC == 0) && (cofins.pCOFINS = 0) && (cofins.vCOFINS = 0) &&
+                (cofins.qBCProd = 0) && (cofins.vAliqProd = 0) &&
+                (!['04', '05', '06', '07', '08', '09', '49', '99'].includes(cofins.CST)))) return undefined;
+        //No caso da NFC-e, o grupo de tributação do PIS e o grupo de tributação da COFINS são opcionais.
+
+        if (!cofins && modelo == '55') throw 'NF-e sem grupo do COFINS'
+        switch (cofins.CST) {
+            case '01':
+            case '02':
+                result = {
+                    COFINSAliq: <schema.TNFeInfNFeDetImpostoCOFINS> {
+                        CST: cofins.CST,
+                        vBC: cofins.vBC,
+                        pCOFINS: cofins.pCOFINS,
+                        vCOFINS: cofins.vCOFINS,
+                    }
+                };
+                break;
+            case '03':
+                result = {
+                    COFINSQtde: <schema.TNFeInfNFeDetImpostoCOFINS> {
+                        CST: cofins.CST,
+                        qBCProd: cofins.qBCProd,
+                        vAliqProd: cofins.vAliqProd,
+                        vCOFINS: cofins.vCOFINS
+                    }
+                }
+                break;
+            case '04':
+            case '05':
+            case '06':
+            case '07':
+            case '08':
+            case '09':
+                result = {
+                    COFINSNT: <schema.TNFeInfNFeDetImpostoCOFINS> {
+                        CST: cofins.CST
+                    }
+                }
+                break;
+            case '49':
+            case '50':
+            case '51':
+            case '52':
+            case '53':
+            case '54':
+            case '55':
+            case '56':
+            case '60':
+            case '61':
+            case '62':
+            case '63':
+            case '64':
+            case '65':
+            case '66':
+            case '67':
+            case '70':
+            case '71':
+            case '72':
+            case '73':
+            case '74':
+            case '75':
+            case '98':
+            case '99':
+                if ((cofins.vBC + cofins.pCOFINS > 0) && (cofins.qBCProd + cofins.vAliqProd > 0)) throw 'As TAG <vBC> e <pCOFINS> não podem ser informadas em conjunto com as TAG <qBCProd> e <vAliqProd>'
+                if (cofins.qBCProd + cofins.vAliqProd <= 0) return undefined;
+
+                result = {
+                    COFINSOutr: <schema.TNFeInfNFeDetImpostoCOFINS> {
+                        CST: cofins.CST,
+                        qBCProd: cofins.qBCProd,
+                        vAliqProd: cofins.vAliqProd,
+                        vCOFINS: cofins.vCOFINS
+                    }
+                }
+                break
+            default:
+                result = {
+                    COFINSOutr: <schema.TNFeInfNFeDetImpostoCOFINS> {
+                        CST: cofins.CST,
+                        vBC: cofins.vBC,
+                        pCOFINS: cofins.pCOFINS,
+                        vCOFINS: cofins.vCOFINS
+                    }
+                }
+                break;
+        }
+        return result;
+    }
+    private getImpostoPISST(PISST: PisST) {
+        let result;
+        if (!PISST) return ;
+        if ((PISST.vBC > 0) || (PISST.pPIS > 0) || (PISST.qBCProd > 0) || (PISST.vAliqProd > 0) || (PISST.vPIS > 0)) {
+            if ((PISST.vBC + PISST.pPIS > 0) && (PISST.qBCProd + PISST.vAliqProd > 0)) throw 'As TAG <vBC> e <pPIS> não podem ser informadas em conjunto com as TAG <qBCProd> e <vAliqProd>';
+
+            if (PISST.vBC + PISST.pPIS > 0) {
+                result = {
+                    PISST: <schema.TNFeInfNFeDetImpostoPISST> {
+                        vBC: PISST.vBC,
+                        pPIS: PISST.pPIS,
+                        vPIS: PISST.vPIS,
+                    }
+                };
+            }
+
+            if (PISST.qBCProd + PISST.vAliqProd > 0) {
+                result = {
+                    PISST: <schema.TNFeInfNFeDetImpostoPISST> {
+                        qBCProd: PISST.qBCProd,
+                        vAliqProd: PISST.vAliqProd,
+                        vPIS: PISST.vPIS,
+                    }
+                };
+            }
+
+        }
+        return result;
+    }
+    private getImpostoCOFINSST(COFINSST: CofinsST) {
+        let result;
+        if (!COFINSST) return;
+        if ((COFINSST.vBC > 0) && (COFINSST.pCOFINS > 0) && (COFINSST.qBCProd > 0) && (COFINSST.vAliqProd > 0) && (COFINSST.vCOFINS > 0)) {
+            if ((COFINSST.vBC + COFINSST.pCOFINS > 0) && (COFINSST.qBCProd + COFINSST.vAliqProd > 0)) throw 'As TAG <vBC> e <pCOFINS> não podem ser informadas em conjunto com as TAG <qBCProd> e <vAliqProd>';
+
+            if (COFINSST.vBC + COFINSST.pCOFINS > 0) {
+                result = {
+                    COFINSST: <schema.TNFeInfNFeDetImpostoCOFINSST> {
+                        vBC: COFINSST.vBC,
+                        pCOFINS: COFINSST.pCOFINS,
+                        vCOFINS: COFINSST.vCOFINS,
+                    }
+                };
+            }
+
+            if (COFINSST.qBCProd + COFINSST.vAliqProd > 0) {
+                result = {
+                    COFINSST: <schema.TNFeInfNFeDetImpostoCOFINSST> {
+                        qBCProd: COFINSST.qBCProd,
+                        vAliqProd: COFINSST.vAliqProd,
+                        vCOFINS: COFINSST.vCOFINS,
+                    }
+                };
+            }
+
+        }
+        return result;
+    }
+    private getImpostoDevolucao(devol: impostoDevol) {
+        return {
+            impostoDevol: <schema.TNFeInfNFeDetImpostoDevol> {
+                pDevol: devol.pDevol,
+                IPI: {
+                    vIPIDevol: devol.vIPIDevol
+                }
+            }
+
+        }
+    }
+    private getIcmsUfDest(icmsUfDest: IcmsUfDest) {
+        if (!icmsUfDest) return;
+        if (icmsUfDest.pICMSInterPart <= 0) return;
+        return {
+            ICMSUFDest: <schema.TNFeInfNFeDetImpostoICMSUFDest> {
+                vBCUFDest: icmsUfDest.vBCUFDest,
+                vBCFCPUFDest: icmsUfDest.vBCFCPUFDest,
+                pFCPUFDest: icmsUfDest.pFCPUFDest,
+                pICMSUFDest: icmsUfDest.pICMSUFDest,
+                pICMSInter: icmsUfDest.pICMSInter,
+                pICMSInterPart: icmsUfDest.pICMSInterPart,
+                vFCPUFDest: icmsUfDest.vFCPUFDest,
+                vICMSUFDest: icmsUfDest.vICMSUFDest,
+                vICMSUFRemet: icmsUfDest.vICMSUFRemet,
+            }
+        }
     }
 
     private getTotal(total: Total) {
