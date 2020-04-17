@@ -13,7 +13,7 @@ jobs:
         ghToken: ${{ secrets.GITHUB_TOKEN }}
         staleAfter: 10
         closeAfter: 20
-        staleLabel: "STALE 📺"
+        staleLabel: "no activity"
         staleComment: "This issue is %DAYS_OLD% days old, marking as stale! cc: @%AUTHOR%"
         closeComment: "Issue last updated %DAYS_OLD% days ago! Closing down!"
         showLogs: true
