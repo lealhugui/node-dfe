@@ -85,9 +85,6 @@ export abstract class WebServiceHelper {
         const result: any = {
             url: soapParams.url,
             agentOptions: this.buildCertAgentOpt(cert),
-            rejectUnauthorized: false,//add when working with https sites
-            requestCert: false,//add when working with https sites
-            agent: false,//add when working with https sites              
             headers: {
                 "Content-Type": "text/xml;charset=utf-8",
                 "SOAPAction": soapParams.action
@@ -105,6 +102,7 @@ export abstract class WebServiceHelper {
 
     private static buildCertAgentOpt(cert: any) {
         return {
+            rejectUnauthorized: cert.rejectUnauthorized || true,
             pfx: cert.pfx,
             passphrase: cert.password
         }
