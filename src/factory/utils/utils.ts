@@ -34,3 +34,31 @@ export function validaUrlWsdl(url: string) {
         
     return url;
 }
+
+
+export function log(msg: string, processo?: string) {
+    console.log(`[node-dfe][${processo || 'log'}]->${msg}`);
+}
+
+export function jsonOneLevel(obj: any): string {
+    const result: any = {}
+
+
+    for (const k of Object.keys(obj)) {
+        let logStr = obj[k].toString() || "null";
+        if (logStr.length > 500) {
+            logStr = logStr.substring(0, 499)
+        }
+        result[k] = logStr
+    }
+
+    return JSON.stringify(result)
+}
+
+export function timeout(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+export async function sleep(fn: any, ms: number, ...args: any) {
+    await timeout(ms);
+    return fn(...args);
+}

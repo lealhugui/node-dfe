@@ -13,7 +13,12 @@ const servicos: any = {
     'consultarStatusServico': {
         method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4',
         action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF'
+    },
+    'recepcaoEvento': {
+        method: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4',
+        action: 'http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEvento'
     }
+
 };
 
 const autorizadores = {
@@ -201,7 +206,23 @@ const autorizadores = {
             consultarStatusServico: {
                 url_producao: 'https://nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx',
                 url_homologacao: 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx'
+            },
+            Inutilizacao: {
+                url_producao: "https://nfe.fazenda.sp.gov.br/ws/nfeinutilizacao4.asmx",
+                url_homologacao: "https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeinutilizacao4.asmx"
             }
+            ,consultarProtocolo: {
+                url_producao: "https://nfe.fazenda.sp.gov.br/ws/nfeconsultaprotocolo4.asmx",
+                url_homologacao: "https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeconsultaprotocolo4.asmx"
+            }
+            ,consultarCadastro: {
+                url_producao: "https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro4.asmx",
+                url_homologacao: "https://homologacao.nfe.fazenda.sp.gov.br/ws/cadconsultacadastro4.asmx"
+            }
+            ,recepcaoEvento: {
+                url_producao: "https://nfe.fazenda.sp.gov.br/ws/nferecepcaoevento4.asmx",
+                url_homologacao: "https://homologacao.nfe.fazenda.sp.gov.br/ws/nferecepcaoevento4.asmx"
+            }               
         }
     },
     'SVAN': {

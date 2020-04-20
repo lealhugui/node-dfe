@@ -1,6 +1,6 @@
 import {
     RetornoProcessamentoNF, Empresa, Endereco, NFCeDocumento, NFeDocumento, DocumentoFiscal, Destinatario, Transporte, Pagamento, Produto, Total,
-    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline, ResponsavelTecnico, ServicosSefaz, II, PisST, Ipi, CofinsST, IcmsUfDest, impostoDevol
+    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline, ResponsavelTecnico, ServicosSefaz, II, PisST, Ipi, CofinsST, IcmsUfDest, impostoDevol, Configuracoes
 } from '../interface/nfe';
 
 import { WebServiceHelper, WebProxy } from "../webservices/webserviceHelper";
@@ -39,29 +39,32 @@ function jsonOneLevel(obj: any): string {
 /**
  * Classe para processamento de NFe/NFCe
  */
-export class NFeProcessor {
+export class EnviaProcessor {
 
     constructor(
-        private empresa: Empresa,
-        private responsavelTecnico?: ResponsavelTecnico,
-        private webProxy?: WebProxy) { }
+        private configuracoes: Configuracoes
+    ) {
+        if (!this.configuracoes.geral.versao) this.configuracoes.geral.versao = '4.00';
+        if (!this.configuracoes.webservices) this.configuracoes.webservices = { tentativas: 3, aguardarConsultaRetorno: 1000 };
+        if (!this.configuracoes.webservices.tentativas) this.configuracoes.webservices.tentativas = 3;
+        if (!this.configuracoes.webservices.aguardarConsultaRetorno) this.configuracoes.webservices.aguardarConsultaRetorno = 1000;
+    }
 
     /**
-     * Metodo para realizar o processamento de documento(s) do tipo 55 ou 65 de forma sincrona
+     * Metodo para realizar o processamento de documento(s) do tipo 55 ou 65
      * @param documento Array de documentos modelo 55 ou 1 documento modelo 65
+     * @param assincrono Boolean para definir se a execução sera sincrona ou assincrona, por padrao === sincrona!
      */
-    public async processarDocumento(documento: NFeDocumento | NFCeDocumento) {
+    public async executar(documento: NFeDocumento | NFCeDocumento, assincrono: boolean = false) {
 
         let result = <RetornoProcessamentoNF>{
             success: false
         };
 
         try {
-            this.configuraUrlsSefaz(documento.docFiscal.modelo, documento.docFiscal.ambiente);
-
+            this.configuraUrlsSefaz();
             let doc = this.gerarXml(documento);
-
-            let xmlAssinado = Signature.signXmlX509(doc.xml, 'infNFe', this.empresa.certificado);
+            let xmlAssinado = Signature.signXmlX509(doc.xml, 'infNFe', this.configuracoes.certificado);
 
             if (documento.docFiscal.modelo == '65') {
                 let appendQRCode = this.appendQRCodeXML(documento, xmlAssinado);
@@ -69,15 +72,14 @@ export class NFeProcessor {
                 doc.nfe.infNFeSupl = appendQRCode.qrCode;
             }
 
-            let xmlLote = this.gerarXmlLote(xmlAssinado, false);
+            let xmlLote = this.gerarXmlLote(xmlAssinado, assincrono);
 
             if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline) {
                 result.retornoContingenciaOffline = <RetornoContingenciaOffline>{};
-
                 result.success = true;
                 result.retornoContingenciaOffline.xml_gerado = xmlLote;
             } else {
-                result = await this.transmitirXml(xmlLote, documento.docFiscal.modelo, documento.docFiscal.ambiente, doc.nfe);
+                result = await this.transmitirXml(xmlLote, doc.nfe);
             }
 
         } catch (ex) {
@@ -88,54 +90,13 @@ export class NFeProcessor {
         return result;
     }
 
-    /**
-     * Metodo para realizar o processamento de documento(s) do tipo 55 ou 65 de forma assincrona
-     * @param documento Array de documentos modelo 55 ou 1 documento modelo 65
-     */
-    public async processarDocumentoAsync(documento: NFeDocumento | NFCeDocumento) {
-
-        let result = <RetornoProcessamentoNF>{
-            success: false
-        };
-
-        try {
-            this.configuraUrlsSefaz(documento.docFiscal.modelo, documento.docFiscal.ambiente);
-
-            let doc = this.gerarXml(documento);
-
-            let xmlAssinado = Signature.signXmlX509(doc.xml, 'infNFe', this.empresa.certificado);
-
-            if (documento.docFiscal.modelo == '65') {
-                let appendQRCode = this.appendQRCodeXML(documento, xmlAssinado);
-                xmlAssinado = appendQRCode.xml;
-                doc.nfe.infNFeSupl = appendQRCode.qrCode;
-            }
-
-            let xmlLote = this.gerarXmlLote(xmlAssinado, true);
-
-            if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline) {
-                result.retornoContingenciaOffline = <RetornoContingenciaOffline>{};
-
-                result.success = true;
-                result.retornoContingenciaOffline.xml_gerado = xmlLote;
-            } else {
-                result = await this.transmitirXml(xmlLote, documento.docFiscal.modelo, documento.docFiscal.ambiente, doc.nfe);
-            }
-
-        } catch (ex) {
-            result.success = false;
-            result.error = ex;
-        }
-
-        return result;
-    }
-
-    private configuraUrlsSefaz(modelo: string, ambiente: string) {
+    private configuraUrlsSefaz() {
+        const { geral: { modelo, ambiente }, empresa } = this.configuracoes;
         if (!soapAutorizacao || !soapRetAutorizacao) {
             let Sefaz = modelo == '65' ? SefazNFCe : SefazNFe;
 
-            soapAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, ambiente, ServicosSefaz.autorizacao);
-            soapRetAutorizacao = Sefaz.getSoapInfo(this.empresa.endereco.uf, ambiente, ServicosSefaz.retAutorizacao);
+            soapAutorizacao = Sefaz.getSoapInfo(empresa.endereco.uf, ambiente, ServicosSefaz.autorizacao);
+            soapRetAutorizacao = Sefaz.getSoapInfo(empresa.endereco.uf, ambiente, ServicosSefaz.retAutorizacao);
         }
     }
 
@@ -151,9 +112,9 @@ export class NFeProcessor {
             let valorTotal = documento.total.icmsTot.vNF;
             let digestValue = Object(xmlAssinadoObj).NFe.Signature.SignedInfo.Reference.DigestValue;
 
-            qrCode = this.gerarQRCodeNFCeOffline(soapAutorizacao.urlQRCode, chave, '2', documento.docFiscal.ambiente, diaEmissao, valorTotal, digestValue, this.empresa.idCSC, this.empresa.CSC);
+            qrCode = this.gerarQRCodeNFCeOffline(soapAutorizacao.urlQRCode, chave, '2', documento.docFiscal.ambiente, diaEmissao, valorTotal, digestValue, this.configuracoes.empresa.idCSC, this.configuracoes.empresa.CSC);
         } else {
-            qrCode = this.gerarQRCodeNFCeOnline(soapAutorizacao.urlQRCode, chave, '2', documento.docFiscal.ambiente, this.empresa.idCSC, this.empresa.CSC);
+            qrCode = this.gerarQRCodeNFCeOnline(soapAutorizacao.urlQRCode, chave, '2', documento.docFiscal.ambiente, this.configuracoes.empresa.idCSC, this.configuracoes.empresa.CSC);
         }
 
         let qrCodeObj = <schema.TNFeInfNFeSupl>{
@@ -169,7 +130,7 @@ export class NFeProcessor {
         };
     }
 
-    public async transmitirXml(xmlLote: string, modelo: string, ambiente: string, nfeObj: Object) {
+    public async transmitirXml(xmlLote: string, nfeObj: Object) {
         let result = <RetornoProcessamentoNF>{
             success: false,
             nfe: nfeObj
@@ -183,9 +144,9 @@ export class NFeProcessor {
                 result.nfe = Object(xmlObj).enviNFe.NFe;
             }
 
-            this.configuraUrlsSefaz(modelo, ambiente);
+            this.configuraUrlsSefaz();
 
-            let retornoEnvio = await this.enviarNF(xmlLote, this.empresa.certificado);
+            let retornoEnvio = await this.enviarNF(xmlLote);
 
             try {
                 log(jsonOneLevel({
@@ -199,7 +160,6 @@ export class NFeProcessor {
                 log(`ja deu erro pra logar.......${e.toString()}`, 'retornoEnvio')
             }
 
-
             if (retornoEnvio && retornoEnvio.data) {
                 const data = Object(retornoEnvio.data);
                 if (data.retEnviNFe) {
@@ -209,82 +169,32 @@ export class NFeProcessor {
                 throw new Error('Erro ao realizar requisição');
             }
 
-
-            console.log(retEnviNFe && retEnviNFe.cStat == '104' && retEnviNFe.protNFe.infProt.cStat == '100');
-            console.log(retEnviNFe && retEnviNFe.cStat == '103');
+            // console.log(retEnviNFe && retEnviNFe.cStat == '104' && retEnviNFe.protNFe.infProt.cStat == '100');
+            // console.log(retEnviNFe && retEnviNFe.cStat == '103');
+            // 100 Autorizado o uso da NF-e
+            // 101 Cancelamento de NF-e homologado
+            // 102 Inutilização de número homologado
+            // 103 Lote recebido com sucesso
+            // 104 Lote processado
+            // 105 Lote em processamento
+            // 106 Lote não localizado
+            // 107 Serviço em Operação
 
             result.envioNF = retornoEnvio;
-
-            if (retEnviNFe && retEnviNFe.cStat == '104' && retEnviNFe.protNFe.infProt.cStat == '100') {
-                // retorno síncrono
-                result.success = true;
-
-            } else if (retEnviNFe && retEnviNFe.cStat == '103') {
-                let recibo = retEnviNFe.infRec.nRec;
-                let xmlConRecNFe = this.gerarXmlConsultaProc(ambiente, recibo);
-
-                let retornoConsulta = null;
-                let retConsReciNFe = null;
-                let cStat = '105';
-
-                do {
-                    retornoConsulta = await this.consultarProc(xmlConRecNFe, this.empresa.certificado);
-
-                    try {
-                        log(jsonOneLevel({
-                            retornoConsulta: !!retornoConsulta,
-                            data: !retornoConsulta ? false : !!retornoConsulta.data
-                        }), 'retornoConsulta.exists')
-
-                        log(jsonOneLevel(retornoConsulta), 'retornoConsulta.data');
-                    } catch (e) {
-                        log('ja deu erro pra logar.......', 'retornoConsulta')
-                    }
-
-                    retConsReciNFe = Object(retornoConsulta.data).retConsReciNFe;
-                    cStat = retConsReciNFe.cStat;
-                } while (cStat == '105'); // nota em processamento, realiza a consulta novamente até obter um status diferente.
-
-                result.consultaProc = retornoConsulta;
-
-                if (cStat == '104' && retConsReciNFe.protNFe.infProt.cStat == '100') {
-                    result.success = true;
-                }
-
-            } else {
-                result.success = false;
-            }
-
         } catch (ex) {
             result.success = false;
             result.error = ex;
         }
-
+        result.success = true; //nao esta confirmada, mas houve sucesso nessa requisicao de envio da nota
         return result;
     }
 
+    private async enviarNF(xml: string) {
+        const { webProxy, certificado } = this.configuracoes
 
-    
-
-    private async consultarProc(xml: string, cert: any) {
         return await WebServiceHelper.makeSoapRequest(
-            xml, cert, soapRetAutorizacao, this.webProxy
+            xml, certificado, soapAutorizacao, webProxy
         );
-    }
-
-    private async enviarNF(xml: string, cert: any) {
-        return await WebServiceHelper.makeSoapRequest(
-            xml, cert, soapAutorizacao, this.webProxy
-        );
-    }
-
-    private gerarXmlConsultaProc(ambiente: string, recibo: string) {
-        let consulta = <schema.TConsReciNFe>{
-            $: { versao: '4.00', xmlns: 'http://www.portalfiscal.inf.br/nfe' },
-            tpAmb: ambiente,
-            nRec: recibo
-        };
-        return XmlHelper.serializeXml(consulta, 'consReciNFe');
     }
 
     private gerarXmlLote(xml: string, isAsync: boolean) {
@@ -307,7 +217,7 @@ export class NFeProcessor {
         if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline)
             documento.docFiscal.tipoEmissao = '9';
 
-        let dadosChave = this.gerarChaveNF(this.empresa, documento.docFiscal);
+        let dadosChave = this.gerarChaveNF(this.configuracoes.empresa, documento.docFiscal);
         let NFe = <schema.TNFe>{
             $: {
                 xmlns: 'http://www.portalfiscal.inf.br/nfe'
@@ -400,7 +310,7 @@ export class NFeProcessor {
         };
 
         nfe.ide = this.getIde(documento.docFiscal, dadosChave);
-        nfe.emit = this.getEmit(this.empresa);
+        nfe.emit = this.getEmit(this.configuracoes.empresa);
         //nfe.avulsa = ;
         nfe.dest = this.getDest(documento.destinatario, documento.docFiscal.ambiente);
         //nfe.retirada = ;
@@ -416,8 +326,8 @@ export class NFeProcessor {
         //nfe.compra = ;
         //nfe.cana = ;
 
-        if (this.responsavelTecnico)
-            nfe.infRespTec = this.getResponsavelTecnico(this.responsavelTecnico, dadosChave.chave);
+        if (this.configuracoes.responsavelTecnico)
+            nfe.infRespTec = this.getResponsavelTecnico(this.configuracoes.responsavelTecnico, dadosChave.chave);
 
         return nfe;
     }
@@ -428,7 +338,7 @@ export class NFeProcessor {
         };
 
         nfce.ide = this.getIde(documento.docFiscal, dadosChave);
-        nfce.emit = this.getEmit(this.empresa);
+        nfce.emit = this.getEmit(this.configuracoes.empresa);
 
         if (documento.destinatario)
             nfce.dest = this.getDest(documento.destinatario, documento.docFiscal.ambiente);
@@ -439,8 +349,8 @@ export class NFeProcessor {
         nfce.pag = this.getPag(documento.pagamento);
         nfce.infAdic = this.getInfoAdic(documento.infoAdicional);
 
-        if (this.responsavelTecnico)
-            nfce.infRespTec = this.getResponsavelTecnico(this.responsavelTecnico, dadosChave.chave);
+        if (this.configuracoes.responsavelTecnico)
+            nfce.infRespTec = this.getResponsavelTecnico(this.configuracoes.responsavelTecnico, dadosChave.chave);
 
         return nfce;
     }
@@ -1348,7 +1258,7 @@ export class NFeProcessor {
         return icmsTot;
 
     }
-    
+
     private getTransp(transp: Transporte) {
         return <schema.TNFeInfNFeTransp>{
             modFrete: transp.modalidateFrete

@@ -3,19 +3,21 @@ const fs = require('fs');
 const lib = require('./lib');
 const signUtils = require('./lib/factory/signature');
 const XmlHelper = require('./lib/factory/xmlHelper');
+const path = require('path');
 
 let cert = {
     key: fs.readFileSync('C:\\cert\\newKey.key'),
     pem: fs.readFileSync('C:\\cert\\test.pem'),
     pfx: fs.readFileSync('C:\\cert\\certificado.pfx'),
-    password: fs.readFileSync('C:\\cert\\senha.txt')    
+    password: fs.readFileSync('C:\\cert\\senha.txt')
+    , rejectUnauthorized: false
 };
 
 let empresa = {
     razaoSocial: 'TESTE',
     nomeFantasia: 'TESTE',
-    cnpj: 'OBRIGATORIO',
-    inscricaoEstadual: 'OBRIGATORIO',
+    cnpj: '18885949000181',
+    inscricaoEstadual: '144895078115',
     inscricaoMunicipal: '',
     codRegimeTributario: '1',//2
     endereco: {
@@ -212,8 +214,25 @@ let nfce = {
     infoAdicional: infoAdic
 };
 
+
+const configuracoes = {
+    empresa,
+    certificado: cert,
+    geral: {
+        ambiente: '2',
+        modelo: '55',
+        versao: '4.00'
+    },
+    arquivos: {
+        salvar: true,
+        pastaEnvio: path.join(__dirname, 'xml_envio'),
+        pastaRetorno: path.join(__dirname, 'xml_retorno'),
+        pastaXML: path.join(__dirname, 'xml'),
+    }
+}
+
 async function testeEmissaoNFe() {
-    const nfeProc = new lib.NFeProcessor(empresa, null);
+    const nfeProc = new lib.NFeProcessor(configuracoes);
 
     const ini = new Date();
     let result = await nfeProc.processarDocumento(nfce);
@@ -222,30 +241,6 @@ async function testeEmissaoNFe() {
 
     result = require('util').inspect(result, false, null);
     console.log('Resultado Emissão NF-e: \n\n' + result);
-}
-
-async function testeEmissaoNFCe() {
-    const nfeProc = new lib.NFeProcessor(empresa, null);
-
-    const ini = new Date();
-    let result = await nfeProc.processarDocumento(nfce);
-    const fin = new Date();
-    console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
-
-    result = require('util').inspect(result, false, null);
-    console.log('Resultado Emissão NFC-e: \n\n' + result);
-}
-
-async function testeEmissaoNFCeAsync(empresa) {
-    const nfeProc = new lib.NFeProcessor(empresa);
-
-    const ini = new Date();
-    let result = await nfeProc.processarDocumentoAsync(nfce);
-    const fin = new Date();
-    console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
-
-    //result = require('util').inspect(result, false, null);
-    //console.log('Resultado Emissão NFC-e: \n\n' + result);
 }
 
 async function testeEmissaoNFCeContingenciaOffline(empresa) {
@@ -298,11 +293,62 @@ function testHashRespTec(){
     console.log(nfeProc.gerarHashCSRT('41180678393592000146558900000006041028190697', 'G8063VRTNDMO886SFNK5LDUDEI24XJ22YIPO'));
 }
 
+const evento = {
+    // id: string;
+    // tpAmbiente: configuracoes.ambiente,
+    // CNPJ: empresa.CNPJ,
+    // cOrgao: empresa.cOrgao,
+    chNFe: '35200418885949000181550200000060481462915175',
+    dhEvento: moment().format(),
+    tpEvento: '110111',
+    nSeqEvento: 1,
+    detEvento: {
+        descEvento:'Cancelamento',
+        nProt:'135200002917461',
+        xJust: 'TESTE DE CANCELAMENTO DA NFE........'
+    }
+}
+
+async function testeEventoNFe() {
+    const eventoProc = new lib.EventoProcessor(configuracoes);
+
+    const ini = new Date();
+    let result = await eventoProc.executar(evento);
+    const fin = new Date();
+    console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
+
+    result = require('util').inspect(result, false, null);
+    console.log('Resultado Emissão NF-e: \n\n' + result);
+}
+
+async function testeConsultaRecibo() {
+    const nfeProc = new lib.RetornoProcessor(configuracoes);
+
+    const ini = new Date();
+    const recibo = '351000140151879'
+    let result = await nfeProc.executar(recibo);
+    const fin = new Date();
+    console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
+
+    result = require('util').inspect(result, false, null);
+    console.log('Resultado consulta recibo NF-e: \n\n' + result);
+}
+
+// testeConsultaRecibo()
 // testeAssinaturaXML();
 // testeConsultaStatusServico(empresa, '2', '65');
-//testeDesereliaze();
+// testeDesereliaze();
 // testeEmissaoNFCe();
 // testeEmissaoNFCeContingenciaOffline(empresa);
 //testeQRcodeNFCe();
 //testHashRespTec();
- testeEmissaoNFe();
+
+//  testeEmissaoNFe();
+testeEventoNFe()
+
+
+// openssl pkcs12 -in mycaservercert.pfx -nokeys -out mycaservercert.pem
+// openssl pkcs12 -in mycaservercert.pfx -nodes -nocerts -out mycaservercertkey.pem
+// openssl rsa -in mycaservercertkey.pem -check -out mycaservercertkeyrsa.pem
+// limpar primeiras linhas do mycaservercert.pem ou no linux, executar awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
+// REFERENCIA: https://docs.vmware.com/br/Unified-Access-Gateway/3.2/com.vmware.uag-32-deploy-config.doc/GUID-870AF51F-AB37-4D6C-B9F5-4BFEB18F11E9.html
