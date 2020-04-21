@@ -989,6 +989,15 @@ export class NFeProcessor {
         return result;
     }
 
+    // private getImpostoII() {
+    //     return <schema.TNFeInfNFeDetImpostoII> {
+    //         vBC: '',
+    //         vDespAdu: '',
+    //         vII: '',
+    //         vIOF: ''
+    //     }
+    // }
+
     private getImpostoISSQN() {
         return <schema.TNFeInfNFeDetImpostoISSQN>{
             vBC: '',
@@ -1016,12 +1025,12 @@ export class NFeProcessor {
         //   if (!GerarTagIPIparaNaoTributado) && (!['00', '49', '50', '99'].includes(ipi.CST)) return;
         //se valores padrão de quando não foi preenchido a TAG IPI
 
-        if ((ipi.cEnq = '') && (ipi.CST = '00') && (ipi.vBC = 0) && (ipi.qUnid = 0) && (ipi.vUnid = 0) && (ipi.pIPI = 0) && (ipi.vIPI = 0)) return;
+      if ((ipi.cEnq = '') && (ipi.CST = '00') && (ipi.vBC = 0) && (ipi.qUnid = 0) && (ipi.vUnid = 0) && (ipi.pIPI = 0) && (ipi.vIPI = 0)) return;
         if ((ipi.vBC + ipi.pIPI > 0) && (ipi.qUnid + ipi.vUnid > 0)) throw 'As TAG <vBC> e <pIPI> não podem ser informadas em conjunto com as TAG <qUnid> e <vUnid>';
 
 
         result = {
-            IPI: <schema.TIpi>{
+            IPI: <schema.TIpi> {
                 CNPJProd: ipi.CNPJProd,
                 cSelo: ipi.cSelo,
                 qSelo: ipi.qSelo,
@@ -1049,7 +1058,6 @@ export class NFeProcessor {
         // result.IPI.IPINT = { CST: ipi.CST }
         return result;
     }
-
     private getImpostoII(ii: II, cfop: string) {
         if (!ii) return;
         if ((ii.vBC > 0) || (ii.vDespAdu > 0) || (ii.vII > 0) || (ii.vIOF > 0) || (cfop[0] === '3')) {
@@ -1060,7 +1068,7 @@ export class NFeProcessor {
                 vIOF: ii.vIOF
             };
         }
-        return;
+        return ;
     }
 
     private getImpostoPIS(pis: Pis, modelo: string) {
@@ -1076,7 +1084,7 @@ export class NFeProcessor {
             case '01':
             case '02':
                 result = {
-                    PISAliq: <schema.TNFeInfNFeDetImpostoPIS>{
+                    PISAliq: <schema.TNFeInfNFeDetImpostoPIS> {
                         CST: pis.CST,
                         vBC: pis.vBC,
                         pPIS: pis.pPIS,
@@ -1086,7 +1094,7 @@ export class NFeProcessor {
                 break;
             case '03':
                 result = {
-                    PISQtde: <schema.TNFeInfNFeDetImpostoPIS>{
+                    PISQtde: <schema.TNFeInfNFeDetImpostoPIS> {
                         CST: pis.CST,
                         vBCProd: pis.vBCProd,
                         vAliqProd: pis.vAliqProd,
@@ -1101,7 +1109,7 @@ export class NFeProcessor {
             case '08':
             case '09':
                 result = {
-                    PISNT: <schema.TNFeInfNFeDetImpostoPIS>{
+                    PISNT: <schema.TNFeInfNFeDetImpostoPIS> {
                         CST: pis.CST
                     }
                 }
@@ -1133,7 +1141,7 @@ export class NFeProcessor {
                 if (pis.qBCProd + pis.vAliqProd <= 0) return undefined;
 
                 result = {
-                    PISOutr: <schema.TNFeInfNFeDetImpostoPIS>{
+                    PISOutr: <schema.TNFeInfNFeDetImpostoPIS> {
                         CST: pis.CST,
                         qBCProd: pis.qBCProd,
                         vAliqProd: pis.vAliqProd,
@@ -1142,7 +1150,7 @@ export class NFeProcessor {
                 }
             default:
                 result = {
-                    PISOutr: <schema.TNFeInfNFeDetImpostoPIS>{
+                    PISOutr: <schema.TNFeInfNFeDetImpostoPIS> {
                         CST: pis.CST,
                         vBC: pis.vBC,
                         pPIS: pis.pPIS,
@@ -1168,7 +1176,7 @@ export class NFeProcessor {
             case '01':
             case '02':
                 result = {
-                    COFINSAliq: <schema.TNFeInfNFeDetImpostoCOFINS>{
+                    COFINSAliq: <schema.TNFeInfNFeDetImpostoCOFINS> {
                         CST: cofins.CST,
                         vBC: cofins.vBC,
                         pCOFINS: cofins.pCOFINS,
@@ -1178,7 +1186,7 @@ export class NFeProcessor {
                 break;
             case '03':
                 result = {
-                    COFINSQtde: <schema.TNFeInfNFeDetImpostoCOFINS>{
+                    COFINSQtde: <schema.TNFeInfNFeDetImpostoCOFINS> {
                         CST: cofins.CST,
                         qBCProd: cofins.qBCProd,
                         vAliqProd: cofins.vAliqProd,
@@ -1193,7 +1201,7 @@ export class NFeProcessor {
             case '08':
             case '09':
                 result = {
-                    COFINSNT: <schema.TNFeInfNFeDetImpostoCOFINS>{
+                    COFINSNT: <schema.TNFeInfNFeDetImpostoCOFINS> {
                         CST: cofins.CST
                     }
                 }
@@ -1226,7 +1234,7 @@ export class NFeProcessor {
                 if (cofins.qBCProd + cofins.vAliqProd <= 0) return undefined;
 
                 result = {
-                    COFINSOutr: <schema.TNFeInfNFeDetImpostoCOFINS>{
+                    COFINSOutr: <schema.TNFeInfNFeDetImpostoCOFINS> {
                         CST: cofins.CST,
                         qBCProd: cofins.qBCProd,
                         vAliqProd: cofins.vAliqProd,
@@ -1236,7 +1244,7 @@ export class NFeProcessor {
                 break
             default:
                 result = {
-                    COFINSOutr: <schema.TNFeInfNFeDetImpostoCOFINS>{
+                    COFINSOutr: <schema.TNFeInfNFeDetImpostoCOFINS> {
                         CST: cofins.CST,
                         vBC: cofins.vBC,
                         pCOFINS: cofins.pCOFINS,
@@ -1250,13 +1258,13 @@ export class NFeProcessor {
 
     private getImpostoPISST(PISST: PisST) {
         let result;
-        if (!PISST) return;
+        if (!PISST) return ;
         if ((PISST.vBC > 0) || (PISST.pPIS > 0) || (PISST.qBCProd > 0) || (PISST.vAliqProd > 0) || (PISST.vPIS > 0)) {
             if ((PISST.vBC + PISST.pPIS > 0) && (PISST.qBCProd + PISST.vAliqProd > 0)) throw 'As TAG <vBC> e <pPIS> não podem ser informadas em conjunto com as TAG <qBCProd> e <vAliqProd>';
 
             if (PISST.vBC + PISST.pPIS > 0) {
                 result = {
-                    PISST: <schema.TNFeInfNFeDetImpostoPISST>{
+                    PISST: <schema.TNFeInfNFeDetImpostoPISST> {
                         vBC: PISST.vBC,
                         pPIS: PISST.pPIS,
                         vPIS: PISST.vPIS,
@@ -1266,7 +1274,7 @@ export class NFeProcessor {
 
             if (PISST.qBCProd + PISST.vAliqProd > 0) {
                 result = {
-                    PISST: <schema.TNFeInfNFeDetImpostoPISST>{
+                    PISST: <schema.TNFeInfNFeDetImpostoPISST> {
                         qBCProd: PISST.qBCProd,
                         vAliqProd: PISST.vAliqProd,
                         vPIS: PISST.vPIS,
@@ -1277,7 +1285,6 @@ export class NFeProcessor {
         }
         return result;
     }
-
     private getImpostoCOFINSST(COFINSST: CofinsST) {
         let result;
         if (!COFINSST) return;
@@ -1286,7 +1293,7 @@ export class NFeProcessor {
 
             if (COFINSST.vBC + COFINSST.pCOFINS > 0) {
                 result = {
-                    COFINSST: <schema.TNFeInfNFeDetImpostoCOFINSST>{
+                    COFINSST: <schema.TNFeInfNFeDetImpostoCOFINSST> {
                         vBC: COFINSST.vBC,
                         pCOFINS: COFINSST.pCOFINS,
                         vCOFINS: COFINSST.vCOFINS,
@@ -1296,7 +1303,7 @@ export class NFeProcessor {
 
             if (COFINSST.qBCProd + COFINSST.vAliqProd > 0) {
                 result = {
-                    COFINSST: <schema.TNFeInfNFeDetImpostoCOFINSST>{
+                    COFINSST: <schema.TNFeInfNFeDetImpostoCOFINSST> {
                         qBCProd: COFINSST.qBCProd,
                         vAliqProd: COFINSST.vAliqProd,
                         vCOFINS: COFINSST.vCOFINS,
@@ -1307,10 +1314,9 @@ export class NFeProcessor {
         }
         return result;
     }
-
     private getImpostoDevolucao(devol: impostoDevol) {
         return {
-            impostoDevol: <schema.TNFeInfNFeDetImpostoDevol>{
+            impostoDevol: <schema.TNFeInfNFeDetImpostoDevol> {
                 pDevol: devol.pDevol,
                 IPI: {
                     vIPIDevol: devol.vIPIDevol
@@ -1324,7 +1330,7 @@ export class NFeProcessor {
         if (!icmsUfDest) return;
         if (icmsUfDest.pICMSInterPart <= 0) return;
         return {
-            ICMSUFDest: <schema.TNFeInfNFeDetImpostoICMSUFDest>{
+            ICMSUFDest: <schema.TNFeInfNFeDetImpostoICMSUFDest> {
                 vBCUFDest: icmsUfDest.vBCUFDest,
                 vBCFCPUFDest: icmsUfDest.vBCFCPUFDest,
                 pFCPUFDest: icmsUfDest.pFCPUFDest,

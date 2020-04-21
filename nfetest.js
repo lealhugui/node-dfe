@@ -16,8 +16,8 @@ let cert = {
 let empresa = {
     razaoSocial: 'TESTE',
     nomeFantasia: 'TESTE',
-    cnpj: '18885949000181',
-    inscricaoEstadual: '144895078115',
+    cnpj: 'OBRIGATORIO',
+    inscricaoEstadual: 'OBRIGATORIO',
     inscricaoMunicipal: '',
     codRegimeTributario: '1',//2
     endereco: {
@@ -214,7 +214,6 @@ let nfce = {
     infoAdicional: infoAdic
 };
 
-
 const configuracoes = {
     empresa,
     certificado: cert,
@@ -243,7 +242,7 @@ async function testeEmissaoNFe() {
     console.log('Resultado Emissão NF-e: \n\n' + result);
 }
 
-// TESTES STATUS SERVICO:
+:
 async function testeConsultaStatusServico(empresa, ambiente, modelo) {
     const statusProc = new lib.StatusServicoProcessor(empresa, ambiente, modelo);
     let result = await statusProc.processarDocumento();
@@ -268,6 +267,7 @@ async function testeEventoCancelar() {
 
     const ini = new Date();
     let result = await eventoProc.executar(evento);
+
     const fin = new Date();
     console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
 
