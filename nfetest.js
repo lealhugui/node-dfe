@@ -252,18 +252,18 @@ async function testeConsultaStatusServico(empresa, ambiente, modelo) {
     console.log(result.data.retConsStatServ.xMotivo);
 }
 
-const eventoCancelar = {   
-    chNFe: '35200418885949000181550200000051001449514062',
-    dhEvento: moment().format(),
-    tpEvento: '110111',
-    nSeqEvento: 1,
-    detEvento: {
-        nProt:'135200002962850',
-        xJust: 'TESTE DE CANCELAMENTO DA NFE........'
-    }
-}
-
 async function testeEventoCancelar() {
+    const evento = {   
+        chNFe: '35200418885949000181550200000051001449514062',
+        dhEvento: moment().format(),
+        tpEvento: '110111',
+        nSeqEvento: 1,
+        detEvento: {
+            nProt:'135200002962850',
+            xJust: 'TESTE DE CANCELAMENTO DA NFE........'
+        }
+    }
+
     const eventoProc = new lib.EventoProcessor(configuracoes);
 
     const ini = new Date();
@@ -272,7 +272,29 @@ async function testeEventoCancelar() {
     console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
 
     result = require('util').inspect(result, false, null);
-    console.log('Resultado Emissão NF-e: \n\n' + result);
+    console.log('Resultado Cancelamento NF-e: \n\n' + result);
+}
+
+async function testeEventoCartaCorrecao() {
+    const evento = {   
+        chNFe: '35200418885949000181550200000029431614400134',
+        dhEvento: moment().format(),
+        tpEvento: '110110',
+        nSeqEvento: 1,
+        detEvento: {
+            xCorrecao: 'O CAMPO OBSERVACAO DEVERIA ESTAR VAZIO'
+        }
+    }    
+    
+    const eventoProc = new lib.EventoProcessor(configuracoes);
+
+    const ini = new Date();
+    let result = await eventoProc.executar(evento);
+    const fin = new Date();
+    console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
+
+    result = require('util').inspect(result, false, null);
+    console.log('Resultado Carta de Correção NF-e: \n\n' + result);
 }
 
 async function testeConsultaRecibo() {
@@ -291,7 +313,8 @@ async function testeConsultaRecibo() {
 // testeConsultaRecibo()
 // testeEmissaoNFCeContingenciaOffline(empresa);
 // testeEmissaoNFe();
-testeEventoCancelar()
+// testeEventoCancelar()
+testeEventoCartaCorrecao()
 
 // TRANSFORMAR CERTIFICADO .PEM, REMOVER CHAVE....
 // openssl pkcs12 -in mycaservercert.pfx -nokeys -out mycaservercert.pem
