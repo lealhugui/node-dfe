@@ -5,7 +5,7 @@ export enum ServicosSefaz {
     retAutorizacao = 'retAutorizacao',
     consultarStatusServico = 'consultarStatusServico',
     evento = 'recepcaoEvento',
-    inutilizacao = 'Inutilizacao',
+    inutilizacao = 'inutilizacao',
     protocolo = 'consultarProtocolo',
     cadastro = 'consultarCadastro',
 }

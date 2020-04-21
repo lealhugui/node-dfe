@@ -297,6 +297,28 @@ async function testeEventoCartaCorrecao() {
     console.log('Resultado Carta de Correção NF-e: \n\n' + result);
 }
 
+async function testeInutilizacao() {
+    const evento = {   
+        ano: 20,
+        modelo: 55,
+        serie: 77,
+        numeroInicial: 1,
+        numeroFinal: 2,
+        xJustificativa: 'teste de inutilizacao de numero. modelo 55'
+
+    }    
+   
+    const eventoProc = new lib.InutilizaProcessor(configuracoes);
+
+    const ini = new Date();
+    let result = await eventoProc.executar(evento);
+    const fin = new Date();
+    console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
+
+    result = require('util').inspect(result, false, null);
+    console.log('Resultado Inutilização NF-e: \n\n' + result);
+}
+
 async function testeConsultaRecibo() {
     const nfeProc = new lib.RetornoProcessor(configuracoes);
 
@@ -314,7 +336,8 @@ async function testeConsultaRecibo() {
 // testeEmissaoNFCeContingenciaOffline(empresa);
 // testeEmissaoNFe();
 // testeEventoCancelar()
-testeEventoCartaCorrecao()
+// testeEventoCartaCorrecao()
+testeInutilizacao()
 
 // TRANSFORMAR CERTIFICADO .PEM, REMOVER CHAVE....
 // openssl pkcs12 -in mycaservercert.pfx -nokeys -out mycaservercert.pem
