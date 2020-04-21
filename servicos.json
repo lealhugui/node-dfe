@@ -10,5 +10,9 @@
     "consultarStatusServico": {
         "method": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4",
         "action": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF"
+    },
+    "recepcaoEvento": {
+        "method": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4",
+        "action": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEvento"
     }
 }

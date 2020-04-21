@@ -437,6 +437,16 @@ export interface Arquivos {
     pastaXML: string;
 }
 
+export enum TipoEvento {
+    cancelamento = '110111',
+    cartaCorrecao = '110110',
+    manifestacaoConfirmacaoOperacao = '210200',
+    manifestacaoCienciaEmissao = '210210',
+    manifestacaoDesconhecimentoOperacao = '210220',
+    manifestacaoOperacaoNaoRealizada = '210240',
+    epec = '110140',
+}
+
 export interface Configuracoes {
     empresa: Empresa;
     webProxy?: WebProxy;

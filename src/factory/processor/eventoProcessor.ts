@@ -32,15 +32,36 @@ export class EventoProcessor {
             if (this.configuracoes.arquivos.pastaXML && (!'/\\'.includes(this.configuracoes.arquivos.pastaXML.substr(-1))))
                 this.configuracoes.arquivos.pastaXML = this.configuracoes.arquivos.pastaXML + path.sep;
         }
-
-
-
     }
 
     public async executar(evento: Evento) {
         let result = <RetornoProcessamento>{
             success: false
         };
+
+        switch (evento.tpEvento) {
+            case '110111':
+                evento.detEvento.descEvento = 'Cancelamento';
+                break;
+            case '110110':
+                evento.detEvento.descEvento = 'Carta de Correcao';
+                break
+            case '210200':
+                evento.detEvento.descEvento = 'Confirmacao da Operacao';
+                break
+            case '210210':
+                evento.detEvento.descEvento = 'Ciencia da Operacao';
+                break
+            case '210220':
+                evento.detEvento.descEvento = 'Desconhecimento da Operacao';
+                break
+            case '210240':
+                evento.detEvento.descEvento = 'Operacao nao Realizada';
+                break
+            case '110140':
+                evento.detEvento.descEvento = 'EPEC';
+                break
+        }
 
         try {
             const { geral: { modelo, ambiente }, empresa, arquivos } = this.configuracoes
@@ -55,26 +76,32 @@ export class EventoProcessor {
 
             result = await this.transmitirXml(xmlLote);
 
-            if (arquivos.salvar && result.success == true) {
-                console.log('pasta para salvar', arquivos.pastaXML)
-
-                // if (! await fs.existsSync(arquivos.pastaEnvio)) await fs.mkdirSync(arquivos.pastaEnvio, { recursive: true });
-                // if (! await fs.existsSync(arquivos.pastaRetorno)) await fs.mkdirSync(arquivos.pastaRetorno, { recursive: true });
+            if (arquivos.salvar) {
+                if (! await fs.existsSync(arquivos.pastaEnvio)) await fs.mkdirSync(arquivos.pastaEnvio, { recursive: true });
+                if (! await fs.existsSync(arquivos.pastaRetorno)) await fs.mkdirSync(arquivos.pastaRetorno, { recursive: true });
                 if (!await fs.existsSync(arquivos.pastaXML)) await fs.mkdirSync(arquivos.pastaXML, { recursive: true });
 
-                const filename = `${arquivos.pastaXML}${evento.chNFe}${evento.tpEvento}-procEventoNFe.xml`;
+                if ((result.success == true) && (Object(result.data).retEnvEvento.retEvento.infEvento.cStat == 135)) {
+                    const filename = `${arquivos.pastaXML}${evento.chNFe}${evento.tpEvento}-procEventoNFe.xml`;
 
-                const procEvento = <schema.TProcEvento> {
-                    $: { versao: "1.00", xmlns: "http://www.portalfiscal.inf.br/nfe" },
-                    _: '[XML_EVENTO]',
-                    retEvento: Object(result.data).retEnvEvento
-                };
+                    const procEvento = <schema.TProcEvento>{
+                        $: { versao: "1.00", xmlns: "http://www.portalfiscal.inf.br/nfe" },
+                        _: '[XML_EVENTO]',
+                        retEvento: Object(result.data).retEnvEvento.retEvento
+                    };
 
-                Utils.removeSelfClosedFields(procEvento);
-                let xmlProcEvento = XmlHelper.serializeXml(procEvento, 'procEvento');
-                xmlProcEvento = xmlProcEvento.replace('[XML_EVENTO]', xmlAssinado);
+                    Utils.removeSelfClosedFields(procEvento);
+                    let xmlProcEvento = XmlHelper.serializeXml(procEvento, 'procEvento');
+                    xmlProcEvento = xmlProcEvento.replace('[XML_EVENTO]', xmlAssinado);
 
-                await fs.writeFileSync(filename, xmlProcEvento);
+                    await fs.writeFileSync(filename, xmlProcEvento);
+                } else {
+                    const filenameEnvio = `${arquivos.pastaEnvio}${evento.chNFe}${evento.tpEvento}-envEventoCancNFe.xml`;
+                    const filenameRetorno = `${arquivos.pastaRetorno}${evento.chNFe}${evento.tpEvento}-retEnvEventoCancNFe.xml`;
+
+                    await fs.writeFileSync(filenameEnvio, result.xml_enviado);
+                    await fs.writeFileSync(filenameRetorno, result.xml_recebido);
+                }
             }
         } catch (ex) {
             result.success = false;
@@ -126,7 +153,6 @@ export class EventoProcessor {
             result.xJust = evento.detEvento.xJust;
         };
         if (evento.tpEvento == 'cancSubst') {
-            // if Utils. (result.chNFeRef', '', 'Chave de NFe Refenciada inválida'
             result.cOrgaoAutor = evento.detEvento.cOrgaoAutor;
             result.tpAutor = '001';
             result.verAplic = evento.detEvento.verAplic;
@@ -142,7 +168,6 @@ export class EventoProcessor {
     }
 
     private gerarXml(evento: Evento) {
-        const { geral: { versao } } = this.configuracoes;
         const xmlEvento = <schema.TEvento>{
             $: {
                 versao: '1.00',
@@ -152,7 +177,6 @@ export class EventoProcessor {
         };
 
         Utils.removeSelfClosedFields(xmlEvento);
-        // pcnEnvEventoNFe ln 160
         return XmlHelper.serializeXml(xmlEvento, 'evento');
     }
 

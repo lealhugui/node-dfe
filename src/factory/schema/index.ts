@@ -2733,22 +2733,22 @@ export interface TRetEvento {
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TRetEventoInfEvento {
     tpAmbField: TAmb;
-    verAplicField: string;
-    cOrgaoField: TCOrgaoIBGE;
-    cStatField: string;
-    xMotivoField: string;
-    chNFeField: string;
-    tpEventoField: string;
-    xEventoField: string;
-    nSeqEventoField: string;
+    verAplic: string;
+    cOrgao: TCOrgaoIBGE;
+    cStat: string;
+    xMotivo: string;
+    chNFe: string;
+    tpEvento: string;
+    xEvento: string;
+    nSeqEvento: string;
     //CNPJDest
     //CPFDest
-    itemField: string;
-    itemElementNameField: ItemChoiceType8;
-    emailDestField: string;
-    dhRegEventoField: string;
-    nProtField: string;
-    idField: string;
+    item: string;
+    itemElementName: ItemChoiceType8;
+    emailDest: string;
+    dhRegEvento: string;
+    nProt: string;
+    id: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
