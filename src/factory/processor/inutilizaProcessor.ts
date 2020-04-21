@@ -111,8 +111,6 @@ export class InutilizaProcessor {
             xJust: dados.xJustificativa,
         };
         return infInut;
-        // Utils.removeSelfClosedFields(infInut);
-        // return XmlHelper.serializeXml(infInut, 'infInut');
     }
 
     private gerarXml(dados: Inutilizar) {
@@ -124,7 +122,6 @@ export class InutilizaProcessor {
         const inutNFe = <schema.TInutNFe>{
             $: { versao, xmlns: 'http://www.portalfiscal.inf.br/nfe' },
             infInut
-            // _: '[XML]'
         };
         Utils.removeSelfClosedFields(inutNFe);
         const xml = XmlHelper.serializeXml(inutNFe, 'inutNFe');
