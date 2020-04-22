@@ -1,19 +1,19 @@
-name: Mark stale issues and pull requests
-
+name: Issue cleanup
 on:
   schedule:
-  - cron: "0 0 * * *"
-
+    - cron: '0 00 * * *'
 jobs:
-  stale:
-
+  triage_issues:
+    name: Issue triage
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/stale@v1
+    - name: Find old issues and mark them stale
+      uses: Krizzu/issue-triage-action@v1.0.0
       with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        stale-issue-message: 'Marcado com "stale"'
-        stale-pr-message: 'Marcado com "stale"'
-        stale-issue-label: 'no-issue-activity'
-        stale-pr-label: 'no-pr-activity'
+        ghToken: ${{ secrets.GITHUB_TOKEN }}
+        staleAfter: 10
+        closeAfter: 20
+        staleLabel: "no activity"
+        staleComment: "This issue is %DAYS_OLD% days old, marking as stale! cc: @%AUTHOR%"
+        closeComment: "Issue last updated %DAYS_OLD% days ago! Closing down!"
+        showLogs: true

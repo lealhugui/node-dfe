@@ -102,7 +102,7 @@ export abstract class WebServiceHelper {
 
     private static buildCertAgentOpt(cert: any) {
         return {
-            rejectUnauthorized: cert.rejectUnauthorized || true,
+            rejectUnauthorized: (cert.rejectUnauthorized === undefined) ? true : cert.rejectUnauthorized,
             pfx: cert.pfx,
             passphrase: cert.password
         }
