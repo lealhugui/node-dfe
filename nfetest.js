@@ -16,8 +16,8 @@ let cert = {
 let empresa = {
     razaoSocial: 'TESTE',
     nomeFantasia: 'TESTE',
-    cnpj: 'OBRIGATORIO',
-    inscricaoEstadual: 'OBRIGATORIO',
+    cnpj: '18885949000181',
+    inscricaoEstadual: '144895078115',
     inscricaoMunicipal: '',
     codRegimeTributario: '1',//2
     endereco: {
@@ -214,6 +214,7 @@ let nfce = {
     infoAdicional: infoAdic
 };
 
+
 const configuracoes = {
     empresa,
     certificado: cert,
@@ -242,7 +243,7 @@ async function testeEmissaoNFe() {
     console.log('Resultado Emissão NF-e: \n\n' + result);
 }
 
-:
+// TESTES STATUS SERVICO:
 async function testeConsultaStatusServico(empresa, ambiente, modelo) {
     const statusProc = new lib.StatusServicoProcessor(empresa, ambiente, modelo);
     let result = await statusProc.processarDocumento();
@@ -251,28 +252,71 @@ async function testeConsultaStatusServico(empresa, ambiente, modelo) {
     console.log(result.data.retConsStatServ.xMotivo);
 }
 
-const eventoCancelar = {   
-    chNFe: '35200418885949000181550200000051001449514062',
-    dhEvento: moment().format(),
-    tpEvento: '110111',
-    nSeqEvento: 1,
-    detEvento: {
-        nProt:'135200002962850',
-        xJust: 'TESTE DE CANCELAMENTO DA NFE........'
-    }
-}
-
 async function testeEventoCancelar() {
+    const evento = {   
+        chNFe: '35200418885949000181550200000051001449514062',
+        dhEvento: moment().format(),
+        tpEvento: '110111',
+        nSeqEvento: 1,
+        detEvento: {
+            nProt:'135200002962850',
+            xJust: 'TESTE DE CANCELAMENTO DA NFE........'
+        }
+    }
+
     const eventoProc = new lib.EventoProcessor(configuracoes);
 
     const ini = new Date();
     let result = await eventoProc.executar(evento);
-
     const fin = new Date();
     console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
 
     result = require('util').inspect(result, false, null);
-    console.log('Resultado Emissão NF-e: \n\n' + result);
+    console.log('Resultado Cancelamento NF-e: \n\n' + result);
+}
+
+async function testeEventoCartaCorrecao() {
+    const evento = {   
+        chNFe: '35200418885949000181550200000029431614400134',
+        dhEvento: moment().format(),
+        tpEvento: '110110',
+        nSeqEvento: 1,
+        detEvento: {
+            xCorrecao: 'O CAMPO OBSERVACAO DEVERIA ESTAR VAZIO'
+        }
+    }    
+    
+    const eventoProc = new lib.EventoProcessor(configuracoes);
+
+    const ini = new Date();
+    let result = await eventoProc.executar(evento);
+    const fin = new Date();
+    console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
+
+    result = require('util').inspect(result, false, null);
+    console.log('Resultado Carta de Correção NF-e: \n\n' + result);
+}
+
+async function testeInutilizacao() {
+    const evento = {   
+        ano: 20,
+        modelo: 55,
+        serie: 77,
+        numeroInicial: 1,
+        numeroFinal: 2,
+        xJustificativa: 'teste de inutilizacao de numero. modelo 55'
+
+    }    
+   
+    const eventoProc = new lib.InutilizaProcessor(configuracoes);
+
+    const ini = new Date();
+    let result = await eventoProc.executar(evento);
+    const fin = new Date();
+    console.log(`${(fin.getTime() - ini.getTime())/1000}s`)
+
+    result = require('util').inspect(result, false, null);
+    console.log('Resultado Inutilização NF-e: \n\n' + result);
 }
 
 async function testeConsultaRecibo() {
@@ -291,7 +335,9 @@ async function testeConsultaRecibo() {
 // testeConsultaRecibo()
 // testeEmissaoNFCeContingenciaOffline(empresa);
 // testeEmissaoNFe();
-testeEventoCancelar()
+// testeEventoCancelar()
+// testeEventoCartaCorrecao()
+testeInutilizacao()
 
 // TRANSFORMAR CERTIFICADO .PEM, REMOVER CHAVE....
 // openssl pkcs12 -in mycaservercert.pfx -nokeys -out mycaservercert.pem
