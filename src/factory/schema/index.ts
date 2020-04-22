@@ -2615,33 +2615,43 @@ export interface TRetCancNFeInfCanc {
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TProcEvento {
-    eventoField: TEvento;
-    retEventoField: TRetEvento;
-    versaoField: string;
+    $: { versao: string, xmlns: string };
+    _: string;//evento: TEvento;
+    retEvento: TRetEvento;
+    versao: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TEvento {
-    infEventoField: TEventoInfEvento;
-    signatureField: SignatureType;
-    versaoField: string;
+    $: { versao: string, xmlns: string },
+    infEvento: TEventoInfEvento;
+    signature: SignatureType;
+    versao: string;
+}
+
+export interface TEnviEvento {
+    $: { versao: string, xmlns: string };
+    idLote: string;
+    //nFe: TNFe[];
+    _: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TEventoInfEvento {
-    cOrgaoField: TCOrgaoIBGE;
-    tpAmbField: TAmb;
-    //CNPJ
-    //CPF
-    itemField: string;
-    itemElementNameField: ItemChoiceType7;
-    chNFeField: string;
-    dhEventoField: string;
-    tpEventoField: string;
-    nSeqEventoField: string;
-    verEventoField: string;
-    detEventoField: TEventoInfEventoDetEvento;
-    idField: string;
+    $: { Id: string },
+    cOrgao: TCOrgaoIBGE;
+    tpAmb: TAmb;
+    CNPJ: string;
+    CPF: string;
+    item: string;
+    itemElementName: ItemChoiceType7;
+    chNFe: string;
+    dhEvento: string;
+    tpEvento: string;
+    nSeqEvento: string;
+    verEvento: string;
+    detEvento: TEventoInfEventoDetEvento;
+    id: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -2686,6 +2696,27 @@ export enum ItemChoiceType7 {
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TEventoInfEventoDetEvento {
+    $: { versao: string };
+    
+    descEvento: string;
+    xCorrecao: string;
+    xCondUso: string;
+    nProt: string;
+    xJust: string;
+    cOrgaoAutor: number;
+    tpAutor: string;
+    verAplic: string;
+    chNFeRef: string;
+    dhEmi: Date;
+    tpNF: string;
+    IE: string;
+    // dest: EventoDestinatario;
+    vNF: number;
+    vICMS: number;
+    vST: number;
+    // itemPedido: EventoItemPedido;
+    idPedidoCancelado: string;    
+
     //System.Xml.XmlElement[]
     Any: any[];
     //System.Xml.XmlAttribute[]
@@ -2702,22 +2733,22 @@ export interface TRetEvento {
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TRetEventoInfEvento {
     tpAmbField: TAmb;
-    verAplicField: string;
-    cOrgaoField: TCOrgaoIBGE;
-    cStatField: string;
-    xMotivoField: string;
-    chNFeField: string;
-    tpEventoField: string;
-    xEventoField: string;
-    nSeqEventoField: string;
+    verAplic: string;
+    cOrgao: TCOrgaoIBGE;
+    cStat: string;
+    xMotivo: string;
+    chNFe: string;
+    tpEvento: string;
+    xEvento: string;
+    nSeqEvento: string;
     //CNPJDest
     //CPFDest
-    itemField: string;
-    itemElementNameField: ItemChoiceType8;
-    emailDestField: string;
-    dhRegEventoField: string;
-    nProtField: string;
-    idField: string;
+    item: string;
+    itemElementName: ItemChoiceType8;
+    emailDest: string;
+    dhRegEvento: string;
+    nProt: string;
+    id: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]

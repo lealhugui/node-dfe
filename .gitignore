@@ -72,3 +72,6 @@ lib
 
 # python compiled
 **/**/*.pyc
+xml/
+xml_envio/
+xml_retorno/
