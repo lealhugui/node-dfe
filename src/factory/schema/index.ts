@@ -105,7 +105,7 @@ export enum TEnviNFeIndSinc {
 [System.Xml.Serialization.XmlRootAttribute("NFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 */
 export interface TNFe {
-    $: { xmlns: string },
+    $: { versao: string, xmlns: string },
     infNFe: TNFeInfNFe;
     infNFeSupl: TNFeInfNFeSupl;
     //[System.Xml.Serialization.XmlElementAttribute(Namespace="http://www.w3.org/2000/09/xmldsig#")]
@@ -2535,31 +2535,32 @@ export interface TRetInutNFeInfInut {
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 //[System.Xml.Serialization.XmlRootAttribute("nfeProc", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TNfeProc {
-    nFeField: TNFe;
-    protNFeField: TProtNFe;
-    versaoField: string;
+    NFe: TNFe;
+    protNFe: TProtNFe;
+    $: { versao: string, xmlns: string };
+    _: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TProtNFe {
-    infProtField: TProtNFeInfProt;
-    signatureField: SignatureType;
-    versaoField: string;
+    infProt: TProtNFeInfProt;
+    signature: SignatureType;
+    versao: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TProtNFeInfProt {
-    tpAmbField: TAmb;
-    verAplicField: string;
-    chNFeField: string;
-    dhRecbtoField: string;
-    nProtField: string;
-    digValField: number[];
-    cStatField: string;
-    xMotivoField: string;
-    cMsgField: string;
-    xMsgField: string;
-    idField: string;
+    tpAmb: TAmb;
+    verAplic: string;
+    chNFe: string;
+    dhRecbto: string;
+    nProt: string;
+    digVal: number[];
+    cStat: string;
+    xMotivo: string;
+    cMsg: string;
+    xMsg: string;
+    Id: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]

@@ -3,13 +3,15 @@ import {
     InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline, ResponsavelTecnico, ServicosSefaz, II, PisST, Ipi, CofinsST, IcmsUfDest, impostoDevol, Configuracoes
 } from '../interface/nfe';
 
-import { WebServiceHelper, WebProxy } from "../webservices/webserviceHelper";
+import { WebServiceHelper } from "../webservices/webserviceHelper";
 import * as schema from '../schema/index';
 import { XmlHelper } from '../xmlHelper';
 import * as Utils from '../utils/utils';
 import { Signature } from '../signature';
 import { SefazNFCe } from '../webservices/sefazNfce';
 import { SefazNFe } from '../webservices/sefazNfe';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const sha1 = require('sha1');
 
@@ -48,6 +50,14 @@ export class EnviaProcessor {
         if (!this.configuracoes.webservices) this.configuracoes.webservices = { tentativas: 3, aguardarConsultaRetorno: 1000 };
         if (!this.configuracoes.webservices.tentativas) this.configuracoes.webservices.tentativas = 3;
         if (!this.configuracoes.webservices.aguardarConsultaRetorno) this.configuracoes.webservices.aguardarConsultaRetorno = 1000;
+        if (this.configuracoes.arquivos) {
+            if (this.configuracoes.arquivos.pastaEnvio && (!'/\\'.includes(this.configuracoes.arquivos.pastaEnvio.substr(-1))))
+                this.configuracoes.arquivos.pastaEnvio = this.configuracoes.arquivos.pastaEnvio + path.sep;
+            if (this.configuracoes.arquivos.pastaRetorno && (!'/\\'.includes(this.configuracoes.arquivos.pastaRetorno.substr(-1))))
+                this.configuracoes.arquivos.pastaRetorno = this.configuracoes.arquivos.pastaRetorno + path.sep;
+            if (this.configuracoes.arquivos.pastaXML && (!'/\\'.includes(this.configuracoes.arquivos.pastaXML.substr(-1))))
+                this.configuracoes.arquivos.pastaXML = this.configuracoes.arquivos.pastaXML + path.sep;
+        }
     }
 
     /**
@@ -56,7 +66,6 @@ export class EnviaProcessor {
      * @param assincrono Boolean para definir se a execução sera sincrona ou assincrona, por padrao === sincrona!
      */
     public async executar(documento: NFeDocumento | NFCeDocumento, assincrono: boolean = false) {
-
         let result = <RetornoProcessamentoNF>{
             success: false
         };
@@ -71,6 +80,7 @@ export class EnviaProcessor {
                 xmlAssinado = appendQRCode.xml;
                 doc.nfe.infNFeSupl = appendQRCode.qrCode;
             }
+            console.log('ASSINADO============================', xmlAssinado)
 
             let xmlLote = this.gerarXmlLote(xmlAssinado, assincrono);
 
@@ -81,7 +91,6 @@ export class EnviaProcessor {
             } else {
                 result = await this.transmitirXml(xmlLote, doc.nfe);
             }
-
         } catch (ex) {
             result.success = false;
             result.error = ex;

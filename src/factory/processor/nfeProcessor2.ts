@@ -8,6 +8,12 @@ import { EventoProcessor } from './eventoProcessor';
 import { InutilizaProcessor } from './inutilizaProcessor';
 import { Inutilizar } from '../interface/inutilizacao';
 import { Evento } from '../interface';
+import { XmlHelper } from '../xmlHelper';
+import * as Utils from '../utils/utils';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as schema from '../schema';
+
 
 
 /**
@@ -26,6 +32,15 @@ export class NFeProcessor {
         if (!this.configuracoes.webservices) this.configuracoes.webservices = { tentativas: 3, aguardarConsultaRetorno: 1000 };
         if (!this.configuracoes.webservices.tentativas) this.configuracoes.webservices.tentativas = 3;
         if (!this.configuracoes.webservices.aguardarConsultaRetorno) this.configuracoes.webservices.aguardarConsultaRetorno = 1000;
+        if (this.configuracoes.arquivos) {
+            if (this.configuracoes.arquivos.pastaEnvio && (!'/\\'.includes(this.configuracoes.arquivos.pastaEnvio.substr(-1))))
+                this.configuracoes.arquivos.pastaEnvio = this.configuracoes.arquivos.pastaEnvio + path.sep;
+            if (this.configuracoes.arquivos.pastaRetorno && (!'/\\'.includes(this.configuracoes.arquivos.pastaRetorno.substr(-1))))
+                this.configuracoes.arquivos.pastaRetorno = this.configuracoes.arquivos.pastaRetorno + path.sep;
+            if (this.configuracoes.arquivos.pastaXML && (!'/\\'.includes(this.configuracoes.arquivos.pastaXML.substr(-1))))
+                this.configuracoes.arquivos.pastaXML = this.configuracoes.arquivos.pastaXML + path.sep;
+        }
+
 
         this.retornoProcessor = new RetornoProcessor(this.configuracoes);
         this.enviaProcessor = new EnviaProcessor(this.configuracoes);
@@ -43,6 +58,7 @@ export class NFeProcessor {
     }
 
     public async executar(documento: NFeDocumento | NFCeDocumento, assincrono: boolean = false) {
+        const { arquivos } = this.configuracoes;
         let result = <RetornoProcessamentoNF>{};
         try {
             result = <RetornoProcessamentoNF>await this.enviaProcessor.executar(documento);
@@ -66,6 +82,38 @@ export class NFeProcessor {
                         result.confirmada = true;
                         result.success = true;
                     }
+
+                if (arquivos.salvar) {
+                    if (! await fs.existsSync(arquivos.pastaEnvio)) await fs.mkdirSync(arquivos.pastaEnvio, { recursive: true });
+                    if (! await fs.existsSync(arquivos.pastaRetorno)) await fs.mkdirSync(arquivos.pastaRetorno, { recursive: true });
+                    if (!await fs.existsSync(arquivos.pastaXML)) await fs.mkdirSync(arquivos.pastaXML, { recursive: true });
+        
+                    if ((result.success == true) && (retConsReciNFe.protNFe.infProt.cStat == '100')) {
+                        const filename = `${arquivos.pastaXML}${retConsReciNFe.protNFe.infProt.chNFe}-procNFe.xml`;
+                        
+                        const nfe_enviada = Object(XmlHelper.deserializeXml(result.envioNF.xml_enviado, { explicitArray: false }));
+                        const nfeProc = <schema.TNfeProc>{
+                            $: { versao: "1.00", xmlns: "http://www.portalfiscal.inf.br/nfe" },
+                            NFe: nfe_enviada.enviNFe.NFe,
+                            protNFe: retConsReciNFe.protNFe
+                        };
+
+                        Utils.removeSelfClosedFields(nfeProc);
+                        let xmlNfeProc = XmlHelper.serializeXml(nfeProc, 'nfeProc');
+
+                        await fs.writeFileSync(filename, xmlNfeProc);
+                    } else {
+                        const filenameEnvio = `${arquivos.pastaEnvio}${retEnviNFe.infRec.nRec}-enviNFe.xml`;
+                        const filenameRetorno = `${arquivos.pastaRetorno}${retEnviNFe.infRec.nRec}-retEnviNFe.xml`;
+                        await fs.writeFileSync(filenameEnvio, result.envioNF.xml_enviado);
+                        await fs.writeFileSync(filenameRetorno, result.envioNF.xml_recebido);
+
+                        const filenameConsultaEnvio = `${arquivos.pastaEnvio}${retConsReciNFe.nRec}-consReciNFe.xml`;
+                        const filenameConsultaRetorno = `${arquivos.pastaRetorno}${retConsReciNFe.nRec}-retConsReciNFe.xml`;
+                        await fs.writeFileSync(filenameConsultaEnvio, result.consultaProc.xml_enviado);
+                        await fs.writeFileSync(filenameConsultaRetorno, result.consultaProc.xml_recebido);       
+                    }
+                }
             } else {
                 throw new Error('Erro ao realizar requisição');
             }
