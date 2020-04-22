@@ -334,10 +334,10 @@ async function testeConsultaRecibo() {
 
 // testeConsultaRecibo()
 // testeEmissaoNFCeContingenciaOffline(empresa);
-// testeEmissaoNFe();
+testeEmissaoNFe();
 // testeEventoCancelar()
 // testeEventoCartaCorrecao()
-testeInutilizacao()
+// testeInutilizacao()
 
 // TRANSFORMAR CERTIFICADO .PEM, REMOVER CHAVE....
 // openssl pkcs12 -in mycaservercert.pfx -nokeys -out mycaservercert.pem
