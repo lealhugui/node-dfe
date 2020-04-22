@@ -2471,23 +2471,24 @@ export interface X509DataType {
 //[System.Xml.Serialization.XmlRootAttribute("inutNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TInutNFe {
     infInut: TInutNFeInfInut;
+    _: string;
     signature: SignatureType;
-    $: { versao: string };
+    $: { versao: string, xmlns: string };
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TInutNFeInfInut {
     tpAmb: TAmb;
-    xServ: TInutNFeInfInutXServ;
+    xServ: string,//TInutNFeInfInutXServ;
     cUF: TCodUfIBGE;
-    ano: string;
-    cNPJ: string;
-    mod: TMod;
-    serie: string;
-    nNFIni: string;
-    nNFFin: string;
+    ano: number;
+    CNPJ: string;
+    mod: number;//TMod;
+    serie: number;
+    nNFIni: number;
+    nNFFin: number;
     xJust: string;
-    id: string;
+    $: { Id: string };
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -2500,7 +2501,8 @@ export enum TInutNFeInfInutXServ {
 export interface TProcInutNFe {
     inutNFe: TInutNFe;
     retInutNFe: TRetInutNFe;
-    $: { versao: string };
+    $: { versao: string, xmlns: string };
+    _: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]

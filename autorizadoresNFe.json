@@ -184,7 +184,7 @@
                 "url_producao": "https://nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx",
                 "url_homologacao": "https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx"
             },
-            "Inutilizacao": {
+            "inutilizacao": {
                 "url_producao": "https://nfe.fazenda.sp.gov.br/ws/nfeinutilizacao4.asmx",
                 "url_homologacao": "https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeinutilizacao4.asmx"
             }

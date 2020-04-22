@@ -5,6 +5,9 @@ import {
 import { RetornoProcessor } from './retornoProcessor';
 import { EnviaProcessor } from './enviaProcessor';
 import { EventoProcessor } from './eventoProcessor';
+import { InutilizaProcessor } from './inutilizaProcessor';
+import { Inutilizar } from '../interface/inutilizacao';
+import { Evento } from '../interface';
 
 
 /**
@@ -14,6 +17,7 @@ export class NFeProcessor {
     private retornoProcessor: any = null;
     private enviaProcessor: any = null;
     private eventoProcessor: any = null;
+    private inutlizacaoProcessor: any = null;
 
     constructor(
         private configuracoes: Configuracoes
@@ -26,6 +30,7 @@ export class NFeProcessor {
         this.retornoProcessor = new RetornoProcessor(this.configuracoes);
         this.enviaProcessor = new EnviaProcessor(this.configuracoes);
         this.eventoProcessor = new EventoProcessor(this.configuracoes);
+        this.inutlizacaoProcessor = new InutilizaProcessor(this.configuracoes);
     }
 
     /**
@@ -72,5 +77,12 @@ export class NFeProcessor {
         return result;
     }
 
+    public async inutilizarNumeracao( dados: Inutilizar) {
+        return await this.inutlizacaoProcessor.executar( dados );
+    }
+
+    public async gerarEvento( evento: Evento ) {
+        return await this.eventoProcessor.executar(evento);
+    }
 
 }
