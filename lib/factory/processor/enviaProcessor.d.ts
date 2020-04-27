@@ -1,4 +1,4 @@
-import { RetornoProcessamentoNF, NFCeDocumento, NFeDocumento, Configuracoes } from '../interface/nfe';
+import { RetornoProcessamentoNF, Configuracoes, NFeBase } from '../interface/nfe';
 /**
  * Classe para processamento de NFe/NFCe
  */
@@ -10,7 +10,7 @@ export declare class EnviaProcessor {
      * @param documento Array de documentos modelo 55 ou 1 documento modelo 65
      * @param assincrono Boolean para definir se a execução sera sincrona ou assincrona, por padrao === sincrona!
      */
-    executar(documento: NFeDocumento | NFCeDocumento, assincrono?: boolean): Promise<RetornoProcessamentoNF>;
+    executar(documento: NFeBase, assincrono?: boolean): Promise<RetornoProcessamentoNF>;
     private configuraUrlsSefaz;
     private appendQRCodeXML;
     transmitirXml(xmlLote: string, nfeObj: Object): Promise<RetornoProcessamentoNF>;
@@ -44,6 +44,8 @@ export declare class EnviaProcessor {
     private getTotal;
     private getIcmsTot;
     private getTransp;
+    private getCobr;
+    private getDetalheCobranca;
     private getPag;
     private getDetalhamentoPagamentos;
     private getDetalhamentoCartao;

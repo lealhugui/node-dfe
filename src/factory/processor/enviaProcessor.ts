@@ -1,6 +1,6 @@
 import {
     RetornoProcessamentoNF, Empresa, Endereco, NFCeDocumento, NFeDocumento, DocumentoFiscal, Destinatario, Transporte, Pagamento, Produto, Total,
-    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline, ResponsavelTecnico, ServicosSefaz, II, PisST, Ipi, CofinsST, IcmsUfDest, impostoDevol, Configuracoes
+    InfoAdicional, DetalhesProduto, Imposto, Icms, Cofins, Pis, IcmsTot, IssqnTot, DetalhePagamento, DetalhePgtoCartao, RetornoContingenciaOffline, ResponsavelTecnico, ServicosSefaz, II, PisST, Ipi, CofinsST, IcmsUfDest, impostoDevol, Configuracoes, Cobranca, Duplicata, NFeBase
 } from '../interface/nfe';
 
 import { WebServiceHelper } from "../webservices/webserviceHelper";
@@ -65,7 +65,7 @@ export class EnviaProcessor {
      * @param documento Array de documentos modelo 55 ou 1 documento modelo 65
      * @param assincrono Boolean para definir se a execução sera sincrona ou assincrona, por padrao === sincrona!
      */
-    public async executar(documento: NFeDocumento | NFCeDocumento, assincrono: boolean = false) {
+    public async executar(documento: NFeBase, assincrono: boolean = false) {
         let result = <RetornoProcessamentoNF>{
             success: false
         };
@@ -76,11 +76,10 @@ export class EnviaProcessor {
             let xmlAssinado = Signature.signXmlX509(doc.xml, 'infNFe', this.configuracoes.certificado);
 
             if (documento.docFiscal.modelo == '65') {
-                let appendQRCode = this.appendQRCodeXML(documento, xmlAssinado);
+                let appendQRCode = this.appendQRCodeXML(documento as NFCeDocumento, xmlAssinado);
                 xmlAssinado = appendQRCode.xml;
                 doc.nfe.infNFeSupl = appendQRCode.qrCode;
             }
-            console.log('ASSINADO============================', xmlAssinado)
 
             let xmlLote = this.gerarXmlLote(xmlAssinado, assincrono);
 
@@ -222,7 +221,7 @@ export class EnviaProcessor {
         return xmlLote.replace('[XMLS]', xml);
     }
 
-    private gerarXml(documento: NFeDocumento | NFCeDocumento) {
+    private gerarXml(documento: NFeBase) {
         if (documento.docFiscal.modelo == '65' && documento.docFiscal.isContingenciaOffline)
             documento.docFiscal.tipoEmissao = '9';
 
@@ -231,7 +230,7 @@ export class EnviaProcessor {
             $: {
                 xmlns: 'http://www.portalfiscal.inf.br/nfe'
             },
-            infNFe: documento.docFiscal.modelo == '65' ? this.gerarNFCe(documento, dadosChave) : this.gerarNFe(documento, dadosChave)
+            infNFe: documento.docFiscal.modelo == '65' ? this.gerarNFCe(documento as NFCeDocumento, dadosChave) : this.gerarNFe(documento as NFeDocumento, dadosChave)
         };
 
         Utils.removeSelfClosedFields(NFe);
@@ -328,8 +327,8 @@ export class EnviaProcessor {
         nfe.det = this.getDet(documento.produtos, documento.docFiscal.ambiente, documento.docFiscal.modelo);
         nfe.total = this.getTotal(documento.total);
         nfe.transp = this.getTransp(documento.transporte);
-        //nfe.cobr =
-        nfe.pag = this.getPag(documento.pagamento);
+        nfe.cobr = this.getCobr(documento.cobranca);
+        nfe.pag = this.getPag(documento.pagamento);        
         nfe.infAdic = this.getInfoAdic(documento.infoAdicional);
         //nfe.exporta = ;
         //nfe.compra = ;
@@ -1283,6 +1282,40 @@ export class EnviaProcessor {
                 vol: TNFeInfNFeTranspVol[];
             */
         }
+    }
+
+    private getCobr(cobranca: Cobranca) {
+        if ((cobranca && cobranca.fatura) &&
+            (cobranca.fatura.nFatura || (cobranca.fatura.vOriginal > 0) || 
+             cobranca.duplicatas.length > 0)
+        ) {
+            const cobr = <schema.TNFeInfNFeCobr>{ fat: {} };            
+            cobr.fat.nFat = cobranca.fatura.nFatura;
+            cobr.fat.vOrig = cobranca.fatura.vOriginal.toFixed(2);
+            cobr.fat.vDesc = (cobranca.fatura.vDesconto ? cobranca.fatura.vDesconto : 0).toFixed(2);
+            cobr.fat.vLiq = cobranca.fatura.vLiquido.toFixed(2);         
+
+            cobr.dup = this.getDetalheCobranca(cobranca.duplicatas);
+
+            return cobr;
+        } else return;
+
+
+    }
+
+    private getDetalheCobranca(duplicatas: Duplicata[]) {
+        let listaDuplicata = [];
+        let detDup;
+
+        for (const dup of duplicatas) {
+            detDup = <schema.TNFeInfNFeCobrDup>{};
+            detDup.nDup = dup.nDuplicata;
+            detDup.dVenc = dup.dVencimento;
+            detDup.vDup = (dup.vDuplicatata ? dup.vDuplicatata : 0).toFixed(2);           
+            listaDuplicata.push(detDup);
+        }
+
+        return listaDuplicata;
     }
 
     private getPag(pagamento: Pagamento) {

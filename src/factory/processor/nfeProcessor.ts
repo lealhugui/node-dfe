@@ -308,7 +308,7 @@ export class NFeProcessor {
             $: {
                 xmlns: 'http://www.portalfiscal.inf.br/nfe'
             },
-            infNFe: documento.docFiscal.modelo == '65' ? this.gerarNFCe(documento, dadosChave) : this.gerarNFe(documento, dadosChave)
+            infNFe: documento.docFiscal.modelo == '65' ? this.gerarNFCe(documento as NFCeDocumento, dadosChave) : this.gerarNFe(documento as NFeDocumento, dadosChave)
         };
 
         Utils.removeSelfClosedFields(NFe);
