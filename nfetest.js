@@ -166,15 +166,15 @@ for (let i = 1; i <= 1; i++) {
 let pagamento = {
   //valorTroco: '',
   pagamentos: [{
-      indicadorFormaPagamento: '',
-      formaPagamento: '01',
+      indicadorFormaPagamento: '1', //0=Vista 1=Prazo 2=Outros ''=Nenhum
+      formaPagamento: '99',
       valor: valorTotalProdutos.toFixed(2),
-      dadosCartao: {
-        tipoIntegracao: '1',
-        cnpj: '99999999999999',
-        bandeira: '01',
-        codAutorizacao: '1321231231'
-      }
+    //   dadosCartao: {
+    //     tipoIntegracao: '1',
+    //     cnpj: '99999999999999',
+    //     bandeira: '01',
+    //     codAutorizacao: '1321231231'
+    //   }
   }]
 };
 
@@ -211,6 +211,23 @@ let nfce = {
     total: {icmsTot: icmsTot},
     transporte: transp,
     pagamento: pagamento,
+    cobranca: {
+        fatura: {
+            nFatura: '20202704-01',
+            vOriginal: valorTotalProdutos,
+            vDesconto: 0,
+            vLiquido: valorTotalProdutos
+            },
+        duplicatas: [{
+            nDuplicata: '001',
+            vDuplicatata: valorTotalProdutos /2,
+            dVencimento: moment().add(7, 'days').format('YYYY-MM-DD')
+            },{
+            nDuplicata: '002',
+            vDuplicatata: valorTotalProdutos /2,
+            dVencimento: moment().add(21, 'days').format('YYYY-MM-DD')
+        }]
+    },
     infoAdicional: infoAdic
 };
 

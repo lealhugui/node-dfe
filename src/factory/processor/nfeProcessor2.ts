@@ -77,8 +77,8 @@ export class NFeProcessor {
                     cStat = retConsReciNFe.cStat;
                 }
 
-                if (retConsReciNFe)
-                    if (cStat == '104' && retConsReciNFe.protNFe.infProt.cStat == '100') {
+                if (retEnviNFe && retConsReciNFe)
+                    if (retEnviNFe.cStat == '103' && retConsReciNFe.cStat == '104') { //protNFe.infProt.
                         result.confirmada = true;
                         result.success = true;
                     }
@@ -88,7 +88,7 @@ export class NFeProcessor {
                     if (! await fs.existsSync(arquivos.pastaRetorno)) await fs.mkdirSync(arquivos.pastaRetorno, { recursive: true });
                     if (!await fs.existsSync(arquivos.pastaXML)) await fs.mkdirSync(arquivos.pastaXML, { recursive: true });
         
-                    if ((result.success == true) && (retConsReciNFe.protNFe.infProt.cStat == '100')) {
+                    if ((result.success == true) && (retConsReciNFe.cStat == '104')) {
                         const filename = `${arquivos.pastaXML}${retConsReciNFe.protNFe.infProt.chNFe}-procNFe.xml`;
                         
                         const nfe_enviada = Object(XmlHelper.deserializeXml(result.envioNF.xml_enviado, { explicitArray: false }));
@@ -115,6 +115,7 @@ export class NFeProcessor {
                     }
                 }
             } else {
+                console.error('nfeProcessor.executar: Erro ao realizar requisição', result);
                 throw new Error('Erro ao realizar requisição');
             }
         } catch (ex) {

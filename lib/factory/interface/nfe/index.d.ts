@@ -28,23 +28,20 @@ export interface RetornoProcessamento {
     data: Object;
     error: string;
 }
-export interface NFeDocumento {
+export interface NFeBase {
     docFiscal: DocumentoFiscal;
     destinatario: Destinatario;
     produtos: Produto[];
     total: Total;
     transporte: Transporte;
-    pagamento: Pagamento;
     infoAdicional: InfoAdicional;
 }
-export interface NFCeDocumento {
-    docFiscal: DocumentoFiscal;
-    destinatario: Destinatario;
-    produtos: Produto[];
-    total: Total;
-    transporte: Transporte;
+export interface NFeDocumento extends NFeBase {
+    cobranca: Cobranca;
     pagamento: Pagamento;
-    infoAdicional: InfoAdicional;
+}
+export interface NFCeDocumento extends NFeBase {
+    pagamento: Pagamento;
 }
 export interface DocumentoFiscal {
     serie: string;
@@ -295,6 +292,21 @@ export interface RetTrib {
 }
 export interface Transporte {
     modalidateFrete: string;
+}
+export interface Cobranca {
+    fatura: Fatura;
+    duplicatas: Duplicata[];
+}
+export interface Fatura {
+    nFatura: string;
+    vOriginal: number;
+    vDesconto: number;
+    vLiquido: number;
+}
+export interface Duplicata {
+    nDuplicata: string;
+    dVencimento: string;
+    vDuplicatata: Number;
 }
 export interface Pagamento {
     valorTroco: string;

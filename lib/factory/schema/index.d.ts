@@ -99,8 +99,8 @@ export interface TNFeInfNFe {
     det: TNFeInfNFeDet[];
     total: TNFeInfNFeTotal;
     transp: TNFeInfNFeTransp;
-    cobr: TNFeInfNFeCobr;
-    pag: TNFeInfNFePag;
+    cobr?: TNFeInfNFeCobr;
+    pag?: TNFeInfNFePag;
     infAdic: TNFeInfNFeInfAdic;
     exporta: TNFeInfNFeExporta;
     compra: TNFeInfNFeCompra;
