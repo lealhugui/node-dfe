@@ -1,14 +1,20 @@
+import { WebProxy } from "../../webservices/webserviceHelper";
 
 export enum ServicosSefaz {
     autorizacao = 'autorizacao',
     retAutorizacao = 'retAutorizacao',
-    consultarStatusServico = 'consultarStatusServico'
+    consultarStatusServico = 'consultarStatusServico',
+    evento = 'recepcaoEvento',
+    inutilizacao = 'Inutilizacao',
+    protocolo = 'consultarProtocolo',
+    cadastro = 'consultarCadastro',
 }
 
 export interface RetornoProcessamentoNF {
     success: boolean,
     error: string,
     nfe: Object,
+    confirmada: boolean;
     envioNF: RetornoProcessamento,
     consultaProc: RetornoProcessamento,
     retornoContingenciaOffline: RetornoContingenciaOffline
@@ -411,4 +417,42 @@ export interface Certificado {
 
 export function fromJsonixObj<T>(json: any): T {
     return json as T;
+}
+
+export interface Geral {
+    ambiente: string;
+    versao: string;
+    modelo: string;    
+}
+
+export interface Webservices {
+    tentativas: number; // quantidade de tentativas a serem feitas, para evitar bloqueio por consumo indevido
+    aguardarConsultaRetorno: number; //tempo em milisegundos
+}
+
+export interface Arquivos {
+    salvar: boolean;
+    pastaEnvio: string;
+    pastaRetorno: string;
+    pastaXML: string;
+}
+
+export enum TipoEvento {
+    cancelamento = '110111',
+    cartaCorrecao = '110110',
+    manifestacaoConfirmacaoOperacao = '210200',
+    manifestacaoCienciaEmissao = '210210',
+    manifestacaoDesconhecimentoOperacao = '210220',
+    manifestacaoOperacaoNaoRealizada = '210240',
+    epec = '110140',
+}
+
+export interface Configuracoes {
+    empresa: Empresa;
+    webProxy?: WebProxy;
+    certificado: Certificado;
+    geral: Geral;
+    webservices: Webservices;
+    responsavelTecnico?: ResponsavelTecnico;
+    arquivos: Arquivos;
 }
