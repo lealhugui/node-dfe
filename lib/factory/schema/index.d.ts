@@ -1,53 +1,36 @@
-
-/*
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-[System.Xml.Serialization.XmlRootAttribute("consReciNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
-*/
 export interface TConsReciNFe {
-    $: { versao: string, xmlns: string };
+    $: {
+        versao: string;
+        xmlns: string;
+    };
     tpAmb: TAmb;
     nRec: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TAmb {
+export declare enum TAmb {
     PRD = "1",
     HML = "2"
 }
-/*
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-[System.Xml.Serialization.XmlRootAttribute("consSitNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
-*/
 export interface TConsSitNFe {
-
     tpAmb: TAmb;
     xServ: TConsSitNFeXServ;
     chNFe: string;
     versao: TVerConsSitNFe;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TConsSitNFeXServ {
-    CONSULTAR,
+export declare enum TConsSitNFeXServ {
+    CONSULTAR = 0
 }
-
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TVerConsSitNFe {
-    Item400,
+export declare enum TVerConsSitNFe {
+    Item400 = 0
 }
-
-//[System.Xml.Serialization.XmlRootAttribute("consStatServ", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TConsStatServ {
-
     tpAmb: TAmb;
     cUF: TCodUfIBGE;
     xServ: TConsStatServXServ;
-    $: { versao: string };
+    $: {
+        versao: string;
+    };
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TCodUfIBGE {
+export declare enum TCodUfIBGE {
     Item11 = "11",
     Item12 = "12",
     Item13 = "13",
@@ -74,47 +57,38 @@ export enum TCodUfIBGE {
     Item50 = "50",
     Item51 = "51",
     Item52 = "52",
-    Item53 = "53",
+    Item53 = "53"
 }
-
-//System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TConsStatServXServ {
-    STATUS = "STATUS",
+export declare enum TConsStatServXServ {
+    STATUS = "STATUS"
 }
-
-/*
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-[System.Xml.Serialization.XmlRootAttribute("enviNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
-*/
 export interface TEnviNFe {
-    $: { versao: string, xmlns: string };
+    $: {
+        versao: string;
+        xmlns: string;
+    };
     idLote: string;
     indSinc: TEnviNFeIndSinc;
-    //nFe: TNFe[];
     _: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TEnviNFeIndSinc {
+export declare enum TEnviNFeIndSinc {
     Item0 = "0",
-    Item1 = "1",
+    Item1 = "1"
 }
-
-/*
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-[System.Xml.Serialization.XmlRootAttribute("NFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
-*/
 export interface TNFe {
-    $: { versao: string, xmlns: string },
+    $: {
+        versao: string;
+        xmlns: string;
+    };
     infNFe: TNFeInfNFe;
     infNFeSupl: TNFeInfNFeSupl;
-    //[System.Xml.Serialization.XmlElementAttribute(Namespace="http://www.w3.org/2000/09/xmldsig#")]
     signature: SignatureType;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFe {
-    $: { versao: string, Id: string };
+    $: {
+        versao: string;
+        Id: string;
+    };
     ide: TNFeInfNFeIde;
     emit: TNFeInfNFeEmit;
     avulsa: TNFeInfNFeAvulsa;
@@ -133,8 +107,6 @@ export interface TNFeInfNFe {
     cana: TNFeInfNFeCana;
     infRespTec: TInfRespTec;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeIde {
     cUF: TCodUfIBGE;
     cNF: string;
@@ -160,38 +132,28 @@ export interface TNFeInfNFeIde {
     xJust: string;
     nFref: TNFeInfNFeIdeNFref[];
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TMod {
+export declare enum TMod {
     Item55 = "55",
-    Item65 = "65",
+    Item65 = "65"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeIdeTpNF {
+export declare enum TNFeInfNFeIdeTpNF {
     Item0 = "0",
-    Item1 = "1",
+    Item1 = "1"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeIdeIdDest {
+export declare enum TNFeInfNFeIdeIdDest {
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeIdeTpImp {
+export declare enum TNFeInfNFeIdeTpImp {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
-    Item5 = "5",
+    Item5 = "5"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeIdeTpEmis {
+export declare enum TNFeInfNFeIdeTpEmis {
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
@@ -199,43 +161,33 @@ export enum TNFeInfNFeIdeTpEmis {
     Item5 = "5",
     Item6 = "6",
     Item7 = "7",
-    Item9 = "9",
+    Item9 = "9"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TFinNFe {
+export declare enum TFinNFe {
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
-    Item4 = "4",
+    Item4 = "4"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeIdeIndFinal {
+export declare enum TNFeInfNFeIdeIndFinal {
     Item0 = "0",
-    Item1 = "1",
+    Item1 = "1"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeIdeIndPres {
+export declare enum TNFeInfNFeIdeIndPres {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
     Item5 = "5",
-    Item9 = "9",
+    Item9 = "9"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TProcEmi {
+export declare enum TProcEmi {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeIdeNFref {
     refCTe?: string;
     refECF?: TNFeInfNFeIdeNFrefRefECF;
@@ -244,24 +196,17 @@ export interface TNFeInfNFeIdeNFref {
     refNFe?: string;
     itemElementName: ItemChoiceType1;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeIdeNFrefRefECF {
     mod: TNFeInfNFeIdeNFrefRefECFMod;
     nECF: string;
     nCOO: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeIdeNFrefRefECFMod {
+export declare enum TNFeInfNFeIdeNFrefRefECFMod {
     Item2B = "2B",
     Item2C = "2C",
-    Item2D = "2D",
+    Item2D = "2D"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeIdeNFrefRefNF {
-
     cUF_1: TCodUfIBGE;
     aAMM: string;
     cNPJ: string;
@@ -269,14 +214,10 @@ export interface TNFeInfNFeIdeNFrefRefNF {
     serie: string;
     nNF: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeIdeNFrefRefNFMod {
+export declare enum TNFeInfNFeIdeNFrefRefNFMod {
     Item01 = "01",
-    Item02 = "02",
+    Item02 = "02"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeIdeNFrefRefNFP {
     cUF: TCodUfIBGE;
     aAMM: string;
@@ -287,35 +228,24 @@ export interface TNFeInfNFeIdeNFrefRefNFP {
     serie: string;
     nNF: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemChoiceType {
-    CNPJ,
-    CPF,
+export declare enum ItemChoiceType {
+    CNPJ = 0,
+    CPF = 1
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeIdeNFrefRefNFPMod {
+export declare enum TNFeInfNFeIdeNFrefRefNFPMod {
     Item01 = "01",
-    Item04 = "04",
+    Item04 = "04"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemChoiceType1 {
-    refCTe,
-    refECF,
-    refNF,
-    refNFP,
-    refNFe,
+export declare enum ItemChoiceType1 {
+    refCTe = 0,
+    refECF = 1,
+    refNF = 2,
+    refNFP = 3,
+    refNFe = 4
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeEmit {
     CNPJ: string;
     CPF: string;
-    //item: string;
-    //CPF/CNPJ
-    //itemElementName: ItemChoiceType2;
     xNome: string;
     xFant: string;
     enderEmit: TEnderEmi;
@@ -325,16 +255,11 @@ export interface TNFeInfNFeEmit {
     CNAE: string;
     CRT: TNFeInfNFeEmitCRT;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemChoiceType2 {
-    CNPJ,
-    CPF,
+export declare enum ItemChoiceType2 {
+    CNPJ = 0,
+    CPF = 1
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TEnderEmi {
-
     xLgr: string;
     nro: string;
     xCpl: string;
@@ -349,9 +274,7 @@ export interface TEnderEmi {
     xPaisSpecified: boolean;
     fone: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TUfEmi {
+export declare enum TUfEmi {
     AC = "AC",
     AL = "AL",
     AM = "AM",
@@ -378,29 +301,20 @@ export enum TUfEmi {
     SC = "SC",
     SE = "SE",
     SP = "SP",
-    TO = "TO",
+    TO = "TO"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TEnderEmiCPais {
-    Item1058 = "1058",
+export declare enum TEnderEmiCPais {
+    Item1058 = "1058"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TEnderEmiXPais {
+export declare enum TEnderEmiXPais {
     Brasil = "Brasil",
-    BRASIL = "BRASIL",
+    BRASIL = "BRASIL"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeEmitCRT {
-
+export declare enum TNFeInfNFeEmitCRT {
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeAvulsa {
     cNPJ: string;
     xOrgao: string;
@@ -414,41 +328,23 @@ export interface TNFeInfNFeAvulsa {
     repEmi: string;
     dPag: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDest {
-
-    //item: string;
-    //CNPJ/CPF/idEstrangeiro
-    //itemElementName: ItemChoiceType3;
     CNPJ: string;
     CPF: string;
     idEstrangeiro: string;
-
     xNome: string;
-
     enderDest: TEndereco;
-
     indIEDest: TNFeInfNFeDestIndIEDest;
-
     IE: string;
-
     ISUF: string;
-
     IM: string;
-
     email: string;
-
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemChoiceType3 {
-    CNPJ,
-    CPF,
-    idEstrangeiro,
+export declare enum ItemChoiceType3 {
+    CNPJ = 0,
+    CPF = 1,
+    idEstrangeiro = 2
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TEndereco {
     xLgr: string;
     nro: string;
@@ -462,9 +358,7 @@ export interface TEndereco {
     xPais: string;
     fone: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TUf {
+export declare enum TUf {
     AC = "AC",
     AL = "AL",
     AM = "AM",
@@ -492,17 +386,13 @@ export enum TUf {
     SE = "SE",
     SP = "SP",
     TO = "TO",
-    EX = "EX",
+    EX = "EX"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDestIndIEDest {
+export declare enum TNFeInfNFeDestIndIEDest {
     Item1 = "1",
     Item2 = "2",
-    Item9 = "9",
+    Item9 = "9"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TLocal {
     item: string;
     itemElementName: ItemChoiceType4;
@@ -521,37 +411,27 @@ export interface TLocal {
     email: string;
     ie: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemChoiceType4 {
-    CNPJ,
-    CPF,
+export declare enum ItemChoiceType4 {
+    CNPJ = 0,
+    CPF = 1
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeAutXML {
-
     item: string;
-
     itemElementName: ItemChoiceType5;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemChoiceType5 {
-    CNPJ,
-    CPF,
+export declare enum ItemChoiceType5 {
+    CNPJ = 0,
+    CPF = 1
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDet {
-    $: { nItem: string };
+    $: {
+        nItem: string;
+    };
     prod: TNFeInfNFeDetProd;
     imposto: TNFeInfNFeDetImposto;
-    impostoDevol: any; //TNFeInfNFeDetImpostoDevol;
+    impostoDevol: any;
     infAdProd: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProd {
     cProd: string;
     cEAN: string;
@@ -584,27 +464,16 @@ export interface TNFeInfNFeDetProd {
     nItemPed: string;
     nFCI: string;
     rastro: TNFeInfNFeDetProdRastro[];
-    //arma
-    //comb
-    //med
-    //nRECOPI
-    //veicProd
     items: object[];
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetProdIndEscala {
-    S,
-    N,
+export declare enum TNFeInfNFeDetProdIndEscala {
+    S = 0,
+    N = 1
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetProdIndTot {
+export declare enum TNFeInfNFeDetProdIndTot {
     Item0 = "0",
-    Item1 = "1",
+    Item1 = "1"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdDI {
     nDI: string;
     dDI: string;
@@ -620,9 +489,7 @@ export interface TNFeInfNFeDetProdDI {
     cExportador: string;
     adi: TNFeInfNFeDetProdDIAdi[];
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetProdDITpViaTransp {
+export declare enum TNFeInfNFeDetProdDITpViaTransp {
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
@@ -634,17 +501,13 @@ export enum TNFeInfNFeDetProdDITpViaTransp {
     Item9 = "9",
     Item10 = "10",
     Item11 = "11",
-    Item12 = "12",
+    Item12 = "12"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetProdDITpIntermedio {
+export declare enum TNFeInfNFeDetProdDITpIntermedio {
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdDIAdi {
     nAdicao: string;
     nSeqAdic: string;
@@ -652,21 +515,15 @@ export interface TNFeInfNFeDetProdDIAdi {
     vDescDI: string;
     nDraw: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdDetExport {
     nDraw: string;
     exportInd: TNFeInfNFeDetProdDetExportExportInd;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdDetExportExportInd {
     nRE: string;
     chNFe: string;
     qExport: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdRastro {
     nLote: string;
     qLote: string;
@@ -674,22 +531,16 @@ export interface TNFeInfNFeDetProdRastro {
     dVal: string;
     cAgreg: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdArma {
     tpArma: TNFeInfNFeDetProdArmaTpArma;
     nSerie: string;
     nCano: string;
     descr: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetProdArmaTpArma {
+export declare enum TNFeInfNFeDetProdArmaTpArma {
     Item0 = "0",
-    Item1 = "1",
+    Item1 = "1"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdComb {
     cProdANP: string;
     descANP: string;
@@ -703,15 +554,11 @@ export interface TNFeInfNFeDetProdComb {
     cIDE: TNFeInfNFeDetProdCombCIDE;
     encerrante: TNFeInfNFeDetProdCombEncerrante;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdCombCIDE {
     qBCProd: string;
     vAliqProd: string;
     vCIDE: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdCombEncerrante {
     nBico: string;
     nBomba: string;
@@ -719,15 +566,11 @@ export interface TNFeInfNFeDetProdCombEncerrante {
     vEncIni: string;
     vEncFin: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdMed {
     cProdANVISA: string;
     xMotivoIsencao: string;
     vPMC: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdVeicProd {
     tpOp: TNFeInfNFeDetProdVeicProdTpOp;
     chassi: string;
@@ -754,29 +597,21 @@ export interface TNFeInfNFeDetProdVeicProd {
     lota: string;
     tpRest: TNFeInfNFeDetProdVeicProdTpRest;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetProdVeicProdTpOp {
+export declare enum TNFeInfNFeDetProdVeicProdTpOp {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetProdVeicProdVIN {
-    R,
-    N,
+export declare enum TNFeInfNFeDetProdVeicProdVIN {
+    R = 0,
+    N = 1
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetProdVeicProdCondVeic {
+export declare enum TNFeInfNFeDetProdVeicProdCondVeic {
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdDIAdi {
     nAdicao: string;
     nSeqAdic: string;
@@ -784,35 +619,25 @@ export interface TNFeInfNFeDetProdDIAdi {
     vDescDI: string;
     nDraw: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdDetExport {
     nDraw: string;
     exportInd: TNFeInfNFeDetProdDetExportExportInd;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetProdDetExportExportInd {
     nRE: string;
     chNFe: string;
     qExport: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetProdVeicProdTpRest {
+export declare enum TNFeInfNFeDetProdVeicProdTpRest {
     Item0 = "1",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
-    Item9 = "9",
+    Item9 = "9"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImposto {
-
     vTotTrib: string;
-
     ICMS: any;
     PIS: any;
     COFINS: any;
@@ -821,57 +646,22 @@ export interface TNFeInfNFeDetImposto {
     II: any;
     IPI: any;
     ISSQN: any;
-
-    //items: object[]; //ICMS, II,IPI, ISSQN
     ICMSUFDest: any;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMS {
-    /*
-    ICMS00
-    ICMS10
-    ICMS20
-    ICMS30
-    ICMS40
-    ICMS51
-    ICMS60
-    ICMS70
-    ICMS90
-    ICMSPart
-    ICMSSN101
-    ICMSSN102
-    ICMSSN201
-    ICMSSN202
-    ICMSSN500
-    ICMSSN900
-    ICMSST
-    */
     item: object;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMS00 {
-
     orig: Torig;
-
     CST: TNFeInfNFeDetImpostoICMSICMS00CST;
-
     modBC: TNFeInfNFeDetImpostoICMSICMS00ModBC;
-
     vBC: string;
-
     pICMS: string;
-
     vICMS: string;
-
     pFCP: string;
-
     vFCP: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum Torig {
+export declare enum Torig {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
@@ -880,23 +670,17 @@ export enum Torig {
     Item5 = "5",
     Item6 = "6",
     Item7 = "7",
-    Item8 = "8",
+    Item8 = "8"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS00CST {
-    Item00 = "00",
+export declare enum TNFeInfNFeDetImpostoICMSICMS00CST {
+    Item00 = "00"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS00ModBC {
+export declare enum TNFeInfNFeDetImpostoICMSICMS00ModBC {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMS10 {
     orig: Torig;
     CST: TNFeInfNFeDetImpostoICMSICMS10CST;
@@ -917,31 +701,23 @@ export interface TNFeInfNFeDetImpostoICMSICMS10 {
     pFCPST: string;
     vFCPST: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS10CST {
-    Item10 = "10",
+export declare enum TNFeInfNFeDetImpostoICMSICMS10CST {
+    Item10 = "10"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS10ModBC {
+export declare enum TNFeInfNFeDetImpostoICMSICMS10ModBC {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS10ModBCST {
+export declare enum TNFeInfNFeDetImpostoICMSICMS10ModBCST {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
-    Item5 = "5",
+    Item5 = "5"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMS20 {
     orig: Torig;
     CST: TNFeInfNFeDetImpostoICMSICMS20CST;
@@ -956,28 +732,20 @@ export interface TNFeInfNFeDetImpostoICMSICMS20 {
     vICMSDeson: string;
     motDesICMS: TNFeInfNFeDetImpostoICMSICMS20MotDesICMS;
 }
-
-
-export enum TNFeInfNFeDetImpostoICMSICMS20CST {
-    Item20 = "20",
+export declare enum TNFeInfNFeDetImpostoICMSICMS20CST {
+    Item20 = "20"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS20ModBC {
+export declare enum TNFeInfNFeDetImpostoICMSICMS20ModBC {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS20MotDesICMS {
+export declare enum TNFeInfNFeDetImpostoICMSICMS20MotDesICMS {
     Item3 = "3",
     Item9 = "9",
-    Item12 = "12",
+    Item12 = "12"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMS30 {
     orig: Torig;
     CST: TNFeInfNFeDetImpostoICMSICMS30CST;
@@ -993,46 +761,34 @@ export interface TNFeInfNFeDetImpostoICMSICMS30 {
     vICMSDeson: string;
     motDesICMS: TNFeInfNFeDetImpostoICMSICMS30MotDesICMS;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS30CST {
-    Item30 = "30",
+export declare enum TNFeInfNFeDetImpostoICMSICMS30CST {
+    Item30 = "30"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS30ModBCST {
+export declare enum TNFeInfNFeDetImpostoICMSICMS30ModBCST {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
-    Item5 = "5",
+    Item5 = "5"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS30MotDesICMS {
+export declare enum TNFeInfNFeDetImpostoICMSICMS30MotDesICMS {
     Item6 = "6",
     Item7 = "7",
-    Item9 = "9",
+    Item9 = "9"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMS40 {
     orig: Torig;
     CST: TNFeInfNFeDetImpostoICMSICMS40CST;
     vICMSDeson: string;
     motDesICMS: TNFeInfNFeDetImpostoICMSICMS40MotDesICMS;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS40CST {
+export declare enum TNFeInfNFeDetImpostoICMSICMS40CST {
     Item40 = "40",
     Item41 = "41",
-    Item50 = "50",
+    Item50 = "50"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS40MotDesICMS {
+export declare enum TNFeInfNFeDetImpostoICMSICMS40MotDesICMS {
     Item1 = "1",
     Item3 = "3",
     Item4 = "4",
@@ -1044,10 +800,8 @@ export enum TNFeInfNFeDetImpostoICMSICMS40MotDesICMS {
     Item10 = "10",
     Item11 = "11",
     Item16 = "16",
-    Item90 = "90",
+    Item90 = "90"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMS51 {
     orig: Torig;
     CST: TNFeInfNFeDetImpostoICMSICMS51CST;
@@ -1064,21 +818,15 @@ export interface TNFeInfNFeDetImpostoICMSICMS51 {
     pFCP: string;
     vFCP: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS51CST {
-    Item51 = "51",
+export declare enum TNFeInfNFeDetImpostoICMSICMS51CST {
+    Item51 = "51"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS51ModBC {
+export declare enum TNFeInfNFeDetImpostoICMSICMS51ModBC {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMS60 {
     orig: Torig;
     CST: TNFeInfNFeDetImpostoICMSICMS60CST;
@@ -1094,13 +842,9 @@ export interface TNFeInfNFeDetImpostoICMSICMS60 {
     pICMSEfet: string;
     vICMSEfet: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS60CST {
-    Item60 = "60",
+export declare enum TNFeInfNFeDetImpostoICMSICMS60CST {
+    Item60 = "60"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMS70 {
     orig: Torig;
     CST: TNFeInfNFeDetImpostoICMSICMS70CST;
@@ -1124,38 +868,28 @@ export interface TNFeInfNFeDetImpostoICMSICMS70 {
     vICMSDeson: string;
     motDesICMS: TNFeInfNFeDetImpostoICMSICMS70MotDesICMS;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS70CST {
-    Item70 = "70",
+export declare enum TNFeInfNFeDetImpostoICMSICMS70CST {
+    Item70 = "70"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS70ModBC {
+export declare enum TNFeInfNFeDetImpostoICMSICMS70ModBC {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS70ModBCST {
+export declare enum TNFeInfNFeDetImpostoICMSICMS70ModBCST {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
-    Item5 = "5",
+    Item5 = "5"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS70MotDesICMS {
+export declare enum TNFeInfNFeDetImpostoICMSICMS70MotDesICMS {
     Item3 = "3",
     Item9 = "9",
-    Item12 = "12",
+    Item12 = "12"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMS90 {
     orig: Torig;
     CST: TNFeInfNFeDetImpostoICMSICMS90CST;
@@ -1179,38 +913,28 @@ export interface TNFeInfNFeDetImpostoICMSICMS90 {
     vICMSDeson: string;
     motDesICMS: TNFeInfNFeDetImpostoICMSICMS90MotDesICMS;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS90CST {
-    Item90 = "90",
+export declare enum TNFeInfNFeDetImpostoICMSICMS90CST {
+    Item90 = "90"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS90ModBC {
+export declare enum TNFeInfNFeDetImpostoICMSICMS90ModBC {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS90ModBCST {
+export declare enum TNFeInfNFeDetImpostoICMSICMS90ModBCST {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
-    Item5 = "5",
+    Item5 = "5"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMS90MotDesICMS {
+export declare enum TNFeInfNFeDetImpostoICMSICMS90MotDesICMS {
     Item3 = "3",
     Item9 = "9",
-    Item12 = "12",
+    Item12 = "12"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSPart {
     orig: Torig;
     CST: TNFeInfNFeDetImpostoICMSICMSPartCST;
@@ -1228,104 +952,69 @@ export interface TNFeInfNFeDetImpostoICMSICMSPart {
     pBCOp: string;
     UFST: TUf;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSPartCST {
+export declare enum TNFeInfNFeDetImpostoICMSICMSPartCST {
     Item10 = "10",
-    Item90 = "90",
+    Item90 = "90"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSPartModBC {
+export declare enum TNFeInfNFeDetImpostoICMSICMSPartModBC {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSPartModBCST {
+export declare enum TNFeInfNFeDetImpostoICMSICMSPartModBCST {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
-    Item5 = "5",
+    Item5 = "5"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSSN101 {
     orig: Torig;
     CSOSN: TNFeInfNFeDetImpostoICMSICMSSN101CSOSN;
     pCredSN: string;
     vCredICMSSN: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSSN101CSOSN {
-    Item101 = "101",
+export declare enum TNFeInfNFeDetImpostoICMSICMSSN101CSOSN {
+    Item101 = "101"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSSN102 {
     orig: Torig;
     CSOSN: TNFeInfNFeDetImpostoICMSICMSSN102CSOSN;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSSN102CSOSN {
+export declare enum TNFeInfNFeDetImpostoICMSICMSSN102CSOSN {
     Item102 = "102",
     Item103 = "103",
     Item300 = "300",
-    Item400 = "400",
+    Item400 = "400"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSSN201 {
-
     orig: Torig;
-
     CSOSN: TNFeInfNFeDetImpostoICMSICMSSN201CSOSN;
-
     modBCST: TNFeInfNFeDetImpostoICMSICMSSN201ModBCST;
-
     pMVAST: string;
-
     pRedBCST: string;
-
     vBCST: string;
-
     pICMSST: string;
-
     vICMSST: string;
-
     vBCFCPST: string;
-
     pFCPST: string;
-
     vFCPST: string;
-
     pCredSN: string;
-
     vCredICMSSN: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSSN201CSOSN {
-    Item201 = "201",
+export declare enum TNFeInfNFeDetImpostoICMSICMSSN201CSOSN {
+    Item201 = "201"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSSN201ModBCST {
+export declare enum TNFeInfNFeDetImpostoICMSICMSSN201ModBCST {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
-    Item5 = "5",
+    Item5 = "5"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSSN202 {
     orig: Torig;
     CSOSN: TNFeInfNFeDetImpostoICMSICMSSN202CSOSN;
@@ -1339,24 +1028,18 @@ export interface TNFeInfNFeDetImpostoICMSICMSSN202 {
     pFCPST: string;
     vFCPST: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSSN202CSOSN {
+export declare enum TNFeInfNFeDetImpostoICMSICMSSN202CSOSN {
     Item202 = "202",
-    Item203 = "203",
+    Item203 = "203"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSSN202ModBCST {
+export declare enum TNFeInfNFeDetImpostoICMSICMSSN202ModBCST {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
-    Item5 = "5",
+    Item5 = "5"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSSN500 {
     orig: Torig;
     CSOSN: TNFeInfNFeDetImpostoICMSICMSSN500CSOSN;
@@ -1372,13 +1055,9 @@ export interface TNFeInfNFeDetImpostoICMSICMSSN500 {
     pICMSEfet: string;
     vICMSEfet: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSSN500CSOSN {
-    Item500 = "500",
+export declare enum TNFeInfNFeDetImpostoICMSICMSSN500CSOSN {
+    Item500 = "500"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSSN900 {
     orig: Torig;
     CSOSN: TNFeInfNFeDetImpostoICMSICMSSN900CSOSN;
@@ -1399,32 +1078,23 @@ export interface TNFeInfNFeDetImpostoICMSICMSSN900 {
     pCredSN: string;
     vCredICMSSN: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSSN900CSOSN {
-    Item900 = "900",
+export declare enum TNFeInfNFeDetImpostoICMSICMSSN900CSOSN {
+    Item900 = "900"
 }
-
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSSN900ModBC {
+export declare enum TNFeInfNFeDetImpostoICMSICMSSN900ModBC {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
-    Item3 = "3",
+    Item3 = "3"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSSN900ModBCST {
+export declare enum TNFeInfNFeDetImpostoICMSICMSSN900ModBCST {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
-    Item5 = "5",
+    Item5 = "5"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSICMSST {
     orig: Torig;
     CST: TNFeInfNFeDetImpostoICMSICMSSTCST;
@@ -1442,41 +1112,28 @@ export interface TNFeInfNFeDetImpostoICMSICMSST {
     pICMSEfet: string;
     vICMSEfet: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSICMSSTCST {
+export declare enum TNFeInfNFeDetImpostoICMSICMSSTCST {
     Item41 = "41",
-    Item60 = "60",
+    Item60 = "60"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoII {
     vBC: string;
     vDespAdu: string;
     vII: string;
     vIOF: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TIpi {
     CNPJProd: string;
     cSelo: string;
     qSelo: string;
     cEnq: string;
-    //IPINT
-    IPITrib: TIpiIPITrib
+    IPITrib: TIpiIPITrib;
     item: object;
 }
-
-
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TIpiIPINT {
     CST: TIpiIPINTCST;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TIpiIPINTCST {
+export declare enum TIpiIPINTCST {
     Item01 = "01",
     Item02 = "02",
     Item03 = "03",
@@ -1486,10 +1143,8 @@ export enum TIpiIPINTCST {
     Item52 = "52",
     Item53 = "53",
     Item54 = "54",
-    Item55 = "55",
+    Item55 = "55"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TIpiIPITrib {
     CST: TIpiIPITribCST;
     vBC: number;
@@ -1497,32 +1152,19 @@ export interface TIpiIPITrib {
     vIPI: number;
     qUnid: number;
     vUnid: number;
-    //pIPI
-    //qUnid
-    //vBC
-    //vUnid
-    // items: string[];
-    // itemsElementName: ItemsChoiceType[];
-    // vIPI: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TIpiIPITribCST {
+export declare enum TIpiIPITribCST {
     Item00 = "00",
     Item49 = "49",
     Item50 = "50",
-    Item99 = "99",
+    Item99 = "99"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemsChoiceType {
-    pIPI,
-    qUnid,
-    vBC,
-    vUnid,
+export declare enum ItemsChoiceType {
+    pIPI = 0,
+    qUnid = 1,
+    vBC = 2,
+    vUnid = 3
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoISSQN {
     vBC: string;
     vAliq: string;
@@ -1541,9 +1183,7 @@ export interface TNFeInfNFeDetImpostoISSQN {
     nProcesso: string;
     indIncentivo: TNFeInfNFeDetImpostoISSQNIndIncentivo;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TCListServ {
+export declare enum TCListServ {
     Item0101 = "01.01",
     Item0102 = "01.02",
     Item0103 = "01.03",
@@ -1742,27 +1382,21 @@ export enum TCListServ {
     Item3701 = "37.01",
     Item3801 = "38.01",
     Item3901 = "39.01",
-    Item4001 = "40.01",
+    Item4001 = "40.01"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoISSQNIndISS {
+export declare enum TNFeInfNFeDetImpostoISSQNIndISS {
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
     Item5 = "5",
     Item6 = "6",
-    Item7 = "7",
+    Item7 = "7"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoISSQNIndIncentivo {
+export declare enum TNFeInfNFeDetImpostoISSQNIndIncentivo {
     Item1 = "1",
-    Item2 = "2",
+    Item2 = "2"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoPIS {
     CST: string;
     vBC: number;
@@ -1771,53 +1405,35 @@ export interface TNFeInfNFeDetImpostoPIS {
     vBCProd: number;
     qBCProd: number;
     vAliqProd: number;
-    // item: object;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoPISPISAliq {
     CST: TNFeInfNFeDetImpostoPISPISAliqCST;
     vBC: string;
     pPIS: string;
     vPIS: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoPISPISAliqCST {
+export declare enum TNFeInfNFeDetImpostoPISPISAliqCST {
     Item01 = "01",
-    Item02 = "02",
+    Item02 = "02"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoPISPISNT {
-
     CST: TNFeInfNFeDetImpostoPISPISNTCST;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoPISPISNTCST {
+export declare enum TNFeInfNFeDetImpostoPISPISNTCST {
     Item04 = "04",
     Item05 = "05",
     Item06 = "06",
     Item07 = "07",
     Item08 = "08",
-    Item09 = "09",
+    Item09 = "09"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoPISPISOutr {
     CST: TNFeInfNFeDetImpostoPISPISOutrCST;
-    //pPIS
-    //qBCProd
-    //vAliqProd
-    //vBC
     items: string[];
     itemsElementName: ItemsChoiceType1[];
     vPIS: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoPISPISOutrCST {
+export declare enum TNFeInfNFeDetImpostoPISPISOutrCST {
     Item49 = "49",
     Item50 = "50",
     Item51 = "51",
@@ -1841,52 +1457,36 @@ export enum TNFeInfNFeDetImpostoPISPISOutrCST {
     Item74 = "74",
     Item75 = "75",
     Item98 = "98",
-    Item99 = "99",
+    Item99 = "99"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemsChoiceType1 {
-    pPIS,
-    qBCProd,
-    vAliqProd,
-    vBC,
+export declare enum ItemsChoiceType1 {
+    pPIS = 0,
+    qBCProd = 1,
+    vAliqProd = 2,
+    vBC = 3
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoPISPISQtde {
     CST: TNFeInfNFeDetImpostoPISPISQtdeCST;
     qBCProd: string;
     vAliqProd: string;
     vPIS: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoPISPISQtdeCST {
-    Item03 = "03",
+export declare enum TNFeInfNFeDetImpostoPISPISQtdeCST {
+    Item03 = "03"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoPISST {
     vBC: number;
     pPIS: number;
     vPIS: number;
     qBCProd: number;
     vAliqProd: number;
-
-    // items: string[];
-    // itemsElementName: ItemsChoiceType2[];
-    // vPIS: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemsChoiceType2 {
-    pPIS,
-    qBCProd,
-    vAliqProd,
-    vBC,
+export declare enum ItemsChoiceType2 {
+    pPIS = 0,
+    qBCProd = 1,
+    vAliqProd = 2,
+    vBC = 3
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoCOFINS {
     CST: string;
     vBC: number;
@@ -1894,53 +1494,35 @@ export interface TNFeInfNFeDetImpostoCOFINS {
     vCOFINS: number;
     qBCProd: number;
     vAliqProd: number;
-
-    // item: object;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoCOFINSCOFINSAliq {
     CST: TNFeInfNFeDetImpostoCOFINSCOFINSAliqCST;
     vBC: string;
     pCOFINS: string;
     vCOFINS: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoCOFINSCOFINSAliqCST {
+export declare enum TNFeInfNFeDetImpostoCOFINSCOFINSAliqCST {
     Item01 = "01",
-    Item02 = "02",
+    Item02 = "02"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoCOFINSCOFINSNT {
     CST: TNFeInfNFeDetImpostoCOFINSCOFINSNTCST;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoCOFINSCOFINSNTCST {
+export declare enum TNFeInfNFeDetImpostoCOFINSCOFINSNTCST {
     Item04 = "04",
     Item05 = "05",
     Item06 = "06",
     Item07 = "07",
     Item08 = "08",
-    Item09 = "09",
+    Item09 = "09"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoCOFINSCOFINSOutr {
     CST: TNFeInfNFeDetImpostoCOFINSCOFINSOutrCST;
-    //pCOFINS
-    //qBCProd
-    //vAliqProd
-    //vBC
     items: string[];
     itemsElementName: ItemsChoiceType3[];
     vCOFINS: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoCOFINSCOFINSOutrCST {
+export declare enum TNFeInfNFeDetImpostoCOFINSCOFINSOutrCST {
     Item49 = "49",
     Item50 = "50",
     Item51 = "51",
@@ -1964,91 +1546,65 @@ export enum TNFeInfNFeDetImpostoCOFINSCOFINSOutrCST {
     Item74 = "74",
     Item75 = "75",
     Item98 = "98",
-    Item99 = "99",
+    Item99 = "99"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemsChoiceType3 {
-    pCOFINS,
-    qBCProd,
-    vAliqProd,
-    vBC,
+export declare enum ItemsChoiceType3 {
+    pCOFINS = 0,
+    qBCProd = 1,
+    vAliqProd = 2,
+    vBC = 3
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoCOFINSCOFINSQtde {
     CST: TNFeInfNFeDetImpostoCOFINSCOFINSQtdeCST;
     qBCProd: string;
     vAliqProd: string;
     vCOFINS: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoCOFINSCOFINSQtdeCST {
-    Item03 = "03",
+export declare enum TNFeInfNFeDetImpostoCOFINSCOFINSQtdeCST {
+    Item03 = "03"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoCOFINSST {
     vBC: number;
     pCOFINS: number;
     vCOFINS: number;
     qBCProd: number;
     vAliqProd: number;
-    // items: string[];
-    // itemsElementName: ItemsChoiceType4[];
-    // vCOFINS: string;
 }
-
-// [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemsChoiceType4 {
-    pCOFINS,
-    qBCProd,
-    vAliqProd,
-    vBC,
+export declare enum ItemsChoiceType4 {
+    pCOFINS = 0,
+    qBCProd = 1,
+    vAliqProd = 2,
+    vBC = 3
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoICMSUFDest {
     vBCUFDest: number;
     vBCFCPUFDest: number;
     pFCPUFDest: number;
     pICMSUFDest: number;
-    pICMSInter: number; //TNFeInfNFeDetImpostoICMSUFDestPICMSInter;
+    pICMSInter: number;
     pICMSInterPart: number;
     vFCPUFDest: number;
     vICMSUFDest: number;
     vICMSUFRemet: number;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeDetImpostoICMSUFDestPICMSInter {
+export declare enum TNFeInfNFeDetImpostoICMSUFDestPICMSInter {
     Item400 = "4.00",
     Item700 = "7.00",
-    Item1200 = "12.00",
+    Item1200 = "12.00"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoDevol {
     pDevol: number;
     IPI: TNFeInfNFeDetImpostoDevolIPI;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeDetImpostoDevolIPI {
     vIPIDevol: number;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeTotal {
     ICMSTot: TNFeInfNFeTotalICMSTot;
     ISSQNtot: TNFeInfNFeTotalISSQNtot;
     retTrib: TNFeInfNFeTotalRetTrib;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeTotalICMSTot {
-
     vBC: string;
     vICMS: string;
     vICMSDeson: string;
@@ -2073,8 +1629,6 @@ export interface TNFeInfNFeTotalICMSTot {
     vNF: string;
     vTotTrib: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeTotalISSQNtot {
     vServ: string;
     vBC: string;
@@ -2090,18 +1644,14 @@ export interface TNFeInfNFeTotalISSQNtot {
     cRegTrib: TNFeInfNFeTotalISSQNtotCRegTrib;
     cRegTribSpecified: boolean;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeTotalISSQNtotCRegTrib {
+export declare enum TNFeInfNFeTotalISSQNtotCRegTrib {
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
     Item5 = "5",
-    Item6 = "6",
+    Item6 = "6"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeTotalRetTrib {
     vRetPIS: string;
     vRetCOFINS: string;
@@ -2111,35 +1661,23 @@ export interface TNFeInfNFeTotalRetTrib {
     vBCRetPrev: string;
     vRetPrev: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeTransp {
     modFrete: TNFeInfNFeTranspModFrete;
     transporta: TNFeInfNFeTranspTransporta;
     retTransp: TNFeInfNFeTranspRetTransp;
-    //balsa
-    //reboque
-    //vagao
-    //veicTransp
     items: object[];
     itemsElementName: ItemsChoiceType5[];
     vol: TNFeInfNFeTranspVol[];
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeTranspModFrete {
+export declare enum TNFeInfNFeTranspModFrete {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
     Item4 = "4",
-    Item9 = "9",
+    Item9 = "9"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeTranspTransporta {
-    //CNPJ
-    //CPF
     item: string;
     itemElementName: ItemChoiceType6;
     xNome: string;
@@ -2149,14 +1687,10 @@ export interface TNFeInfNFeTranspTransporta {
     uf: TUf;
     ufSpecified: boolean;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemChoiceType6 {
-    CNPJ,
-    CPF,
+export declare enum ItemChoiceType6 {
+    CNPJ = 0,
+    CPF = 1
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeTranspRetTransp {
     vServ: string;
     vBCRet: string;
@@ -2165,74 +1699,48 @@ export interface TNFeInfNFeTranspRetTransp {
     cFOP: string;
     cMunFG: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TVeiculo {
     placa: string;
     uf: TUf;
     rNTC: string;
 }
-
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemsChoiceType5 {
-    balsa,
-    reboque,
-    vagao,
-    veicTransp,
+export declare enum ItemsChoiceType5 {
+    balsa = 0,
+    reboque = 1,
+    vagao = 2,
+    veicTransp = 3
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeTranspVol {
-
     qVol: string;
-
     esp: string;
-
     marca: string;
-
     nVol: string;
-
     pesoL: string;
-
     pesoB: string;
-
     lacres: TNFeInfNFeTranspVolLacres[];
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeTranspVolLacres {
     nLacre: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeCobr {
     fat: TNFeInfNFeCobrFat;
     dup: TNFeInfNFeCobrDup[];
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeCobrFat {
     nFat: string;
     vOrig: string;
     vDesc: string;
     vLiq: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeCobrDup {
     nDup: string;
     dVenc: string;
     vDup: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFePag {
     detPag: TNFeInfNFePagDetPag[];
     vTroco: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFePagDetPag {
     indPag: TNFeInfNFePagDetPagIndPag;
     indPagSpecified: boolean;
@@ -2240,15 +1748,11 @@ export interface TNFeInfNFePagDetPag {
     vPag: string;
     card: TNFeInfNFePagDetPagCard;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFePagDetPagIndPag {
+export declare enum TNFeInfNFePagDetPagIndPag {
     Item0 = "0",
-    Item1 = "1",
+    Item1 = "1"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFePagDetPagTPag {
+export declare enum TNFeInfNFePagDetPagTPag {
     Item01 = "01",
     Item02 = "02",
     Item03 = "03",
@@ -2261,10 +1765,8 @@ export enum TNFeInfNFePagDetPagTPag {
     Item14 = "14",
     Item15 = "15",
     Item90 = "90",
-    Item99 = "99",
+    Item99 = "99"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFePagDetPagCard {
     tpIntegra: TNFeInfNFePagDetPagCardTpIntegra;
     CNPJ: string;
@@ -2272,16 +1774,11 @@ export interface TNFeInfNFePagDetPagCard {
     tBandSpecified: boolean;
     cAut: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFePagDetPagCardTpIntegra {
+export declare enum TNFeInfNFePagDetPagCardTpIntegra {
     Item1 = "1",
-    Item2 = "2",
+    Item2 = "2"
 }
-
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFePagDetPagCardTBand {
+export declare enum TNFeInfNFePagDetPagCardTBand {
     Item01 = "01",
     Item02 = "02",
     Item03 = "03",
@@ -2291,65 +1788,44 @@ export enum TNFeInfNFePagDetPagCardTBand {
     Item07 = "07",
     Item08 = "08",
     Item09 = "09",
-    Item99 = "99",
+    Item99 = "99"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeInfAdic {
-
     infAdFisco: string;
-
     infCpl: string;
-
     obsCont: TNFeInfNFeInfAdicObsCont[];
-
     obsFisco: TNFeInfNFeInfAdicObsFisco[];
-
     procRef: TNFeInfNFeInfAdicProcRef[];
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeInfAdicObsCont {
     xTexto: string;
     xCampo: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeInfAdicObsFisco {
     xTexto: string;
     xCampo: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeInfAdicProcRef {
     nProc: string;
     indProc: TNFeInfNFeInfAdicProcRefIndProc;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TNFeInfNFeInfAdicProcRefIndProc {
+export declare enum TNFeInfNFeInfAdicProcRefIndProc {
     Item0 = "0",
     Item1 = "1",
     Item2 = "2",
     Item3 = "3",
-    Item9 = "9",
+    Item9 = "9"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeExporta {
     uFSaidaPais: TUfEmi;
     xLocExporta: string;
     xLocDespacho: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeCompra {
     xNEmp: string;
     xPed: string;
     xCont: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeCana {
     safra: string;
     ref: string;
@@ -2362,68 +1838,44 @@ export interface TNFeInfNFeCana {
     vTotDed: string;
     vLiqFor: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeCanaForDia {
     qtde: string;
     dia: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeCanaDeduc {
     xDed: string;
     vDed: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TInfRespTec {
     CNPJ: string;
     xContato: string;
     email: string;
     fone: string;
     idCSRT: string;
-    //base64Binary
     hashCSRT: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TNFeInfNFeSupl {
     qrCode: string;
     urlChave: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.w3.org/2000/09/xmldsig#")]
-//[System.Xml.Serialization.XmlRootAttribute("Signature", Namespace="http://www.w3.org/2000/09/xmldsig#", IsNullable=false)]
 export interface SignatureType {
-
     signedInfo: SignedInfoType;
-
     signatureValue: SignatureValueType;
-
     keyInfo: KeyInfoType;
-    //DataType="ID"
     id: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.w3.org/2000/09/xmldsig#")]
 export interface SignedInfoType {
     canonicalizationMethod: SignedInfoTypeCanonicalizationMethod;
     signatureMethod: SignedInfoTypeSignatureMethod;
     reference: ReferenceType;
     id: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.w3.org/2000/09/xmldsig#")]
-export class SignedInfoTypeCanonicalizationMethod {
-    algorithm: string = "http://www.w3.org/TR/2001/REC-xml-c14n-20010315";
+export declare class SignedInfoTypeCanonicalizationMethod {
+    algorithm: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.w3.org/2000/09/xmldsig#")]
-export class SignedInfoTypeSignatureMethod {
-    algorithm: string = "http://www.w3.org/2000/09/xmldsig#rsa-sha1";
+export declare class SignedInfoTypeSignatureMethod {
+    algorithm: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.w3.org/2000/09/xmldsig#")]
 export interface ReferenceType {
     transforms: TransformType[];
     digestMethod: ReferenceTypeDigestMethod;
@@ -2432,88 +1884,71 @@ export interface ReferenceType {
     uRI: string;
     Type: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.w3.org/2000/09/xmldsig#")]
 export interface TransformType {
     xPath: string[];
     algorithm: TTransformURI;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.w3.org/2000/09/xmldsig#")]
-export enum TTransformURI {
+export declare enum TTransformURI {
     httpwwww3org200009xmldsigenvelopedsignature = "http://www.w3.org/2000/09/xmldsig#enveloped-signature",
-    httpwwww3orgTR2001RECxmlc14n20010315 = "http://www.w3.org/TR/2001/REC-xml-c14n-20010315",
+    httpwwww3orgTR2001RECxmlc14n20010315 = "http://www.w3.org/TR/2001/REC-xml-c14n-20010315"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.w3.org/2000/09/xmldsig#")]
-export class ReferenceTypeDigestMethod {
-    algorithm: string = "http://www.w3.org/2000/09/xmldsig#sha1";
+export declare class ReferenceTypeDigestMethod {
+    algorithm: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.w3.org/2000/09/xmldsig#")]
 export interface SignatureValueType {
     id: string;
     value: number[];
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.w3.org/2000/09/xmldsig#")]
 export interface KeyInfoType {
     x509Data: X509DataType;
     id: string;
 }
-
 export interface X509DataType {
-    //base64Binary
     x509Certificate: number[];
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-//[System.Xml.Serialization.XmlRootAttribute("inutNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TInutNFe {
     infInut: TInutNFeInfInut;
     _: string;
     signature: SignatureType;
-    $: { versao: string, xmlns: string };
+    $: {
+        versao: string;
+        xmlns: string;
+    };
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TInutNFeInfInut {
     tpAmb: TAmb;
-    xServ: string,//TInutNFeInfInutXServ;
+    xServ: string;
     cUF: TCodUfIBGE;
     ano: number;
     CNPJ: string;
-    mod: number;//TMod;
+    mod: number;
     serie: number;
     nNFIni: number;
     nNFFin: number;
     xJust: string;
-    $: { Id: string };
+    $: {
+        Id: string;
+    };
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TInutNFeInfInutXServ {
-    INUTILIZAR,
+export declare enum TInutNFeInfInutXServ {
+    INUTILIZAR = 0
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-//[System.Xml.Serialization.XmlRootAttribute("ProcInutNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TProcInutNFe {
     inutNFe: TInutNFe;
     retInutNFe: TRetInutNFe;
-    $: { versao: string, xmlns: string };
+    $: {
+        versao: string;
+        xmlns: string;
+    };
     _: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-//[System.Xml.Serialization.XmlRootAttribute("retInutNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TRetInutNFe {
     infInut: TRetInutNFeInfInut;
     signature: SignatureType;
-    $: { versao: string };
+    $: {
+        versao: string;
+    };
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TRetInutNFeInfInut {
     tpAmbField: TAmb;
     verAplicField: string;
@@ -2531,24 +1966,20 @@ export interface TRetInutNFeInfInut {
     nProtField: string;
     idField: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-//[System.Xml.Serialization.XmlRootAttribute("nfeProc", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TNfeProc {
     NFe: TNFe;
     protNFe: TProtNFe;
-    $: { versao: string, xmlns: string };
+    $: {
+        versao: string;
+        xmlns: string;
+    };
     _: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TProtNFe {
     infProt: TProtNFeInfProt;
     signature: SignatureType;
     versao: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TProtNFeInfProt {
     tpAmb: TAmb;
     verAplic: string;
@@ -2562,9 +1993,6 @@ export interface TProtNFeInfProt {
     xMsg: string;
     Id: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-//[System.Xml.Serialization.XmlRootAttribute("retConsReciNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TRetConsReciNFe {
     tpAmbField: TAmb;
     verAplicField: string;
@@ -2578,9 +2006,6 @@ export interface TRetConsReciNFe {
     protNFeField: TProtNFe[];
     versaoField: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-//[System.Xml.Serialization.XmlRootAttribute("retConsSitNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TRetConsSitNFe {
     tpAmbField: TAmb;
     verAplicField: string;
@@ -2594,15 +2019,11 @@ export interface TRetConsSitNFe {
     procEventoNFeField: TProcEvento[];
     versaoField: TVerConsSitNFe;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TRetCancNFe {
     infCancField: TRetCancNFeInfCanc;
     signatureField: SignatureType;
     versaoField: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TRetCancNFeInfCanc {
     tpAmbField: TAmb;
     verAplicField: string;
@@ -2615,33 +2036,36 @@ export interface TRetCancNFeInfCanc {
     nProtField: string;
     idField: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TProcEvento {
-    $: { versao: string, xmlns: string };
-    _: string;//evento: TEvento;
+    $: {
+        versao: string;
+        xmlns: string;
+    };
+    _: string;
     retEvento: TRetEvento;
     versao: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TEvento {
-    $: { versao: string, xmlns: string },
+    $: {
+        versao: string;
+        xmlns: string;
+    };
     infEvento: TEventoInfEvento;
     signature: SignatureType;
     versao: string;
 }
-
 export interface TEnviEvento {
-    $: { versao: string, xmlns: string };
+    $: {
+        versao: string;
+        xmlns: string;
+    };
     idLote: string;
-    //nFe: TNFe[];
     _: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TEventoInfEvento {
-    $: { Id: string },
+    $: {
+        Id: string;
+    };
     cOrgao: TCOrgaoIBGE;
     tpAmb: TAmb;
     CNPJ: string;
@@ -2656,9 +2080,7 @@ export interface TEventoInfEvento {
     detEvento: TEventoInfEventoDetEvento;
     id: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-export enum TCOrgaoIBGE {
+export declare enum TCOrgaoIBGE {
     Item11 = "11",
     Item12 = "12",
     Item13 = "13",
@@ -2688,19 +2110,16 @@ export enum TCOrgaoIBGE {
     Item53 = "53",
     Item90 = "90",
     Item91 = "91",
-    Item92 = "92",
+    Item92 = "92"
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemChoiceType7 {
-    CNPJ,
-    CPF,
+export declare enum ItemChoiceType7 {
+    CNPJ = 0,
+    CPF = 1
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TEventoInfEventoDetEvento {
-    $: { versao: string };
-    
+    $: {
+        versao: string;
+    };
     descEvento: string;
     xCorrecao: string;
     xCondUso: string;
@@ -2713,27 +2132,18 @@ export interface TEventoInfEventoDetEvento {
     dhEmi: Date;
     tpNF: string;
     IE: string;
-    // dest: EventoDestinatario;
     vNF: number;
     vICMS: number;
     vST: number;
-    // itemPedido: EventoItemPedido;
-    idPedidoCancelado: string;    
-
-    //System.Xml.XmlElement[]
+    idPedidoCancelado: string;
     Any: any[];
-    //System.Xml.XmlAttribute[]
     AnyAttrField: any[];
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TRetEvento {
     infEventoField: TRetEventoInfEvento;
     signatureField: SignatureType;
     versaoField: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TRetEventoInfEvento {
     tpAmbField: TAmb;
     verAplic: string;
@@ -2744,8 +2154,6 @@ export interface TRetEventoInfEvento {
     tpEvento: string;
     xEvento: string;
     nSeqEvento: string;
-    //CNPJDest
-    //CPFDest
     item: string;
     itemElementName: ItemChoiceType8;
     emailDest: string;
@@ -2753,15 +2161,10 @@ export interface TRetEventoInfEvento {
     nProt: string;
     id: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-export enum ItemChoiceType8 {
-    CNPJDest,
-    CPFDest,
+export declare enum ItemChoiceType8 {
+    CNPJDest = 0,
+    CPFDest = 1
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-//[System.Xml.Serialization.XmlRootAttribute("retConsStatServ", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TRetConsStatServ {
     tpAmbField: TAmb;
     verAplicField: string;
@@ -2774,9 +2177,6 @@ export interface TRetConsStatServ {
     xObsField: string;
     versaoField: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-//[System.Xml.Serialization.XmlRootAttribute("retEnviNFe", Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
 export interface TRetEnviNFe {
     tpAmbField: TAmb;
     verAplicField: string;
@@ -2784,13 +2184,9 @@ export interface TRetEnviNFe {
     xMotivoField: string;
     cUFField: TCodUfIBGE;
     dhRecbtoField: string;
-    //infRec
-    //protNFe
     itemField: object;
     versaoField: string;
 }
-
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
 export interface TRetEnviNFeInfRec {
     nRecField: string;
     tMedField: string;

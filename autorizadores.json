@@ -167,23 +167,22 @@
                 "url_producao": "https://nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx",
                 "url_homologacao": "https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx"
             },
-            "Inutilizacao": {
+            "inutilizacao": {
                 "url_producao": "https://nfe.fazenda.sp.gov.br/ws/nfeinutilizacao4.asmx",
                 "url_homologacao": "https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeinutilizacao4.asmx"
-            }
-            ,"consultarProtocolo": {
+            },
+            "consultarProtocolo": {
                 "url_producao": "https://nfe.fazenda.sp.gov.br/ws/nfeconsultaprotocolo4.asmx",
                 "url_homologacao": "https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeconsultaprotocolo4.asmx"
-            }
-            ,"consultarCadastro": {
+            },
+            "consultarCadastro": {
                 "url_producao": "https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro4.asmx",
                 "url_homologacao": "https://homologacao.nfe.fazenda.sp.gov.br/ws/cadconsultacadastro4.asmx"
-            }
-            ,"recepcaoEvento": {
+            },
+            "recepcaoEvento": {
                 "url_producao": "https://nfe.fazenda.sp.gov.br/ws/nferecepcaoevento4.asmx",
                 "url_homologacao": "https://homologacao.nfe.fazenda.sp.gov.br/ws/nferecepcaoevento4.asmx"
-            }                        
-
+            }
         }
     }
 }

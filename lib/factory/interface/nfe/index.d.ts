@@ -1,38 +1,33 @@
 import { WebProxy } from "../../webservices/webserviceHelper";
-
-export enum ServicosSefaz {
-    autorizacao = 'autorizacao',
-    retAutorizacao = 'retAutorizacao',
-    consultarStatusServico = 'consultarStatusServico',
-    evento = 'recepcaoEvento',
-    inutilizacao = 'inutilizacao',
-    protocolo = 'consultarProtocolo',
-    cadastro = 'consultarCadastro',
+export declare enum ServicosSefaz {
+    autorizacao = "autorizacao",
+    retAutorizacao = "retAutorizacao",
+    consultarStatusServico = "consultarStatusServico",
+    evento = "recepcaoEvento",
+    inutilizacao = "inutilizacao",
+    protocolo = "consultarProtocolo",
+    cadastro = "consultarCadastro"
 }
-
 export interface RetornoProcessamentoNF {
-    success: boolean,
-    error: string,
-    nfe: Object,
+    success: boolean;
+    error: string;
+    nfe: Object;
     confirmada: boolean;
-    envioNF: RetornoProcessamento,
-    consultaProc: RetornoProcessamento,
-    retornoContingenciaOffline: RetornoContingenciaOffline
+    envioNF: RetornoProcessamento;
+    consultaProc: RetornoProcessamento;
+    retornoContingenciaOffline: RetornoContingenciaOffline;
 }
-
 export interface RetornoContingenciaOffline {
-    xml_gerado: string
+    xml_gerado: string;
 }
-
 export interface RetornoProcessamento {
-    xml_enviado: string,
-    xml_recebido: string,
-    status: number,
-    success: boolean,
-    data: Object,
-    error: string
+    xml_enviado: string;
+    xml_recebido: string;
+    status: number;
+    success: boolean;
+    data: Object;
+    error: string;
 }
-
 export interface NFeBase {
     docFiscal: DocumentoFiscal;
     destinatario: Destinatario;
@@ -41,16 +36,13 @@ export interface NFeBase {
     transporte: Transporte;
     infoAdicional: InfoAdicional;
 }
-
 export interface NFeDocumento extends NFeBase {
     cobranca: Cobranca;
     pagamento: Pagamento;
 }
-
 export interface NFCeDocumento extends NFeBase {
     pagamento: Pagamento;
 }
-
 export interface DocumentoFiscal {
     serie: string;
     modelo: string;
@@ -74,14 +66,12 @@ export interface DocumentoFiscal {
     justificativaContingencia: string;
     isContingenciaOffline: boolean;
 }
-
 export interface Produto {
     prod: DetalhesProduto;
     imposto: Imposto;
     infoAdicional: string;
     numeroItem: string;
 }
-
 export interface DetalhesProduto {
     codigo: string;
     cEAN: string;
@@ -107,26 +97,13 @@ export interface DetalhesProduto {
     cNPJFab: string;
     cBenef: string;
     eXTIPI: string;
-
     percentualDevolucao: number;
     valorIPIDevolucao: number;
-    /*
-    TODO: demais campos
-    nVE: string[];
-    indEscala: TNFeInfNFeDetProdIndEscala;
-    indEscalaSpecified: boolean;
-    di: TNFeInfNFeDetProdDI[];
-    detExport: TNFeInfNFeDetProdDetExport[];
-    nFCI: string;
-    rastro: TNFeInfNFeDetProdRastro[];
-    */
 }
-
 export interface impostoDevol {
     pDevol: number;
     vIPIDevol: number;
 }
-
 export interface Imposto {
     valorAproximadoTributos: string;
     icms: Icms;
@@ -137,9 +114,8 @@ export interface Imposto {
     issqn: Issqn;
     pisst: PisST;
     cofinsst: CofinsST;
-    icmsUfDest: IcmsUfDest
+    icmsUfDest: IcmsUfDest;
 }
-
 export interface Icms {
     orig: string;
     CST: string;
@@ -194,7 +170,6 @@ export interface IcmsUfDest {
     vICMSUFDest: number;
     vICMSUFRemet: number;
 }
-
 export interface Pis {
     CST: string;
     vBC: number;
@@ -204,7 +179,6 @@ export interface Pis {
     vAliqProd: number;
     qBCProd: number;
 }
-
 export interface PisST {
     vBC: number;
     pPIS: number;
@@ -212,7 +186,6 @@ export interface PisST {
     vAliqProd: number;
     vPIS: number;
 }
-
 export interface CofinsST {
     vBC: number;
     pCOFINS: number;
@@ -220,7 +193,6 @@ export interface CofinsST {
     vAliqProd: number;
     vCOFINS: number;
 }
-
 export interface Cofins {
     CST: string;
     vBC: number;
@@ -229,7 +201,6 @@ export interface Cofins {
     qBCProd: number;
     vAliqProd: number;
 }
-
 export interface Ipi {
     cEnq: string;
     CST: string;
@@ -242,39 +213,35 @@ export interface Ipi {
     cSelo: string;
     qSelo: string;
 }
-
 export interface II {
-    vBC: number,
-    vDespAdu: number,
-    vII: number,
-    vIOF: number
+    vBC: number;
+    vDespAdu: number;
+    vII: number;
+    vIOF: number;
 }
-
 export interface Issqn {
-    vBC: string,
-    vAliq: string,
-    vISSQN: string,
-    cMunFG: string,
-    cListServ: string,
-    vDeducao: string,
-    vOutro: string,
-    vDescIncond: string,
-    vDescCond: string,
-    vISSRet: string,
-    indISS: string,
-    cServico: string,
-    cMun: string,
-    cPais: string,
-    nProcesso: string,
-    indIncentivo: string
+    vBC: string;
+    vAliq: string;
+    vISSQN: string;
+    cMunFG: string;
+    cListServ: string;
+    vDeducao: string;
+    vOutro: string;
+    vDescIncond: string;
+    vDescCond: string;
+    vISSRet: string;
+    indISS: string;
+    cServico: string;
+    cMun: string;
+    cPais: string;
+    nProcesso: string;
+    indIncentivo: string;
 }
-
 export interface Total {
     icmsTot: IcmsTot;
     issqnTot: IssqnTot;
     retTrib: RetTrib;
 }
-
 export interface IcmsTot {
     vBC: string;
     vICMS: string;
@@ -300,7 +267,6 @@ export interface IcmsTot {
     vNF: string;
     vTotTrib: string;
 }
-
 export interface IssqnTot {
     vServ: string;
     vBC: string;
@@ -315,7 +281,6 @@ export interface IssqnTot {
     vISSRet: string;
     cRegTrib: string;
 }
-
 export interface RetTrib {
     vRetPIS: string;
     vRetCOFINS: string;
@@ -325,55 +290,44 @@ export interface RetTrib {
     vBCRetPrev: string;
     vRetPrev: string;
 }
-
 export interface Transporte {
     modalidateFrete: string;
-    //..
 }
-
 export interface Cobranca {
     fatura: Fatura;
     duplicatas: Duplicata[];
 }
-
 export interface Fatura {
     nFatura: string;
     vOriginal: number;
     vDesconto: number;
     vLiquido: number;
 }
-
 export interface Duplicata {
     nDuplicata: string;
     dVencimento: string;
     vDuplicatata: Number;
 }
-
 export interface Pagamento {
     valorTroco: string;
-    pagamentos: DetalhePagamento[]
+    pagamentos: DetalhePagamento[];
 }
-
 export interface DetalhePagamento {
     indicadorFormaPagamento: string;
     formaPagamento: string;
     valor: string;
     dadosCartao: DetalhePgtoCartao;
 }
-
 export interface DetalhePgtoCartao {
     tipoIntegracao: string;
     cnpj: string;
     bandeira: string;
     codAutorizacao: string;
 }
-
 export interface InfoAdicional {
     infoComplementar: string;
     infoFisco: string;
-    // ..
 }
-
 export interface Empresa {
     cnpj: string;
     razaoSocial: string;
@@ -388,7 +342,6 @@ export interface Empresa {
     idCSC: string;
     CSC: string;
 }
-
 export interface ResponsavelTecnico {
     cnpj: string;
     contato: string;
@@ -397,7 +350,6 @@ export interface ResponsavelTecnico {
     idCSRT?: string;
     CSRT?: string;
 }
-
 export interface Destinatario {
     documento: string;
     nome: string;
@@ -409,7 +361,6 @@ export interface Destinatario {
     inscricaoSuframa: string;
     isEstrangeiro: boolean;
 }
-
 export interface Endereco {
     logradouro: string;
     numero: string;
@@ -424,45 +375,36 @@ export interface Endereco {
     pais: string;
     telefone: string;
 }
-
 export interface Certificado {
     key: any;
     pfx: any;
     password: string;
 }
-
-export function fromJsonixObj<T>(json: any): T {
-    return json as T;
-}
-
+export declare function fromJsonixObj<T>(json: any): T;
 export interface Geral {
     ambiente: string;
     versao: string;
-    modelo: string;    
+    modelo: string;
 }
-
 export interface Webservices {
-    tentativas: number; // quantidade de tentativas a serem feitas, para evitar bloqueio por consumo indevido
-    aguardarConsultaRetorno: number; //tempo em milisegundos
+    tentativas: number;
+    aguardarConsultaRetorno: number;
 }
-
 export interface Arquivos {
     salvar: boolean;
     pastaEnvio: string;
     pastaRetorno: string;
     pastaXML: string;
 }
-
-export enum TipoEvento {
-    cancelamento = '110111',
-    cartaCorrecao = '110110',
-    manifestacaoConfirmacaoOperacao = '210200',
-    manifestacaoCienciaEmissao = '210210',
-    manifestacaoDesconhecimentoOperacao = '210220',
-    manifestacaoOperacaoNaoRealizada = '210240',
-    epec = '110140',
+export declare enum TipoEvento {
+    cancelamento = "110111",
+    cartaCorrecao = "110110",
+    manifestacaoConfirmacaoOperacao = "210200",
+    manifestacaoCienciaEmissao = "210210",
+    manifestacaoDesconhecimentoOperacao = "210220",
+    manifestacaoOperacaoNaoRealizada = "210240",
+    epec = "110140"
 }
-
 export interface Configuracoes {
     empresa: Empresa;
     webProxy?: WebProxy;
