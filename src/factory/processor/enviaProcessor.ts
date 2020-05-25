@@ -522,14 +522,14 @@ export class EnviaProcessor {
     private getDetImposto(imposto: Imposto, modelo: string, cfop: string) {
         let detImposto = <schema.TNFeInfNFeDetImposto>{
             vTotTrib: imposto.valorAproximadoTributos,
-            ICMS: [this.getImpostoIcms(imposto.icms)],
-            PIS: [this.getImpostoPIS(imposto.pis, modelo)],
-            COFINS: [this.getImpostoCOFINS(imposto.cofins, modelo)],
-            PISST: [this.getImpostoPISST(imposto.pisst)],
-            COFINSST: [this.getImpostoCOFINSST(imposto.cofinsst)],
-            IPI: [this.getImpostoIPI(imposto.ipi, modelo)],
-            II: [this.getImpostoII(imposto.ii, cfop)],
-            ICMSUFDest: [this.getIcmsUfDest(imposto.icmsUfDest)],
+            ICMS: imposto.icms ? [this.getImpostoIcms(imposto.icms)] : [],
+            PIS: imposto.pis ? [this.getImpostoPIS(imposto.pis, modelo)] : [],
+            COFINS: imposto.cofins ? [this.getImpostoCOFINS(imposto.cofins, modelo)] : [],
+            PISST: imposto.pisst ? [this.getImpostoPISST(imposto.pisst)] : [],
+            COFINSST: imposto.cofinsst ? [this.getImpostoCOFINSST(imposto.cofinsst)] : [],
+            IPI: imposto.ipi ? [this.getImpostoIPI(imposto.ipi, modelo)] : [],
+            II: imposto.ii ? [this.getImpostoII(imposto.ii, cfop)] : [],
+            ICMSUFDest: imposto.icmsUfDest ? [this.getIcmsUfDest(imposto.icmsUfDest)] : [],
             ISSQN: '',
         };
 
