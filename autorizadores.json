@@ -13,6 +13,10 @@
             "consultarStatusServico": {
                 "url_producao": "https://nfce.sefaz.am.gov.br/nfce-services/services/NfeStatusServico4",
                 "url_homologacao": "https://homnfce.sefaz.am.gov.br/nfce-services/services/NfeStatusServico4.asmx?wsdl"
+            },
+            "inutilizacao": {
+                "url_producao": "https://nfce.sefaz.am.gov.br/nfce-services/services/NFeInutilizacao4",
+                "url_homologacao": "https://homnfce.sefaz.am.gov.br/nfce-services/services/NFeInutilizacao4.asmx?wsdl"
             }
         }
     },
@@ -30,6 +34,10 @@
             "consultarStatusServico": {
                 "url_producao": "https://nfce.sefaz.ce.gov.br/nfce4/services/NFeStatusServico4?WSDL",
                 "url_homologacao": "https://nfceh.sefaz.ce.gov.br/nfce4/services/NFeStatusServico4?WSDL"
+            },
+            "inutilizacao": {
+                "url_producao": "https://nfce.sefaz.ce.gov.br/nfce4/services/NFeInutilizacao4?WSDL",
+                "url_homologacao": "https://nfceh.sefaz.ce.gov.br/nfce4/services/NFeInutilizacao4?WSDL"
             }
         }
     },
@@ -47,6 +55,10 @@
             "consultarStatusServico": {
                 "url_producao": "https://nfe.sefaz.go.gov.br/nfe/services/NFeStatusServico4?wsdl",
                 "url_homologacao": "https://homolog.sefaz.go.gov.br/nfe/services/NFeStatusServico4?wsdl"
+            },
+            "inutilizacao": {
+                "url_producao": "https://nfe.sefaz.go.gov.br/nfe/services/NFeInutilizacao4",
+                "url_homologacao": "https://homolog.sefaz.go.gov.br/nfe/services/Nfeinutilizacao4.asmx"
             }
         }
     },
@@ -64,6 +76,10 @@
             "consultarStatusServico": {
                 "url_producao": "https://nfce.sefaz.mt.gov.br/nfcews/services/NfeStatusServico4",
                 "url_homologacao": "https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeStatusServico4"
+            },
+            "inutilizacao": {
+                "url_producao": "https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao4",
+                "url_homologacao": "https://homologacao.sefaz.mt.gov.br/nfcews/services/Nfeinutilizacao4.asmx"
             }
         }
     },
@@ -81,6 +97,10 @@
             "consultarStatusServico": {
                 "url_producao": "https://nfce.sefaz.ms.gov.br/ws/NFeStatusServico4",
                 "url_homologacao": "https://hom.nfce.sefaz.ms.gov.br/ws/NFeStatusServico4"
+            },
+            "inutilizacao": {
+                "url_producao": "https://nfe.sefaz.ms.gov.br/ws/NFeInutilizacao4",
+                "url_homologacao": "https://hom.nfce.sefaz.ms.gov.br/ws/Nfeinutilizacao4.asmx"
             }
         }
     },
@@ -98,6 +118,10 @@
             "consultarStatusServico": {
                 "url_producao": "https://nfce.fazenda.mg.gov.br/nfce/services/NFeStatusServico4",
                 "url_homologacao": "https://hnfce.fazenda.mg.gov.br/nfce/services/NFeStatusServico4"
+            },
+            "inutilizacao": {
+                "url_producao": "https://nfe.fazenda.mg.gov.br/nfe2/services/NFeInutilizacao4",
+                "url_homologacao": "https://hnfce.fazenda.mg.gov.br/nfce/services/Nfeinutilizacao4.asmx"
             }
         }
     },
@@ -115,6 +139,10 @@
             "consultarStatusServico": {
                 "url_producao": "https://nfce.sefa.pr.gov.br/nfce/NFeStatusServico4",
                 "url_homologacao": "https://homologacao.nfce.sefa.pr.gov.br/nfce/NFeStatusServico4"
+            },
+            "inutilizacao": {
+                "url_producao": "https://nfe.sefa.pr.gov.br/nfe/NFeInutilizacao4",
+                "url_homologacao": "https://homologacao.nfce.sefa.pr.gov.br/nfce/Nfeinutilizacao4.asmx"
             }
         }
     },
@@ -132,6 +160,10 @@
             "consultarStatusServico": {
                 "url_producao": "https://nfce.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
                 "url_homologacao": "https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx?wsdl"
+            },
+            "inutilizacao": {
+                "url_producao": "https://nfe.sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx",
+                "url_homologacao": "https://nfce-homologacao.sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx"
             }
         }
     },
