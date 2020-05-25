@@ -57,8 +57,8 @@ export class NFeProcessor {
         return result;
     }
 
-    public async executar(documento: NFeDocumento | NFCeDocumento, assincrono: boolean = false) {
-        const { arquivos } = this.configuracoes;
+    public async executar(documento: NFeDocumento | NFCeDocumento) {
+        const { arquivos, geral } = this.configuracoes;
         let result = <RetornoProcessamentoNF>{};
         try {
             result = <RetornoProcessamentoNF>await this.enviaProcessor.executar(documento);
@@ -69,7 +69,7 @@ export class NFeProcessor {
 
             if (result.envioNF && result.envioNF.data) {
                 const data = Object(result.envioNF.data);
-                if (data.retEnviNFe) {
+                if (data.retEnviNFe && geral.modelo == '55') {
                     retEnviNFe = data.retEnviNFe;
                     const recibo = retEnviNFe.infRec.nRec;
                     result.consultaProc = <RetornoProcessamento>await this.retornoProcessor.executar(recibo);
@@ -83,10 +83,10 @@ export class NFeProcessor {
                         result.success = true;
                     }
 
-                if (arquivos.salvar) {
-                    if (! await fs.existsSync(arquivos.pastaEnvio)) await fs.mkdirSync(arquivos.pastaEnvio, { recursive: true });
-                    if (! await fs.existsSync(arquivos.pastaRetorno)) await fs.mkdirSync(arquivos.pastaRetorno, { recursive: true });
-                    if (!await fs.existsSync(arquivos.pastaXML)) await fs.mkdirSync(arquivos.pastaXML, { recursive: true });
+                if (arquivos && arquivos.salvar) {
+                    if (!fs.existsSync(arquivos.pastaEnvio)) fs.mkdirSync(arquivos.pastaEnvio, { recursive: true });
+                    if (!fs.existsSync(arquivos.pastaRetorno)) fs.mkdirSync(arquivos.pastaRetorno, { recursive: true });
+                    if (!fs.existsSync(arquivos.pastaXML)) fs.mkdirSync(arquivos.pastaXML, { recursive: true });
         
                     if ((result.success == true) && (retConsReciNFe.cStat == '104')) {
                         const filename = `${arquivos.pastaXML}${retConsReciNFe.protNFe.infProt.chNFe}-procNFe.xml`;
@@ -101,17 +101,17 @@ export class NFeProcessor {
                         Utils.removeSelfClosedFields(nfeProc);
                         let xmlNfeProc = XmlHelper.serializeXml(nfeProc, 'nfeProc');
 
-                        await fs.writeFileSync(filename, xmlNfeProc);
+                        fs.writeFileSync(filename, xmlNfeProc);
                     } else {
                         const filenameEnvio = `${arquivos.pastaEnvio}${retEnviNFe.infRec.nRec}-enviNFe.xml`;
                         const filenameRetorno = `${arquivos.pastaRetorno}${retEnviNFe.infRec.nRec}-retEnviNFe.xml`;
-                        await fs.writeFileSync(filenameEnvio, result.envioNF.xml_enviado);
-                        await fs.writeFileSync(filenameRetorno, result.envioNF.xml_recebido);
+                        fs.writeFileSync(filenameEnvio, result.envioNF.xml_enviado);
+                        fs.writeFileSync(filenameRetorno, result.envioNF.xml_recebido);
 
                         const filenameConsultaEnvio = `${arquivos.pastaEnvio}${retConsReciNFe.nRec}-consReciNFe.xml`;
                         const filenameConsultaRetorno = `${arquivos.pastaRetorno}${retConsReciNFe.nRec}-retConsReciNFe.xml`;
-                        await fs.writeFileSync(filenameConsultaEnvio, result.consultaProc.xml_enviado);
-                        await fs.writeFileSync(filenameConsultaRetorno, result.consultaProc.xml_recebido);       
+                        fs.writeFileSync(filenameConsultaEnvio, result.consultaProc.xml_enviado);
+                        fs.writeFileSync(filenameConsultaRetorno, result.consultaProc.xml_recebido);       
                     }
                 }
             } else {
