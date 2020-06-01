@@ -48,10 +48,10 @@ export class InutilizaProcessor {
             const xml = this.gerarXml(dados);
             result = await this.transmitirXml(xml);
 
-            if (arquivos.salvar) {
-                if (! await fs.existsSync(arquivos.pastaEnvio)) await fs.mkdirSync(arquivos.pastaEnvio, { recursive: true });
-                if (! await fs.existsSync(arquivos.pastaRetorno)) await fs.mkdirSync(arquivos.pastaRetorno, { recursive: true });
-                if (!await fs.existsSync(arquivos.pastaXML)) await fs.mkdirSync(arquivos.pastaXML, { recursive: true });
+            if (arquivos && arquivos.salvar) {
+                if (!fs.existsSync(arquivos.pastaEnvio)) fs.mkdirSync(arquivos.pastaEnvio, { recursive: true });
+                if (!fs.existsSync(arquivos.pastaRetorno)) fs.mkdirSync(arquivos.pastaRetorno, { recursive: true });
+                if (!fs.existsSync(arquivos.pastaXML)) fs.mkdirSync(arquivos.pastaXML, { recursive: true });
                 
                 if ((result.success == true) && (Object(result.data).retInutNFe.infInut.cStat == 102)) {
                     const filename = `${arquivos.pastaXML}${dados.ano}${dados.modelo}${dados.serie}${dados.numeroInicial}${dados.numeroFinal}-procInutNFe.xml`;
@@ -66,13 +66,13 @@ export class InutilizaProcessor {
                     let xmlProcEvento = XmlHelper.serializeXml(procEvento, 'retInutNFe');
                     xmlProcEvento = xmlProcEvento.replace('[XML]', xml);
 
-                    await fs.writeFileSync(filename, xmlProcEvento);
+                    fs.writeFileSync(filename, xmlProcEvento);
                 } else {
                     const filenameEnvio = `${arquivos.pastaEnvio}${dados.ano}${dados.modelo}${dados.serie}${dados.numeroInicial}${dados.numeroFinal}-inutNFe.xml`;
                     const filenameRetorno = `${arquivos.pastaRetorno}${dados.ano}${dados.modelo}${dados.serie}${dados.numeroInicial}${dados.numeroFinal}-retInutNFe.xml`;
 
-                    await fs.writeFileSync(filenameEnvio, result.xml_enviado);
-                    await fs.writeFileSync(filenameRetorno, result.xml_recebido);
+                    fs.writeFileSync(filenameEnvio, result.xml_enviado);
+                    fs.writeFileSync(filenameRetorno, result.xml_recebido);
                 }
             }
         } catch (ex) {
