@@ -1,7 +1,5 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lealhugui_node-dfe&metric=alert_status)](https://sonarcloud.io/dashboard?id=lealhugui_node-dfe)
 
-
-
 # node-dfe
 Biblioteca para geração/integração de NF-e/NFC-e em aplicações node.js
 
