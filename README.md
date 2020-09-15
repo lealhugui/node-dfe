@@ -3,6 +3,9 @@
 # node-dfe
 Biblioteca para geração/integração de NF-e/NFC-e em aplicações node.js
 
+## HELP WANTED!!
+OSS no Brasil é incrivelmente dificil, especialmente com o volume de trabalho e as cargas horarias que o mercado de trabalho brasileiro acaba impondo sob nossas vidas. Isso faz com que o tempo que tenhamos para investir em manutençao de projetos OS como esse acabe sendo bem reduzido (especialmente pela natureza "non profit" deste projeto). Portanto, se voce gostou da lib, ou se tem interesse em contribuir para algum projeto OS e ganhar alguma experiencia, sinta-se livre para enviar uma PR, ou apenas ajudar com as discussoes nos Issues abertos.
+
 ## Instalação
 A instalação pode ser feita diretamente via npm/yarn. Nao é requerido nenhum passo adicional.
 
