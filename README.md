@@ -13,7 +13,8 @@ A instalação pode ser feita diretamente via npm/yarn. Nao é requerido nenhum 
 
 ## Requisitos
 
-A biblioteca foi testada em plataformas windows/linux, 32 e 64 bits. O unico requisito real é nodejs v8+.
+NodeJs v8+, e um certificado A1 válido.
+Certificados tipo A3 nao sao suportados (mas fica ai uma PR bem interessante ;) )
 
 ## Exemplo
 
