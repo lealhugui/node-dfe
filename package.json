@@ -7,7 +7,7 @@
     "test": "npm run build && node test.js",
     "build": "tsc",
     "cxsd": "cxsd",
-    "dev":"ts-node-dev --respawn ./src/index.ts"
+    "dev": "ts-node-dev --respawn ./src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -42,11 +42,11 @@
     "request": "^2.88.0",
     "sha1": "^1.1.1",
     "xml-crypto": "^1.2.0",
-    "xml2js": "^0.4.19"
+    "xml2js": "0.4.19"
   },
   "devDependencies": {
+    "@types/xml2js": "0.4.3",
     "@types/request": "^2.48.1",
-    "@types/xml2js": "^0.4.3",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.1.6"
   }
