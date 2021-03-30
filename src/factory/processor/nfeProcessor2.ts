@@ -114,6 +114,8 @@ export class NFeProcessor {
                         fs.writeFileSync(filenameConsultaRetorno, result.consultaProc.xml_recebido);       
                     }
                 }
+            } else if (result.retornoContingenciaOffline && result.success) {
+                return result;
             } else {
                 console.error('nfeProcessor.executar: Erro ao realizar requisição', result);
                 throw new Error('Erro ao realizar requisição');
@@ -132,6 +134,10 @@ export class NFeProcessor {
 
     public async gerarEvento( evento: Evento ) {
         return await this.eventoProcessor.executar(evento);
+    }
+
+    public async processarXmlContingencia(xml: string) {
+        return await this.enviaProcessor.transmitirXml(xml);
     }
 
 }

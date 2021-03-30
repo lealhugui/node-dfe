@@ -19,4 +19,5 @@ export declare class NFeProcessor {
     executar(documento: NFeDocumento | NFCeDocumento): Promise<RetornoProcessamentoNF>;
     inutilizarNumeracao(dados: Inutilizar): Promise<any>;
     gerarEvento(evento: Evento): Promise<any>;
+    processarXmlContingencia(xml: string): Promise<any>;
 }
