@@ -103,10 +103,10 @@ export abstract class WebServiceHelper {
     private static buildCertAgentOpt(cert: any) {
         const certAgentOpt:any = {}
 
-        if (cert.opcoes.stringfyPassphrase) {certAgentOpt.passphrase = cert.password.toString()}
+        if (cert.opcoes && cert.opcoes.stringfyPassphrase) {certAgentOpt.passphrase = cert.password.toString()}
         else (certAgentOpt.passphrase = cert.password)
 
-        if (!cert.opcoes.removeRejectUnauthorized) {
+        if (!cert.opcoes || (cert.opcoes && !cert.opcoes.removeRejectUnauthorized)) {
             certAgentOpt.rejectUnauthorized = (cert.rejectUnauthorized === undefined) ? true : cert.rejectUnauthorized
         }
 
