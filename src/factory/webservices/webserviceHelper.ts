@@ -101,11 +101,20 @@ export abstract class WebServiceHelper {
     }
 
     private static buildCertAgentOpt(cert: any) {
-        return {
-            rejectUnauthorized: (cert.rejectUnauthorized === undefined) ? true : cert.rejectUnauthorized,
-            pfx: cert.pfx,
-            passphrase: cert.password
+        const certAgentOpt:any = {}
+
+        if (cert.opcoes.stringfyPassphrase) {certAgentOpt.passphrase = cert.password.toString()}
+        else (certAgentOpt.passphrase = cert.password)
+
+        if (!cert.opcoes.removeRejectUnauthorized) {
+            certAgentOpt.rejectUnauthorized = (cert.rejectUnauthorized === undefined) ? true : cert.rejectUnauthorized
         }
+
+        if (cert.pfx) {certAgentOpt.pfx = cert.pfx}
+        if (cert.pem) {certAgentOpt.cert = cert.pem}
+        if (cert.key) {certAgentOpt.key = cert.key}
+
+        return certAgentOpt
     }
 
     public static async makeSoapRequest(xml: string, cert: any, soap: any, proxy?: WebProxy) {
