@@ -429,6 +429,12 @@ export interface Certificado {
     key: any;
     pfx: any;
     password: string;
+    opcoes?: OpcoesCertificado;
+}
+
+export interface OpcoesCertificado {
+    stringfyPassphrase?: boolean;
+    removeRejectUnauthorized?: boolean;
 }
 
 export function fromJsonixObj<T>(json: any): T {
