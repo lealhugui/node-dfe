@@ -159,6 +159,17 @@ export interface TNFeInfNFeIde {
     dhCont: string;
     xJust: string;
     nFref: TNFeInfNFeIdeNFref[];
+    indIntermed?: TNFeInfNFeIdeIndIntermed;
+}
+
+//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
+export enum TNFeInfNFeIdeIndIntermed {
+    Item0 = "0",
+    Item1 = "1",
+    Item2 = "2",
+    Item3 = "3",
+    Item4 = "4",
+    Item9 = "9"
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -2239,6 +2250,7 @@ export interface TNFeInfNFePagDetPag {
     tPag: TNFeInfNFePagDetPagTPag;
     vPag: string;
     card: TNFeInfNFePagDetPagCard;
+    xPag?: string;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
@@ -2260,8 +2272,12 @@ export enum TNFeInfNFePagDetPagTPag {
     Item13 = "13",
     Item14 = "14",
     Item15 = "15",
+    Item16 = "16",
+    Item17 = "17",
+    Item18 = "18",
+    Item19 = "19",
     Item90 = "90",
-    Item99 = "99",
+    Item99 = "99"
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]

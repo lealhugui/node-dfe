@@ -73,6 +73,7 @@ export interface DocumentoFiscal {
     dhContingencia: string;
     justificativaContingencia: string;
     isContingenciaOffline: boolean;
+    indIntermed?: string;
 }
 
 export interface Produto {
@@ -359,6 +360,7 @@ export interface DetalhePagamento {
     formaPagamento: string;
     valor: string;
     dadosCartao: DetalhePgtoCartao;
+    descricaoFormaPagamento: string;
 }
 
 export interface DetalhePgtoCartao {
