@@ -390,6 +390,10 @@ export class EnviaProcessor {
             //nFref: schema.TNFeInfNFeIdeNFref[],
         };
 
+        if (documento.indIntermed) {
+            ide.indIntermed = Utils.getEnumByValue(schema.TNFeInfNFeIdeIndIntermed, documento.indIntermed); // NT 2020.006
+        }
+
         return ide;
     }
 
@@ -1336,6 +1340,10 @@ export class EnviaProcessor {
             detPag.indPag = Utils.getEnumByValue(schema.TNFeInfNFePagDetPagIndPag, pag.indicadorFormaPagamento);
             detPag.tPag = Utils.getEnumByValue(schema.TNFeInfNFePagDetPagTPag, pag.formaPagamento);
             detPag.vPag = pag.valor;
+
+            if (pag.descricaoFormaPagamento) {
+                detPag.xPag = pag.descricaoFormaPagamento; // YA02A NT 2020.006
+            }
 
             if (pag.dadosCartao) {
                 detPag.card = this.getDetalhamentoCartao(pag.dadosCartao);
