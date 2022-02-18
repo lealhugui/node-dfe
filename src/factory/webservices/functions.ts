@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getContentType = void 0;
-function getContentType(uf) {
+export function getContentType(uf: string) : string {
     switch (uf) {
         case 'GO':
             return "application/soap+xml";
@@ -36,4 +33,4 @@ function getContentType(uf) {
             throw new Error('Content Type não encontrado!');
     }
 }
-exports.getContentType = getContentType;
+
