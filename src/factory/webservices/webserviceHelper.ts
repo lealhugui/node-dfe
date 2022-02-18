@@ -86,7 +86,7 @@ export abstract class WebServiceHelper {
             url: soapParams.url,
             agentOptions: this.buildCertAgentOpt(cert),
             headers: {
-                "Content-Type": "text/xml;charset=utf-8",
+                "Content-Type": soapParams.contentType,
                 "SOAPAction": soapParams.action
             },
             body: this.buildSoapEnvelope(xml, soapParams.method),
@@ -138,7 +138,7 @@ export abstract class WebServiceHelper {
                 let retorno = XmlHelper.deserializeXml(result.xml_recebido, {explicitArray: false});
                 if (retorno) {
                     //result.data = retorno;
-                    result.data = Object(retorno)['soap:Envelope']['soap:Body']['nfeResultMsg'];
+                    result.data = Object(retorno)['soap:Envelope'] != undefined ? result.data = Object(retorno)['soap:Envelope']['soap:Body']['nfeResultMsg'] : result.data = Object(retorno)['env:Envelope']['env:Body']['nfeResultMsg'];
                     //console.log(result.data)
                 }
             }
