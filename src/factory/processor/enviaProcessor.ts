@@ -1027,6 +1027,7 @@ export class EnviaProcessor {
                         CST: pis.CST
                     }
                 }
+                break;
             case '49':
             case '50':
             case '51':
@@ -1062,6 +1063,7 @@ export class EnviaProcessor {
                         vPIS: pis.vPIS
                     }
                 }
+                break;
             default:
                 result = {
                     PISOutr: <schema.TNFeInfNFeDetImpostoPIS>{

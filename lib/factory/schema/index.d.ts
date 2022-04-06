@@ -135,11 +135,7 @@ export interface TNFeInfNFeIde {
 }
 export declare enum TNFeInfNFeIdeIndIntermed {
     Item0 = "0",
-    Item1 = "1",
-    Item2 = "2",
-    Item3 = "3",
-    Item4 = "4",
-    Item9 = "9"
+    Item1 = "1"
 }
 export declare enum TMod {
     Item55 = "55",
