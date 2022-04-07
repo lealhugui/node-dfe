@@ -166,10 +166,6 @@ export interface TNFeInfNFeIde {
 export enum TNFeInfNFeIdeIndIntermed {
     Item0 = "0",
     Item1 = "1",
-    Item2 = "2",
-    Item3 = "3",
-    Item4 = "4",
-    Item9 = "9"
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
