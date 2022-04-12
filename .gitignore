@@ -1,3 +1,9 @@
+omni-nfetest.js
+.gitignore
+
+#ide vs
+.vscode
+
 #ide stuff
 .idea
 
