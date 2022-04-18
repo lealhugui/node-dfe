@@ -158,7 +158,7 @@ export interface TNFeInfNFeIde {
     verProc: string;
     dhCont: string;
     xJust: string;
-    nFref: TNFeInfNFeIdeNFref[];
+    NFref?: TNFeInfNFeIdeNFref[];
     indIntermed?: TNFeInfNFeIdeIndIntermed;
 }
 
@@ -253,7 +253,7 @@ export interface TNFeInfNFeIdeNFref {
     refNF?: TNFeInfNFeIdeNFrefRefNF;
     refNFP?: TNFeInfNFeIdeNFrefRefNFP;
     refNFe?: string;
-    itemElementName: ItemChoiceType1;
+    itemElementName?: ItemChoiceType1;
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]

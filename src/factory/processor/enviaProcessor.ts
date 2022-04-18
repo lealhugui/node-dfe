@@ -387,7 +387,7 @@ export class EnviaProcessor {
             dhSaiEnt: documento.dhSaiEnt,
             dhCont: documento.dhContingencia,
             xJust: documento.justificativaContingencia,
-            //nFref: schema.TNFeInfNFeIdeNFref[],
+            NFref: documento.NFref,
         };
 
         if (documento.indIntermed) {

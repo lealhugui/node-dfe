@@ -4,11 +4,13 @@ const lib = require('./lib');
 const signUtils = require('./lib/factory/signature');
 const XmlHelper = require('./lib/factory/xmlHelper');
 
+const versao = '4.00'
+
 let cert = {
-    key: fs.readFileSync('C:\\cert\\newKey.key'),
-    pem: fs.readFileSync('C:\\cert\\test.pem'),
-    pfx: fs.readFileSync('C:\\cert\\certificado.pfx'),
-    password: fs.readFileSync('C:\\cert\\senha.txt')
+    key: fs.readFileSync('C:\\node-dfe\\cert\\newKey.key'),
+    pem: fs.readFileSync('C:\\node-dfe\\cert\\test.pem'),
+    pfx: fs.readFileSync('C:\\node-dfe\\cert\\certificado.pfx'),
+    password: fs.readFileSync('C:\\node-dfe\\cert\\senha.txt').toString()
 };
 
 let empresa = {
@@ -68,6 +70,7 @@ let documento = {
     tipoEmissao: '1',
     tipoImpressao: '4',
     versaoAplicativoEmissao: 'NODE-NFE TEST 1.0',
+    NFref: [{refNFe: 'XXXXXXXXXXXXX'}, {refNFe: 'YYYYYYYYYYYYYY'}],
 };
 
 let dest = {
@@ -202,8 +205,25 @@ let nfce = {
     infoAdicional: infoAdic
 };
 
+const configuracoes = {
+    empresa: empresa,
+    certificado: cert,
+    geral: {
+      ambiente: documento.ambiente,
+      modelo: documento.modelo,
+      versao
+    },
+    arquivos: {
+      salvar: true,
+      pastaEnvio: 'c:/node-dfe/xmls/envio',
+      pastaRetorno: 'c:/node-dfe/xmls/retorno',
+      pastaXML: 'c:/node-dfe/xmls/xml',
+    },
+    responsavelTecnico: responsavelTecnico
+  }
+
 async function testeEmissaoNFCe() {
-    const nfeProc = new lib.NFeProcessor(empresa, null);
+    const nfeProc = new lib.NFeProcessor(configuracoes, null);
 
     const ini = new Date();
     let result = await nfeProc.processarDocumento(nfce);
@@ -279,7 +299,7 @@ function testHashRespTec(){
 //testeAssinaturaXML();
 //testeConsultaStatusServico(empresa, '2', '65');
 //testeDesereliaze();
-//testeEmissaoNFCe();
-testeEmissaoNFCeContingenciaOffline(empresa);
+testeEmissaoNFCe();
+// testeEmissaoNFCeContingenciaOffline(empresa);
 //testeQRcodeNFCe();
 //testHashRespTec();

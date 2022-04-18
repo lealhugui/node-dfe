@@ -130,7 +130,7 @@ export interface TNFeInfNFeIde {
     verProc: string;
     dhCont: string;
     xJust: string;
-    nFref: TNFeInfNFeIdeNFref[];
+    NFref?: TNFeInfNFeIdeNFref[];
     indIntermed?: TNFeInfNFeIdeIndIntermed;
 }
 export declare enum TNFeInfNFeIdeIndIntermed {
@@ -203,7 +203,7 @@ export interface TNFeInfNFeIdeNFref {
     refNF?: TNFeInfNFeIdeNFrefRefNF;
     refNFP?: TNFeInfNFeIdeNFrefRefNFP;
     refNFe?: string;
-    itemElementName: ItemChoiceType1;
+    itemElementName?: ItemChoiceType1;
 }
 export interface TNFeInfNFeIdeNFrefRefECF {
     mod: TNFeInfNFeIdeNFrefRefECFMod;

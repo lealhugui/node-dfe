@@ -96,7 +96,7 @@ export abstract class WebServiceHelper {
         if (proxy) {
             result.proxy = proxyToUrl(proxy)
         }
-        console.log(result)
+        // console.log(result)
         return result
     }
 
