@@ -108,8 +108,9 @@ export class NFeProcessor {
 
                         fs.writeFileSync(filename, xmlNfeProc);
                     } else {
-                        const filenameEnvio = `${arquivos.pastaEnvio}${new Date().toISOString()}${retEnviNFe.infRec?.nRec || ''}-enviNFe.xml`;
-                        const filenameRetorno = `${arquivos.pastaRetorno}${new Date().toISOString()}${retEnviNFe.infRec?.nRec || ''}-retEnviNFe.xml`;
+                        const date = new Date().toISOString().replace(/:/g, '-');
+                        const filenameEnvio = `${arquivos.pastaEnvio}${date}${retEnviNFe.infRec?.nRec || ''}-enviNFe.xml`;
+                        const filenameRetorno = `${arquivos.pastaRetorno}${date}${retEnviNFe.infRec?.nRec || ''}-retEnviNFe.xml`;
                         fs.writeFileSync(filenameEnvio, result.envioNF.xml_enviado);
                         fs.writeFileSync(filenameRetorno, result.envioNF.xml_recebido);
                         if (result.consultaProc) {
