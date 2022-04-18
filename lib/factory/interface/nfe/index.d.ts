@@ -25,7 +25,9 @@ export interface RetornoProcessamento {
     xml_recebido: string;
     status: number;
     success: boolean;
-    data: Object;
+    data: {
+        retEnviNFe?: Object;
+    };
     error: string;
 }
 export interface NFeBase {

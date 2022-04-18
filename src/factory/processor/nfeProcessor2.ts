@@ -69,11 +69,16 @@ export class NFeProcessor {
 
             if (result.envioNF && result.envioNF.data) {
                 const data = Object(result.envioNF.data);
-                if (data.retEnviNFe && geral.modelo == '55') {
-                    retEnviNFe = data.retEnviNFe;
-                    const recibo = retEnviNFe.infRec.nRec;
-                    result.consultaProc = <RetornoProcessamento>await this.retornoProcessor.executar(recibo);
-                    retConsReciNFe = Object(result.consultaProc.data).retConsReciNFe;
+                retEnviNFe = data.retEnviNFe;
+                if (data.retEnviNFe) {
+                    if (geral.modelo == '55') {
+                        const recibo = retEnviNFe.infRec.nRec;
+                        result.consultaProc = <RetornoProcessamento>await this.retornoProcessor.executar(recibo);
+                    }
+                    if (result.envioNF?.data?.retEnviNFe)
+                        retConsReciNFe = Object(result.envioNF.data.retEnviNFe);
+                    else
+                        retConsReciNFe = Object(result.consultaProc.data).retConsReciNFe;
                     cStat = retConsReciNFe.cStat;
                 }
 
@@ -103,15 +108,16 @@ export class NFeProcessor {
 
                         fs.writeFileSync(filename, xmlNfeProc);
                     } else {
-                        const filenameEnvio = `${arquivos.pastaEnvio}${retEnviNFe.infRec.nRec}-enviNFe.xml`;
-                        const filenameRetorno = `${arquivos.pastaRetorno}${retEnviNFe.infRec.nRec}-retEnviNFe.xml`;
+                        const filenameEnvio = `${arquivos.pastaEnvio}${new Date().toISOString()}${retEnviNFe.infRec?.nRec || ''}-enviNFe.xml`;
+                        const filenameRetorno = `${arquivos.pastaRetorno}${new Date().toISOString()}${retEnviNFe.infRec?.nRec || ''}-retEnviNFe.xml`;
                         fs.writeFileSync(filenameEnvio, result.envioNF.xml_enviado);
                         fs.writeFileSync(filenameRetorno, result.envioNF.xml_recebido);
-
-                        const filenameConsultaEnvio = `${arquivos.pastaEnvio}${retConsReciNFe.nRec}-consReciNFe.xml`;
-                        const filenameConsultaRetorno = `${arquivos.pastaRetorno}${retConsReciNFe.nRec}-retConsReciNFe.xml`;
-                        fs.writeFileSync(filenameConsultaEnvio, result.consultaProc.xml_enviado);
-                        fs.writeFileSync(filenameConsultaRetorno, result.consultaProc.xml_recebido);       
+                        if (result.consultaProc) {
+                            const filenameConsultaEnvio = `${arquivos.pastaEnvio}${retConsReciNFe.nRec}-consReciNFe.xml`;
+                            const filenameConsultaRetorno = `${arquivos.pastaRetorno}${retConsReciNFe.nRec}-retConsReciNFe.xml`;
+                            fs.writeFileSync(filenameConsultaEnvio, result.consultaProc.xml_enviado);
+                            fs.writeFileSync(filenameConsultaRetorno, result.consultaProc.xml_recebido);       
+                        }
                     }
                 }
             } else if (result.retornoContingenciaOffline && result.success) {
