@@ -149,6 +149,10 @@
             "consultarStatusServico": {
                 "url_producao": "https://nfe.sefa.pr.gov.br/nfe/NFeStatusServico4?wsdl",
                 "url_homologacao": "https://homologacao.nfe.sefa.pr.gov.br/nfe/NFeStatusServico4?wsdl"
+            },
+            "recepcaoEvento": {
+                "url_producao": "https://nfe.sefa.pr.gov.br/nfe/NFeRecepcaoEvento4",
+                "url_homologacao": "https://homologacao.nfe.sefa.pr.gov.br/nfe/NFeRecepcaoEvento4"
             }
         }
     },

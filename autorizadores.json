@@ -143,6 +143,10 @@
             "inutilizacao": {
                 "url_producao": "https://nfe.sefa.pr.gov.br/nfe/NFeInutilizacao4",
                 "url_homologacao": "https://homologacao.nfce.sefa.pr.gov.br/nfce/Nfeinutilizacao4.asmx"
+            },
+            "recepcaoEvento": {
+                "url_producao": "https://nfce.sefa.pr.gov.br/nfce/NFeRecepcaoEvento4",
+                "url_homologacao": "https://homologacao.nfce.sefa.pr.gov.br/nfce/NFeRecepcaoEvento4"
             }
         }
     },
