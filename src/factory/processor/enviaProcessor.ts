@@ -1341,15 +1341,15 @@ export class EnviaProcessor {
 
             detPag.indPag = Utils.getEnumByValue(schema.TNFeInfNFePagDetPagIndPag, pag.indicadorFormaPagamento);
             detPag.tPag = Utils.getEnumByValue(schema.TNFeInfNFePagDetPagTPag, pag.formaPagamento);
-            detPag.vPag = pag.valor;
-
+            
             if (pag.descricaoFormaPagamento) {
                 detPag.xPag = pag.descricaoFormaPagamento; // YA02A NT 2020.006
             }
-
+            
             if (pag.dadosCartao) {
                 detPag.card = this.getDetalhamentoCartao(pag.dadosCartao);
             }
+            detPag.vPag = pag.valor;
             listPagamentos.push(detPag);
         }
 
