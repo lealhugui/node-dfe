@@ -560,6 +560,8 @@ export interface TNFeInfNFeDet {
     imposto: TNFeInfNFeDetImposto;
     impostoDevol: any; //TNFeInfNFeDetImpostoDevol;
     infAdProd: string;
+    PIS: Object,
+    COFINS: Object,
 }
 
 //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]

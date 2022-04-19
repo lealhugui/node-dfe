@@ -82,6 +82,8 @@ export interface Produto {
     imposto: Imposto;
     infoAdicional: string;
     numeroItem: string;
+    pis: Object | undefined,
+    cofins: Object | undefined,
 }
 
 export interface DetalhesProduto {
@@ -330,6 +332,8 @@ export interface RetTrib {
 
 export interface Transporte {
     modalidateFrete: string;
+    transporta: Object,
+    vol: Object,
     //..
 }
 

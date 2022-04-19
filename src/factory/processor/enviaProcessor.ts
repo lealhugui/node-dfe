@@ -476,7 +476,9 @@ export class EnviaProcessor {
                 prod: this.getDetProd(produtos[i].prod, ambiente, i == 0),
                 imposto: this.getDetImposto(produtos[i].imposto, modelo, produtos[i].prod.CFOP),
                 infAdProd: produtos[i].infoAdicional,
-                impostoDevol: (produtos[i].prod.percentualDevolucao && (produtos[i].prod.percentualDevolucao > 0)) ? this.getImpostoDevolucao({ pDevol: produtos[i].prod.percentualDevolucao, vIPIDevol: produtos[i].prod.valorIPIDevolucao }) : undefined
+                impostoDevol: (produtos[i].prod.percentualDevolucao && (produtos[i].prod.percentualDevolucao > 0)) ? this.getImpostoDevolucao({ pDevol: produtos[i].prod.percentualDevolucao, vIPIDevol: produtos[i].prod.valorIPIDevolucao }) : undefined,
+                PIS: produtos[i].pis,
+                COFINS: produtos[i].cofins,
             });
         }
 
@@ -1273,18 +1275,18 @@ export class EnviaProcessor {
 
     private getTransp(transp: Transporte) {
         return <schema.TNFeInfNFeTransp>{
-            modFrete: transp.modalidateFrete
+            modFrete: transp.modalidateFrete,
+            transporta: transp.transporta,
             /**
-             * transporta: TNFeInfNFeTranspTransporta;
-                retTransp: TNFeInfNFeTranspRetTransp;
-                //balsa
-                //reboque
-                //vagao
-                //veicTransp
+             * retTransp: TNFeInfNFeTranspRetTransp;
+                balsa
+                reboque
+                vagao
+                veicTransp
                 items: object[];
                 itemsElementName: ItemsChoiceType5[];
-                vol: TNFeInfNFeTranspVol[];
-            */
+                */
+           vol: transp.vol,
         }
     }
 

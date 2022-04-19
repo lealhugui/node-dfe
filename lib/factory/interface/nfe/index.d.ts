@@ -77,6 +77,8 @@ export interface Produto {
     imposto: Imposto;
     infoAdicional: string;
     numeroItem: string;
+    pis: Object | undefined;
+    cofins: Object | undefined;
 }
 export interface DetalhesProduto {
     codigo: string;
@@ -298,6 +300,8 @@ export interface RetTrib {
 }
 export interface Transporte {
     modalidateFrete: string;
+    transporta: Object;
+    vol: Object;
 }
 export interface Cobranca {
     fatura: Fatura;

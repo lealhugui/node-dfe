@@ -440,6 +440,8 @@ export interface TNFeInfNFeDet {
     imposto: TNFeInfNFeDetImposto;
     impostoDevol: any;
     infAdProd: string;
+    PIS: Object;
+    COFINS: Object;
 }
 export interface TNFeInfNFeDetProd {
     cProd: string;
