@@ -477,8 +477,6 @@ export class EnviaProcessor {
                 imposto: this.getDetImposto(produtos[i].imposto, modelo, produtos[i].prod.CFOP),
                 infAdProd: produtos[i].infoAdicional,
                 impostoDevol: (produtos[i].prod.percentualDevolucao && (produtos[i].prod.percentualDevolucao > 0)) ? this.getImpostoDevolucao({ pDevol: produtos[i].prod.percentualDevolucao, vIPIDevol: produtos[i].prod.valorIPIDevolucao }) : undefined,
-                PIS: produtos[i].pis,
-                COFINS: produtos[i].cofins,
             });
         }
 
