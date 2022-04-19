@@ -71,7 +71,7 @@ export class NFeProcessor {
                 const data = Object(result.envioNF.data);
                 retEnviNFe = data.retEnviNFe;
                 if (data.retEnviNFe) {
-                    if (geral.modelo == '55') {
+                    if (geral.modelo == '55' && retEnviNFe.infRec) {
                         const recibo = retEnviNFe.infRec.nRec;
                         result.consultaProc = <RetornoProcessamento>await this.retornoProcessor.executar(recibo);
                     }
