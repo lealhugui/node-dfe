@@ -120,8 +120,12 @@
                 "url_homologacao": "https://hnfce.fazenda.mg.gov.br/nfce/services/NFeStatusServico4"
             },
             "inutilizacao": {
-                "url_producao": "https://nfe.fazenda.mg.gov.br/nfe2/services/NFeInutilizacao4",
+                "url_producao": "https://nfce.fazenda.mg.gov.br/nfe2/services/NFeInutilizacao4",
                 "url_homologacao": "https://hnfce.fazenda.mg.gov.br/nfce/services/Nfeinutilizacao4.asmx"
+            },
+            "recepcaoEvento": {
+                "url_producao": "https://nfce.fazenda.mg.gov.br/nfce/services/NFeRecepcaoEvento4",
+                "url_homologacao": "https://hnfce.fazenda.mg.gov.br/nfce/services/NFeRecepcaoEvento4"
             }
         }
     },
@@ -185,6 +189,10 @@
             "inutilizacao": {
                 "url_producao": "https://nfe.svrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx",
                 "url_homologacao": "https://nfce-homologacao.svrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx"
+            },
+            "recepcaoEvento": {
+                "url_producao": "https://nfce.svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx",
+                "url_homologacao": "https://nfce-homologacao.svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx"
             }
         }
     },

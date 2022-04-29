@@ -81,6 +81,10 @@
             "consultarStatusServico": {
                 "url_producao": "https://nfe.fazenda.mg.gov.br/nfe2/services/NFeStatusServico4",
                 "url_homologacao": "https://hnfe.fazenda.mg.gov.br/nfe2/services/NFeStatusServico4"
+            },
+            "recepcaoEvento": {
+                "url_producao": "https://nfe.fazenda.mg.gov.br/nfe2/services/NFeRecepcaoEvento4",
+                "url_homologacao": "https://hnfe.fazenda.mg.gov.br/nfe2/services/NFeRecepcaoEvento4"
             }
         }
     },
@@ -233,6 +237,10 @@
             "consultarStatusServico": {
                 "url_producao": "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
                 "url_homologacao": "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx"
+            },
+            "recepcaoEvento": {
+                "url_producao": "https://nfe.svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx",
+                "url_homologacao": "https://nfe-homologacao.svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx"
             }
         }
     },
