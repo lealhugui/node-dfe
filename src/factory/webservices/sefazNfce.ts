@@ -73,7 +73,7 @@ export abstract class SefazNFCe {
 				case 'MA':
 					return { urlChave: 'www.sefaz.ma.gov.br/nfce/consulta', urlQRCode: 'http://www.nfce.sefaz.ma.gov.br/portal/consultarNFCe.jsp' };
 				case 'MG':
-					return { urlChave: 'http://nfce.fazenda.mg.gov.br/portalnfce', urlQRCode: 'https://nfce.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml' };
+					return { urlChave: 'http://nfce.fazenda.mg.gov.br/portalnfce', urlQRCode: 'https://portalsped.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml' };
 				case 'MS':
 					return { urlChave: 'http://www.dfe.ms.gov.br/nfce/consulta', urlQRCode: 'http://www.dfe.ms.gov.br/nfce/qrcode' };
 				case 'MT':
@@ -130,7 +130,7 @@ export abstract class SefazNFCe {
 				case 'MA':
 					return { urlChave: 'www.sefaz.ma.gov.br/nfce/consulta', urlQRCode: 'http://www.hom.nfce.sefaz.ma.gov.br/portal/consultarNFCe.jsp' };
 				case 'MG':
-					return { urlChave: 'http://hnfce.fazenda.mg.gov.br/portalnfce', urlQRCode: 'https://nfce.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml' };
+					return { urlChave: 'http://hnfce.fazenda.mg.gov.br/portalnfce', urlQRCode: 'https://portalsped.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml' };
 				case 'MS':
 					return { urlChave: 'http://www.dfe.ms.gov.br/nfce/consulta', urlQRCode: 'http://www.dfe.ms.gov.br/nfce/qrcode' };
 				case 'MT':
