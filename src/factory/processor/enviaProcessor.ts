@@ -100,12 +100,10 @@ export class EnviaProcessor {
 
     private configuraUrlsSefaz() {
         const { geral: { modelo, ambiente }, empresa } = this.configuracoes;
-        if (!soapAutorizacao || !soapRetAutorizacao) {
-            let Sefaz = modelo == '65' ? SefazNFCe : SefazNFe;
+        let Sefaz = modelo == '65' ? SefazNFCe : SefazNFe;
 
-            soapAutorizacao = Sefaz.getSoapInfo(empresa.endereco.uf, ambiente, ServicosSefaz.autorizacao);
-            soapRetAutorizacao = Sefaz.getSoapInfo(empresa.endereco.uf, ambiente, ServicosSefaz.retAutorizacao);
-        }
+        soapAutorizacao = Sefaz.getSoapInfo(empresa.endereco.uf, ambiente, ServicosSefaz.autorizacao);
+        soapRetAutorizacao = Sefaz.getSoapInfo(empresa.endereco.uf, ambiente, ServicosSefaz.retAutorizacao);
     }
 
     private appendQRCodeXML(documento: NFCeDocumento, xmlAssinado: string) {
