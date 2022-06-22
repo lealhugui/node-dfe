@@ -18,6 +18,7 @@ export declare class NFeProcessor {
      * @param documento Array de documentos modelo 55 ou 1 documento modelo 65
      */
     processarDocumentoAsync(documento: NFeDocumento | NFCeDocumento): Promise<RetornoProcessamentoNF>;
+    obterXmlLoteAssinado(documento: NFeBase);
     private configuraUrlsSefaz;
     private appendQRCodeXML;
     transmitirXml(xmlLote: string, modelo: string, ambiente: string, nfeObj: Object): Promise<RetornoProcessamentoNF>;
