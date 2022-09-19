@@ -90,7 +90,7 @@ export class EnviaProcessor {
             } else {
                 result = await this.transmitirXml(xmlLote, doc.nfe);
             }
-        } catch (ex) {
+        } catch (ex: any) {
             result.success = false;
             result.error = ex;
         }
@@ -164,7 +164,7 @@ export class EnviaProcessor {
                 }), 'retornoEnvio.exists')
 
                 log(jsonOneLevel(retornoEnvio), 'retornoEnvio.full');
-            } catch (e) {
+            } catch (e: any) {
                 log(`ja deu erro pra logar.......${e.toString()}`, 'retornoEnvio')
             }
 
@@ -189,7 +189,7 @@ export class EnviaProcessor {
             // 107 Serviço em Operação
 
             result.envioNF = retornoEnvio;
-        } catch (ex) {
+        } catch (ex: any) {
             result.success = false;
             result.error = ex;
         }

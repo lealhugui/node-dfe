@@ -9,9 +9,6 @@ export interface WebProxy {
     };
 }
 export declare abstract class WebServiceHelper {
-    private static httpPost;
     static buildSoapEnvelope(xml: string, soapMethod: string): string;
-    private static buildSoapRequestOpt;
-    private static buildCertAgentOpt;
     static makeSoapRequest(xml: string, cert: any, soap: any, proxy?: WebProxy): Promise<RetornoProcessamento>;
 }

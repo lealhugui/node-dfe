@@ -5,10 +5,10 @@ const signUtils = require('./lib/factory/signature');
 const XmlHelper = require('./lib/factory/xmlHelper');
 
 let cert = {
-    key: fs.readFileSync('C:\\cert\\newKey.key'),
-    pem: fs.readFileSync('C:\\cert\\test.pem'),
-    pfx: fs.readFileSync('C:\\cert\\certificado.pfx'),
-    password: fs.readFileSync('C:\\cert\\senha.txt')
+    pfx: fs.readFileSync('certificado/certificado.pfx'),
+    pem: fs.readFileSync('certificado/cert.pem', 'utf8'),
+    key: fs.readFileSync('certificado/key.pem', 'utf8'),
+    password: fs.readFileSync('certificado/senha', 'utf8')
 };
 
 let empresa = {
@@ -277,9 +277,9 @@ function testHashRespTec(){
 }
 
 //testeAssinaturaXML();
-//testeConsultaStatusServico(empresa, '2', '65');
+testeConsultaStatusServico(empresa, '2', '65');
 //testeDesereliaze();
 //testeEmissaoNFCe();
-testeEmissaoNFCeContingenciaOffline(empresa);
+//testeEmissaoNFCeContingenciaOffline(empresa);
 //testeQRcodeNFCe();
 //testHashRespTec();

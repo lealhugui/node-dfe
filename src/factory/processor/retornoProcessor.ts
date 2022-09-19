@@ -67,7 +67,7 @@ export class RetornoProcessor {
 
             if (retornoConsulta)
                 result = retornoConsulta;
-        } catch (ex) {
+        } catch (ex: any) {
             result.success = false;
             result.error = ex;
         }
