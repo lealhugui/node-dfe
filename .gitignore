@@ -75,3 +75,5 @@ yarn.lock
 xml/
 xml_envio/
 xml_retorno/
+certificado/
+dist/

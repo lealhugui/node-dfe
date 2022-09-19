@@ -79,7 +79,7 @@ export class NFeProcessor {
                 result = await this.transmitirXml(xmlLote, documento.docFiscal.modelo, documento.docFiscal.ambiente, doc.nfe);
             }
 
-        } catch (ex) {
+        } catch (ex: any) {
             result.success = false;
             result.error = ex;
         }
@@ -121,7 +121,7 @@ export class NFeProcessor {
                 result = await this.transmitirXml(xmlLote, documento.docFiscal.modelo, documento.docFiscal.ambiente, doc.nfe);
             }
 
-        } catch (ex) {
+        } catch (ex: any) {
             result.success = false;
             result.error = ex;
         }
@@ -194,7 +194,7 @@ export class NFeProcessor {
                 }), 'retornoEnvio.exists')
 
                 log(jsonOneLevel(retornoEnvio), 'retornoEnvio.full');
-            } catch(e) {
+            } catch(e: any) {
                 log(`ja deu erro pra logar.......${e.toString()}`, 'retornoEnvio')
             }
 
@@ -254,7 +254,7 @@ export class NFeProcessor {
                 result.success = false;
             }
 
-        } catch (ex) {
+        } catch (ex: any) {
             result.success = false;
             result.error = ex;
         }

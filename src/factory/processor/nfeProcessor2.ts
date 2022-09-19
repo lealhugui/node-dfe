@@ -120,7 +120,7 @@ export class NFeProcessor {
                 console.error('nfeProcessor.executar: Erro ao realizar requisição', result);
                 throw new Error('Erro ao realizar requisição');
             }
-        } catch (ex) {
+        } catch (ex: any) {
             result.success = false;
             result.error = ex;
         }
