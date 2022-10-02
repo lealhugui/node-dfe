@@ -1,8 +1,7 @@
-import * as request from 'request'
+import fetch, {Response} from 'node-fetch'
+import * as https from 'https';
 import { XmlHelper } from '../xmlHelper'
-
 import { RetornoProcessamento } from '../interface/nfe'
-
 
 export interface WebProxy {
     host: string
@@ -25,29 +24,7 @@ function proxyToUrl(pr: WebProxy): string {
     return `${final}${server}`
 }
 
-interface PostResponse {
-    response: request.Response
-    body: any
-}
-
 export abstract class WebServiceHelper {
-
-    private static httpPost(reqOpt: any) {
-        return new Promise((resolve, reject) => {
-            console.log(reqOpt)
-            request.post(reqOpt, function(err: any, resp: request.Response, body: any) {
-                console.error(err)
-                if(err) {
-                    reject(err)
-                }
-
-                resolve(<PostResponse>{
-                    response: resp,
-                    body: body
-                })
-            })
-        });
-    }
 
     public static buildSoapEnvelope(xml: string, soapMethod: string) {
         let soapEnvelopeObj = {
@@ -68,88 +45,43 @@ export abstract class WebServiceHelper {
         return soapEnvXml.replace('[XML]', xml);
     }
 
-    /*
-    public static getHttpsAgent(cert: any) {
-        return new https.Agent({
-            rejectUnauthorized: false,
-            //strictSSL: false,
-            pfx: cert.pfx,
-            passphrase: cert.password
-        });
-    }
-    */
-
-
-    private static buildSoapRequestOpt(
-        cert: any, soapParams: any, xml: string, proxy?: WebProxy) {
-        const result: any = {
-            url: soapParams.url,
-            agentOptions: this.buildCertAgentOpt(cert),
-            headers: {
-                "Content-Type": soapParams.contentType,
-                "SOAPAction": soapParams.action
-            },
-            body: this.buildSoapEnvelope(xml, soapParams.method),
-            family: 4 //workaround para erro de dns em versões antigas da glibc
-        }
-
-        if (proxy) {
-            result.proxy = proxyToUrl(proxy)
-        }
-        console.log(result)
-        return result
-    }
-
-    private static buildCertAgentOpt(cert: any) {
-        const certAgentOpt:any = {}
-
-        if (cert.opcoes && cert.opcoes.stringfyPassphrase) {certAgentOpt.passphrase = cert.password.toString()}
-        else (certAgentOpt.passphrase = cert.password)
-
-        if (!cert.opcoes || (cert.opcoes && !cert.opcoes.removeRejectUnauthorized)) {
-            certAgentOpt.rejectUnauthorized = (cert.rejectUnauthorized === undefined) ? true : cert.rejectUnauthorized
-        }
-
-        if (cert.pfx) {certAgentOpt.pfx = cert.pfx}
-        if (cert.pem) {certAgentOpt.cert = cert.pem}
-        if (cert.key) {certAgentOpt.key = cert.key}
-
-        return certAgentOpt
-    }
-
-    public static async makeSoapRequest(xml: string, cert: any, soap: any, proxy?: WebProxy) {
+    public static async makeSoapRequest(xml: string, cert: any, soap: any,  proxy?: WebProxy) {
         let result = <RetornoProcessamento>{ xml_enviado: xml };
         try {
-            const reqOpt: any = this.buildSoapRequestOpt(
-                cert, soap, xml, proxy
-            )
+            const options = {
+                method: 'POST',
+                headers: {
+                    "Content-Type": soap.contentType,
+                    "SOAPAction": soap.action
+                },
+                agent: new https.Agent({
+                    rejectUnauthorized: false,
+                    // pfx: cert.pfx,
+                    cert: cert.pem,
+                    key: cert.key,
+                    passphrase: cert.password,
+                }),
+                body: this.buildSoapEnvelope(xml, soap.method),
+            }
 
-            console.log('----->', reqOpt.url)
-            //let res = await axios(reqOpt);
-            const res = ((await this.httpPost(reqOpt)) as PostResponse);
-            console.log('----->', res.response.statusCode)
-            result.status = res.response.statusCode;
-            result.xml_recebido = res.response.body;
+            const res = await fetch(soap.url, options);
+            result.status = res.status;
+            result.xml_recebido = await res.text();
 
             if (result.status == 200) {
                 result.success = true;
-
-                //let retorno = (require('util').inspect(XmlHelper.deserializeXml(res.data), false, null));
                 let retorno = XmlHelper.deserializeXml(result.xml_recebido, {explicitArray: false});
                 if (retorno) {
-                    //result.data = retorno;
-                    result.data = Object(retorno)['soap:Envelope'] != undefined ? result.data = Object(retorno)['soap:Envelope']['soap:Body']['nfeResultMsg'] : result.data = Object(retorno)['env:Envelope']['env:Body']['nfeResultMsg'];
-                    //console.log(result.data)
+                    result.data = Object(retorno)['soap:Envelope'] != undefined 
+                        ? Object(retorno)['soap:Envelope']['soap:Body']['nfeResultMsg'] 
+                        : Object(retorno)['env:Envelope']['env:Body']['nfeResultMsg'];
                 }
             }
-            console.log('----->', result.success)
             return result;
 
-        } catch (err) {
-            
+        } catch (err: any) {
             result.success = false;
             result.error = err;
-            console.log('----->', result.success)
             return result;
         }
     }

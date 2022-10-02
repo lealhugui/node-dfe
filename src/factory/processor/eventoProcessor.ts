@@ -104,7 +104,7 @@ export class EventoProcessor {
                     await fs.writeFileSync(filenameRetorno, result.xml_recebido);
                 }
             }
-        } catch (ex) {
+        } catch (ex: any) {
             result.success = false;
             result.error = ex;
         }

@@ -79,7 +79,7 @@ export class NFeProcessor {
                 result = await this.transmitirXml(xmlLote, documento.docFiscal.modelo, documento.docFiscal.ambiente, doc.nfe);
             }
 
-        } catch (ex) {
+        } catch (ex: any) {
             result.success = false;
             result.error = ex;
         }
@@ -121,7 +121,7 @@ export class NFeProcessor {
                 result = await this.transmitirXml(xmlLote, documento.docFiscal.modelo, documento.docFiscal.ambiente, doc.nfe);
             }
 
-        } catch (ex) {
+        } catch (ex: any) {
             result.success = false;
             result.error = ex;
         }
@@ -194,7 +194,7 @@ export class NFeProcessor {
                 }), 'retornoEnvio.exists')
 
                 log(jsonOneLevel(retornoEnvio), 'retornoEnvio.full');
-            } catch(e) {
+            } catch(e: any) {
                 log(`ja deu erro pra logar.......${e.toString()}`, 'retornoEnvio')
             }
 
@@ -254,7 +254,7 @@ export class NFeProcessor {
                 result.success = false;
             }
 
-        } catch (ex) {
+        } catch (ex: any) {
             result.success = false;
             result.error = ex;
         }
@@ -1068,8 +1068,6 @@ export class NFeProcessor {
         return ;
     }
     private getImpostoPIS(pis: Pis, modelo: string) {
-        let result;
-
         if ((modelo != '55') &&
             ((pis.vBC == 0) && (pis.pPIS = 0) && (pis.vPIS = 0) &&
                 (pis.qBCProd = 0) && (pis.vAliqProd = 0) &&
@@ -1079,7 +1077,7 @@ export class NFeProcessor {
         switch (pis.CST) {
             case '01':
             case '02':
-                result = {
+                return {
                     PISAliq: <schema.TNFeInfNFeDetImpostoPIS> {
                         CST: pis.CST,
                         vBC: pis.vBC,
@@ -1087,9 +1085,8 @@ export class NFeProcessor {
                         vPIS: pis.vPIS,
                     }
                 };
-                break;
             case '03':
-                result = {
+                return {
                     PISQtde: <schema.TNFeInfNFeDetImpostoPIS> {
                         CST: pis.CST,
                         vBCProd: pis.vBCProd,
@@ -1097,14 +1094,13 @@ export class NFeProcessor {
                         vPIS: pis.vPIS,
                     }
                 }
-                break;
             case '04':
             case '05':
             case '06':
             case '07':
             case '08':
             case '09':
-                result = {
+                return {
                     PISNT: <schema.TNFeInfNFeDetImpostoPIS> {
                         CST: pis.CST
                     }
@@ -1134,18 +1130,18 @@ export class NFeProcessor {
             case '98':
             case '99':
                 if ((pis.vBC + pis.pPIS > 0) && (pis.qBCProd + pis.vAliqProd > 0)) throw 'As TAG <vBC> e <pPIS> não podem ser informadas em conjunto com as TAG <qBCProd> e <vAliqProd>'
-                if (pis.qBCProd + pis.vAliqProd <= 0) return undefined;
-
-                result = {
-                    PISOutr: <schema.TNFeInfNFeDetImpostoPIS> {
-                        CST: pis.CST,
-                        qBCProd: pis.qBCProd,
-                        vAliqProd: pis.vAliqProd,
-                        vPIS: pis.vPIS
+                if (pis.qBCProd + pis.vAliqProd > 0) {
+                    return {
+                        PISOutr: <schema.TNFeInfNFeDetImpostoPIS> {
+                            CST: pis.CST,
+                            qBCProd: pis.qBCProd,
+                            vAliqProd: pis.vAliqProd,
+                            vPIS: pis.vPIS
+                        }
                     }
                 }
-            default:
-                result = {
+                
+                return {
                     PISOutr: <schema.TNFeInfNFeDetImpostoPIS> {
                         CST: pis.CST,
                         vBC: pis.vBC,
@@ -1153,13 +1149,11 @@ export class NFeProcessor {
                         vPIS: pis.vPIS
                     }
                 }
-                break;
         }
-        return result;
+
+        throw `PIS CST ${pis.CST} não suportado.`
     }
     private getImpostoCOFINS(cofins: Cofins, modelo: string) {
-        let result;
-
         if ((modelo != '55') &&
             ((cofins.vBC == 0) && (cofins.pCOFINS = 0) && (cofins.vCOFINS = 0) &&
                 (cofins.qBCProd = 0) && (cofins.vAliqProd = 0) &&
@@ -1170,7 +1164,7 @@ export class NFeProcessor {
         switch (cofins.CST) {
             case '01':
             case '02':
-                result = {
+                return {
                     COFINSAliq: <schema.TNFeInfNFeDetImpostoCOFINS> {
                         CST: cofins.CST,
                         vBC: cofins.vBC,
@@ -1178,9 +1172,8 @@ export class NFeProcessor {
                         vCOFINS: cofins.vCOFINS,
                     }
                 };
-                break;
             case '03':
-                result = {
+                return {
                     COFINSQtde: <schema.TNFeInfNFeDetImpostoCOFINS> {
                         CST: cofins.CST,
                         qBCProd: cofins.qBCProd,
@@ -1188,19 +1181,17 @@ export class NFeProcessor {
                         vCOFINS: cofins.vCOFINS
                     }
                 }
-                break;
             case '04':
             case '05':
             case '06':
             case '07':
             case '08':
             case '09':
-                result = {
+                return {
                     COFINSNT: <schema.TNFeInfNFeDetImpostoCOFINS> {
                         CST: cofins.CST
                     }
                 }
-                break;
             case '49':
             case '50':
             case '51':
@@ -1226,19 +1217,18 @@ export class NFeProcessor {
             case '98':
             case '99':
                 if ((cofins.vBC + cofins.pCOFINS > 0) && (cofins.qBCProd + cofins.vAliqProd > 0)) throw 'As TAG <vBC> e <pCOFINS> não podem ser informadas em conjunto com as TAG <qBCProd> e <vAliqProd>'
-                if (cofins.qBCProd + cofins.vAliqProd <= 0) return undefined;
-
-                result = {
-                    COFINSOutr: <schema.TNFeInfNFeDetImpostoCOFINS> {
-                        CST: cofins.CST,
-                        qBCProd: cofins.qBCProd,
-                        vAliqProd: cofins.vAliqProd,
-                        vCOFINS: cofins.vCOFINS
+                if (cofins.qBCProd + cofins.vAliqProd > 0) {
+                    return {
+                        COFINSOutr: <schema.TNFeInfNFeDetImpostoCOFINS> {
+                            CST: cofins.CST,
+                            qBCProd: cofins.qBCProd,
+                            vAliqProd: cofins.vAliqProd,
+                            vCOFINS: cofins.vCOFINS
+                        }
                     }
                 }
-                break
-            default:
-                result = {
+
+                return {
                     COFINSOutr: <schema.TNFeInfNFeDetImpostoCOFINS> {
                         CST: cofins.CST,
                         vBC: cofins.vBC,
@@ -1246,9 +1236,9 @@ export class NFeProcessor {
                         vCOFINS: cofins.vCOFINS
                     }
                 }
-                break;
         }
-        return result;
+
+        throw `COFINS CST ${cofins.CST} não suportado.`
     }
     private getImpostoPISST(PISST: PisST) {
         let result;

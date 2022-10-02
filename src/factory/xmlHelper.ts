@@ -5,7 +5,6 @@ export abstract class XmlHelper {
     public static serializeXml(obj: any, rootTag: string) {
         let builder = new xml2js.Builder({
             rootName: rootTag,
-            explicitArray: false,
             headless: true,
             renderOpts: {
                 pretty: false
