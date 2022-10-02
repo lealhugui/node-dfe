@@ -429,6 +429,7 @@ export interface Endereco {
 
 export interface Certificado {
     key: any;
+    pem: any;
     pfx: any;
     password: string;
     opcoes?: OpcoesCertificado;
