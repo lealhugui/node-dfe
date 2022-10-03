@@ -56,7 +56,7 @@ export abstract class WebServiceHelper {
                 },
                 agent: new https.Agent({
                     rejectUnauthorized: false,
-                    // pfx: cert.pfx,
+                    pfx: cert.pfx,
                     cert: cert.pem,
                     key: cert.key,
                     passphrase: cert.password,

@@ -359,8 +359,8 @@ export interface DetalhePagamento {
     indicadorFormaPagamento: string;
     formaPagamento: string;
     valor: string;
-    dadosCartao: DetalhePgtoCartao;
-    descricaoFormaPagamento: string;
+    dadosCartao?: DetalhePgtoCartao;
+    descricaoFormaPagamento?: string;
 }
 
 export interface DetalhePgtoCartao {
