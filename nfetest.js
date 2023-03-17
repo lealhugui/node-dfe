@@ -5,6 +5,7 @@ const signUtils = require('./lib/factory/signature');
 const XmlHelper = require('./lib/factory/xmlHelper');
 const path = require('path');
 
+
 let cert = {
     key: fs.readFileSync('C:\\cert\\newKey.key'),
     pem: fs.readFileSync('C:\\cert\\test.pem'),
