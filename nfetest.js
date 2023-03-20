@@ -3,12 +3,14 @@ const fs = require('fs');
 const lib = require('./lib');
 const signUtils = require('./lib/factory/signature');
 const XmlHelper = require('./lib/factory/xmlHelper');
+const pemKey = require ('./lib/factory/key-pem-generator')
 const path = require('path');
 
+const keypem = generateKeyPem()
 
 let cert = {
-    key: fs.readFileSync('C:\\cert\\newKey.key'),
-    pem: fs.readFileSync('C:\\cert\\test.pem'),
+    pem: keypem.pem,
+    key: keypem.key,
     pfx: fs.readFileSync('C:\\cert\\certificado.pfx'),
     password: fs.readFileSync('C:\\cert\\senha.txt')
     , rejectUnauthorized: false
@@ -247,6 +249,11 @@ const configuracoes = {
         pastaRetorno: path.join(__dirname, 'xml_retorno'),
         pastaXML: path.join(__dirname, 'xml'),
     }
+}
+
+function generateKeyPem(){
+    const data = pemKey.KeyPem.generate('certificado/certificado.pfx', '123456')
+    return data
 }
 
 async function testeEmissaoNFe() {

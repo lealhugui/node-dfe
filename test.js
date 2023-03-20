@@ -283,10 +283,11 @@ function testHashRespTec(){
 function generateKeyPem(){
     const data = pemKey.KeyPem.generate('certificado/certificado.pfx', '123456')
     console.log(data);
+    return data
 }
 
-//testeAssinaturaXML();
-testeConsultaStatusServico(empresa, '2', '65');
+testeAssinaturaXML();
+//testeConsultaStatusServico(empresa, '2', '65');
 //testeDesereliaze();
 //testeEmissaoNFCe();
 //testeEmissaoNFCeContingenciaOffline(empresa);

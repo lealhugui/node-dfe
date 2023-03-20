@@ -9,26 +9,19 @@ type Output = {
 
 export abstract class KeyPem {
 
-
-
   public static generate(path: string, password: string): Output {
-
     if (!fs.existsSync(path)) {
       throw new CertificateNotFoundError()
     }
-
     const pfx = fs.readFileSync(path)
     const p12buffer = pfx.toString('base64')
-
     const asn = forge.asn1.fromDer(forge.util.decode64(p12buffer))
-
     let p12
     try {
       p12 = forge.pkcs12.pkcs12FromAsn1(asn, true, password)
     } catch (err) {
       throw new CertificatePasswordError()
     }
-
     return {
       pem: getPem(p12),
       key: getKey(p12)
@@ -46,7 +39,6 @@ function getKey (p12: forge.pkcs12.Pkcs12Pfx): string {
   const rsaPrivateKey = forge.pki.privateKeyToAsn1(keyData[0].key)
   const privateKeyInfo = forge.pki.wrapRsaPrivateKey(rsaPrivateKey)
   const key = forge.pki.privateKeyInfoToPem(privateKeyInfo)
-
   return key
 }
 
