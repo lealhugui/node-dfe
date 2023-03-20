@@ -1,6 +1,6 @@
 import * as forge from 'node-forge'
 import * as fs from 'fs'
-import { CertificateNotFoundError, CertificatePasswordError } from './error';
+import { CertificateNotFoundError, CertificatePasswordError } from './error/certificate';
 
 type Output = {
   pem: string
