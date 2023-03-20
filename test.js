@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 const lib = require('./lib');
 const signUtils = require('./lib/factory/signature');
