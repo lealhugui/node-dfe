@@ -1,17 +1,12 @@
-
 const fs = require('fs');
 const lib = require('./lib');
 const signUtils = require('./lib/factory/signature');
 const XmlHelper = require('./lib/factory/xmlHelper');
-const pemKey = require ('./lib/factory/key-pem-generator')
-
-
-const keypem = generateKeyPem()
 
 let cert = {
     pfx: fs.readFileSync('certificado/certificado.pfx'),
-    pem: keypem.pem,
-    key: keypem.key,
+    pem: fs.readFileSync('certificado/cert.pem', 'utf8'),
+    key: fs.readFileSync('certificado/key.pem', 'utf8'),
     password: fs.readFileSync('certificado/senha', 'utf8')
 };
 
@@ -280,17 +275,10 @@ function testHashRespTec(){
     console.log(nfeProc.gerarHashCSRT('41180678393592000146558900000006041028190697', 'G8063VRTNDMO886SFNK5LDUDEI24XJ22YIPO'));
 }
 
-function generateKeyPem(){
-    const data = pemKey.KeyPem.generate('certificado/certificado.pfx', '123456')
-    console.log(data);
-    return data
-}
-
-testeAssinaturaXML();
-//testeConsultaStatusServico(empresa, '2', '65');
+//testeAssinaturaXML();
+testeConsultaStatusServico(empresa, '2', '65');
 //testeDesereliaze();
 //testeEmissaoNFCe();
 //testeEmissaoNFCeContingenciaOffline(empresa);
 //testeQRcodeNFCe();
 //testHashRespTec();
-//generateKeyPem()
