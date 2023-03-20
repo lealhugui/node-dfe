@@ -1,4 +1,4 @@
-type Output = {
+declare type Output = {
     pem: string;
     key: string;
 };
